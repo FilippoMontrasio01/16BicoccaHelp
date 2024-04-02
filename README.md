@@ -45,7 +45,7 @@ BicoccaHelp è sviluppato utilizzando le seguenti tecnologie:
 
 Per ulteriori informazioni, domande o feedback, contattare:
 
-- **Filippo Montrasio**: [f.montrasio1@campus.unimib.it](mailto:f.montrasio1@campus.unimib.it)
+- **Email**: [f.montrasio1@campus.unimib.it](mailto:f.montrasio1@campus.unimib.it)
 - **GitHub**: [FilippoMontrasio01](https://github.com/FilippoMontrasio01)
 - **Telegram**: [@FilippoMontrasio](https://t.me/FilippoMontrasio)
 
