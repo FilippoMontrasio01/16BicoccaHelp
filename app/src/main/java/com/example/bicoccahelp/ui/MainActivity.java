@@ -1,7 +1,9 @@
-package com.example.bicoccahelp;
+package com.example.bicoccahelp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.bicoccahelp.R;
 
 public class MainActivity extends AppCompatActivity {
 
