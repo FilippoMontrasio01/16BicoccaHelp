@@ -1,66 +1,155 @@
 package com.example.bicoccahelp.ui.welcome;
 
+import android.nfc.Tag;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
+import com.example.bicoccahelp.data.Callback;
+import com.example.bicoccahelp.data.auth.AuthRepository;
+import com.example.bicoccahelp.data.auth.authException.EmailVerificationException;
+import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.databinding.FragmentLoginBinding;
+import com.example.bicoccahelp.databinding.FragmentRegistrationBinding;
+import com.example.bicoccahelp.utils.InputValidator;
+import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.android.material.snackbar.Snackbar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegistrationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RegistrationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class RegistrationFragment extends Fragment implements View.OnClickListener{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private NavController navController;
+    private FragmentRegistrationBinding binding;
+    private AuthRepository authRepository;
+    private UserRepository userRepository;
+
+
+
 
     public RegistrationFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegistrationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegistrationFragment newInstance(String param1, String param2) {
-        RegistrationFragment fragment = new RegistrationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        authRepository = ServiceLocator.getInstance().getAuthRepository();
+        userRepository = ServiceLocator.getInstance().getUserRepository();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration, container, false);
+
+        binding = FragmentRegistrationBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+        //binding.createAccountNameEditText.setOnFocusChangeListener(this);
+        //binding.createAccountEmailEditText.setOnFocusChangeListener(this);
+        //binding.createAccountPasswordEditText.setOnFocusChangeListener(this);
+        binding.createAccountButton.setOnClickListener(this);
+    }
+
+    /*public void onFocusChange(@NonNull View view, boolean hasFocus){
+        if(hasFocus){
+            return;
+        }
+
+        if(view.getId() == binding.createAccountEmailEditText.getId()){
+            this.validateEmail();
+            return;
+        }
+
+        if(view.getId() == binding.createAccountPasswordEditText.getId()){
+            this.validatePassword();
+        }
+
+
+    }*/
+
+    @Override
+    public void onClick(@NonNull View v) {
+        if(v.getId() == binding.createAccountButton.getId()){
+            this.onRegisterClick(v);
+        }
+    }
+
+    public void onRegisterClick(@NonNull View view){
+       // boolean isValidEmail = this.validateEmail();
+       // boolean isValidPsw = this.validatePassword();
+
+        //if(!isValidEmail || isValidPsw){
+          //  return;
+        //}
+
+        String email = binding.createAccountEmailEditText.getText().toString();
+        String psw = binding.createAccountPasswordEditText.getText().toString();
+
+        authRepository.register(email, psw, new Callback<Void>() {
+            @Override
+            public void onSucces(Void unused) {
+
+
+                Log.d(getTag(), "SONO ENTRATO ");
+                userRepository.sendEmailVerification(new Callback<Void>() {
+                    @Override
+                    public void onSucces(Void unused) {
+                        Log.d(getTag(), "SONO ENTRATO, MAIL INVIATA ");
+                        Snackbar.make(view,"ACCOUNT CREATO, VERIFICA MAIL", Snackbar.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.d(getTag(), "SONO ENTRATO, MAIL NON INVIATA ");
+                        Snackbar.make(view,"MAIL NON INVIATA", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(view,"ACCOUNT NON CREATO", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /*private boolean validateEmail(){
+        String email = binding.createAccountEmailEditText.getText().toString();
+
+        if(!InputValidator.isValidEmail(email)){
+            binding.createAccountEmailEditText.setError("ERROR");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validatePassword(){
+        String psw = binding.createAccountPasswordEditText.getText().toString();
+
+        if(!InputValidator.isValidPassword(psw)){
+            binding.createAccountPasswordEditText.setError("ERROR");
+            return false;
+        }
+
+        return true;
+    }*/
 }

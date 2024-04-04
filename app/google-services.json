@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "959048059520",
+    "firebase_url": "https://bicoccahelp-c39fe-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "bicoccahelp-c39fe",
+    "storage_bucket": "bicoccahelp-c39fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959048059520:android:755f5111576ed6db65f465",
+        "android_client_info": {
+          "package_name": "com.example.bicoccahelp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANGVDbjQMpMumyL3y9-_ocjLJlWVTg-r0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

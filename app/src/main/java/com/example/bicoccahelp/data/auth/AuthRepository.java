@@ -26,8 +26,6 @@ public class AuthRepository {
         authRemoteDataSource.logout();
     }
 
-    public void sendEmailVerification(Callback<Void> callback){
-        authRemoteDataSource.sendEmailVerification(callback);
-    }
+
 
 }

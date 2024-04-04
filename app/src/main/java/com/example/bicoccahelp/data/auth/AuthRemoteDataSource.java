@@ -25,16 +25,7 @@ public class AuthRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
-    public void sendEmailVerification(Callback<Void> callback){
-        if(user == null){
-            callback.onFailure(null) ;
-            return;
-        }
 
-        user.sendEmailVerification()
-                .addOnSuccessListener(callback::onSucces)
-                .addOnFailureListener(callback::onFailure);
-    }
 
 
     public void logout(){
