@@ -93,12 +93,14 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     public void onRegisterClick(@NonNull View view){
-       // boolean isValidEmail = this.validateEmail();
-       // boolean isValidPsw = this.validatePassword();
+        /*boolean isValidEmail = this.validateEmail();
+        boolean isValidPsw = this.validatePassword();
 
-        //if(!isValidEmail || isValidPsw){
-          //  return;
-        //}
+        if(!isValidEmail || isValidPsw){
+            return;
+        }
+        */
+
 
         String email = binding.createAccountEmailEditText.getText().toString();
         String psw = binding.createAccountPasswordEditText.getText().toString();
@@ -106,22 +108,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         authRepository.register(email, psw, new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
-
-
-                Log.d(getTag(), "SONO ENTRATO ");
-                userRepository.sendEmailVerification(new Callback<Void>() {
-                    @Override
-                    public void onSucces(Void unused) {
-                        Log.d(getTag(), "SONO ENTRATO, MAIL INVIATA ");
-                        Snackbar.make(view,"ACCOUNT CREATO, VERIFICA MAIL", Snackbar.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        Log.d(getTag(), "SONO ENTRATO, MAIL NON INVIATA ");
-                        Snackbar.make(view,"MAIL NON INVIATA", Snackbar.LENGTH_SHORT).show();
-                    }
-                });
+                navController.navigate(R.id.action_from_registration_to_login);
             }
 
             @Override
@@ -131,7 +118,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         });
     }
 
-    /*private boolean validateEmail(){
+    /*
+    private boolean validateEmail(){
         String email = binding.createAccountEmailEditText.getText().toString();
 
         if(!InputValidator.isValidEmail(email)){
@@ -152,4 +140,10 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         return true;
     }*/
+
+    public void onDestroyView() {
+
+        super.onDestroyView();
+        binding = null;
+    }
 }

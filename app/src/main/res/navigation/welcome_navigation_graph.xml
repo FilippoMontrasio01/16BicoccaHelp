@@ -37,6 +37,10 @@
         android:label="@string/registrationFragment"
         tools:layout="@layout/fragment_registration">
 
+        <action
+            android:id="@+id/action_from_registration_to_login"
+            app:destination="@id/fragment_login"/>
+
     </fragment>
 
 </navigation>

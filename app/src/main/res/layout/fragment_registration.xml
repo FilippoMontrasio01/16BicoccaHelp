@@ -66,21 +66,29 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/create_account_email_editText"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_background"
-                android:drawableLeft="@drawable/email_logo"
-                android:ems="10"
-                android:fontFamily="@font/lato"
-                android:hint="Insert your email"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
-                android:inputType="textEmailAddress"
-                android:padding="12dp"
-                android:textColor="#707070"
-                android:textSize="18sp" />
+                <EditText
+                    android:id="@+id/create_account_email_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/edittext_background"
+                    android:drawableLeft="@drawable/email_logo"
+                    android:ems="10"
+                    android:fontFamily="@font/lato"
+                    android:hint="Insert your email"
+                    android:inputType="textEmailAddress"
+                    android:padding="12dp"
+                    android:textColor="#707070"
+                    android:textSize="18sp" />
+
+
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/create_account_password_textView"
@@ -92,20 +100,29 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/create_account_password_editText"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_background"
-                android:drawableLeft="@drawable/key_logo"
-                android:ems="10"
-                android:hint="Insert your password"
 
-                android:inputType="textPassword"
-                android:padding="12dp"
-                android:textColor="#707070"
-                android:textSize="18sp" />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+
+                <EditText
+                    android:id="@+id/create_account_password_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/edittext_background"
+                    android:drawableLeft="@drawable/key_logo"
+                    android:ems="10"
+                    android:hint="Insert your password"
+                    android:inputType="textPassword"
+                    android:padding="12dp"
+                    android:textColor="#707070"
+                    android:textSize="18sp" />
+
+
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/create_account_repeat_password_textView"
@@ -117,20 +134,27 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/create_account_repeat_password_editText"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_background"
-                android:drawableLeft="@drawable/key_logo"
-                android:ems="10"
-                android:hint="Insert your password"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
-                android:inputType="textPassword"
-                android:padding="12dp"
-                android:textColor="#707070"
-                android:textSize="18sp" />
+                <EditText
+                    android:id="@+id/create_account_repeat_password_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/edittext_background"
+                    android:drawableLeft="@drawable/key_logo"
+                    android:ems="10"
+                    android:hint="Insert your password"
+                    android:inputType="textPassword"
+                    android:padding="12dp"
+                    android:textColor="#707070"
+                    android:textSize="18sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <TextView
                 android:id="@+id/create_account_name_textView"
@@ -142,48 +166,58 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/create_account_name_editText"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_background"
-                android:drawableLeft="@drawable/account_logo"
-                android:ems="10"
-                android:hint="Insert your name"
 
-                android:inputType="text"
-                android:padding="12dp"
-                android:textColor="#707070"
-                android:textSize="18sp" />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:endIconMode="clear_text"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_account_name_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_background"
+                    android:inputType="text"
+                    android:hint="Insert your name"
+                    android:drawableStart="@drawable/account_logo"
+                    android:textColor="#707070"
+                    android:padding="12dp"
+                    android:textSize="18sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/create_account_button"
+                style="@android:style/Widget.Button"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
+                android:layout_gravity="center"
                 android:layout_marginBottom="100dp"
                 android:background="@drawable/button_background"
+                android:fontFamily="@font/lato_bold"
                 android:text="Create Account"
+                android:textAlignment="center"
                 android:textColor="#ffffff"
                 android:textSize="22sp"
-                android:fontFamily="@font/lato_bold"
-                style="@android:style/Widget.Button"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/linearLayout" />
 
 
-
-
-        </LinearLayout>
-
+    </LinearLayout>
 
 
 
 
 
-    </ScrollView>
+
+
+</ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
