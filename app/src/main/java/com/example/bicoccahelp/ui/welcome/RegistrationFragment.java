@@ -26,7 +26,8 @@ import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 
 
-public class RegistrationFragment extends Fragment implements View.OnClickListener{
+public class RegistrationFragment extends Fragment implements View.OnClickListener,
+View.OnFocusChangeListener{
 
     private NavController navController;
     private FragmentRegistrationBinding binding;
@@ -62,13 +63,13 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-        //binding.createAccountNameEditText.setOnFocusChangeListener(this);
-        //binding.createAccountEmailEditText.setOnFocusChangeListener(this);
-        //binding.createAccountPasswordEditText.setOnFocusChangeListener(this);
+        binding.createAccountEmailEditText.setOnFocusChangeListener(this);
+        binding.createAccountPasswordEditText.setOnFocusChangeListener(this);
+        binding.createAccountNameEditText.setOnFocusChangeListener(this);
         binding.createAccountButton.setOnClickListener(this);
     }
 
-    /*public void onFocusChange(@NonNull View view, boolean hasFocus){
+    public void onFocusChange(@NonNull View view, boolean hasFocus){
         if(hasFocus){
             return;
         }
@@ -80,10 +81,16 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         if(view.getId() == binding.createAccountPasswordEditText.getId()){
             this.validatePassword();
+            return;
+        }
+
+        if(view.getId() == binding.createAccountNameEditText.getId()){
+            this.validateName();
         }
 
 
-    }*/
+
+    }
 
     @Override
     public void onClick(@NonNull View v) {
@@ -93,13 +100,14 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     public void onRegisterClick(@NonNull View view){
-        /*boolean isValidEmail = this.validateEmail();
+        boolean isValidEmail = this.validateEmail();
         boolean isValidPsw = this.validatePassword();
+        boolean isValiName = this.validateName();
 
-        if(!isValidEmail || isValidPsw){
+        if(!isValidEmail || !isValidPsw || !isValiName){
             return;
         }
-        */
+
 
 
         String email = binding.createAccountEmailEditText.getText().toString();
@@ -118,15 +126,28 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         });
     }
 
-    /*
+    private boolean validateName(){
+        String name = binding.createAccountNameEditText.getText().toString();
+
+        if(!InputValidator.isValidName(name)){
+            binding.createAccountNameTextInputLayout.setError("NOME NON VALIDO");
+            return false;
+        }
+
+        binding.createAccountNameTextInputLayout.setError(null);
+        return true;
+    }
+
+
     private boolean validateEmail(){
         String email = binding.createAccountEmailEditText.getText().toString();
 
         if(!InputValidator.isValidEmail(email)){
-            binding.createAccountEmailEditText.setError("ERROR");
+            binding.createAccountEmailTextInputLayout.setError("EMAIL NON VALIDA");
             return false;
         }
 
+        binding.createAccountEmailTextInputLayout.setError(null);
         return true;
     }
 
@@ -134,12 +155,13 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         String psw = binding.createAccountPasswordEditText.getText().toString();
 
         if(!InputValidator.isValidPassword(psw)){
-            binding.createAccountPasswordEditText.setError("ERROR");
+            binding.createAccountPswTextInputLayout.setError("PASSWORD NON VALIDA");
             return false;
         }
 
+        binding.createAccountPswTextInputLayout.setError(null);
         return true;
-    }*/
+    }
 
     public void onDestroyView() {
 

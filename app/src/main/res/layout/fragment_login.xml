@@ -24,7 +24,7 @@
         android:id="@+id/login_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hi, \nPlease login"
+        android:text="@string/login_title"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:textSize="30sp"
@@ -51,26 +51,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:text="Email"
+            android:text="@string/email"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/login_email_editText"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/edittext_background"
-            android:drawableLeft="@drawable/email_logo"
-            android:ems="10"
-            android:fontFamily="@font/lato"
-            android:hint="Insert your email"
 
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:textColor="#707070"
-            android:textSize="18sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/login_email_TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:endIconMode="clear_text"
+            app:hintEnabled="false"
+            >
+
+            <EditText
+                android:id="@+id/login_email_editText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_background"
+                android:drawableStart="@drawable/email_logo"
+                android:ems="10"
+                android:fontFamily="@font/lato"
+                android:hint="@string/insert_your_email"
+
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:textColor="#707070"
+                android:textSize="18sp" />
+
+
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <TextView
@@ -78,25 +93,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Password"
+            android:text="@string/password"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/login_password_editText"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/edittext_background"
-            android:drawableLeft="@drawable/key_logo"
-            android:ems="10"
-            android:hint="Insert your password"
 
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:textColor="#707070"
-            android:textSize="18sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/login_password_TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:endIconMode="password_toggle"
+            app:hintEnabled="false"
+            >
+
+            <EditText
+                android:id="@+id/login_password_editText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_background"
+                android:drawableStart="@drawable/key_logo"
+                android:ems="10"
+                android:hint="@string/insert_your_password"
+
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textColor="#707070"
+                android:textSize="18sp" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
 
         <Button
             android:id="@+id/button_login_forgot_password"
@@ -105,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="24dp"
-            android:text="Forgot password"
+            android:text="@string/forgot_password"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/light_green"
             android:textSize="15sp"
@@ -121,7 +152,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="305dp"
         android:background="@drawable/button_background"
-        android:text="Login"
+        android:text="@string/sign_in"
         android:textColor="#ffffff"
         android:textSize="22sp"
         android:fontFamily="@font/roboto_bold"
@@ -136,7 +167,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Don't have an'account?"
+        android:text="@string/dont_have_an_account"
         android:fontFamily="@font/lato"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -150,7 +181,7 @@
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/register"
         android:textSize="15sp"
         android:fontFamily="@font/lato_bold"
         android:textColor="@color/light_green"

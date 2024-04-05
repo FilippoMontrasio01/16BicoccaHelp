@@ -3,6 +3,23 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="loginFragment">Login Fragment</string>
-    <string name="forgotPasswordFragment">Forgot password Fragment\n</string>
-    <string name="registrationFragment">Registration Fragment\n</string>
+    <string name="forgotPasswordFragment">Forgot password Fragment</string>
+    <string name="registrationFragment">Registration Fragment</string>
+    <string name="mainActivity">Main Activity</string>
+    <string name="reset_password_title">Reset \npassword</string>
+    <string name="email">Email</string>
+    <string name="insert_your_email">Insert your email</string>
+    <string name="send_email">Send Email</string>
+    <string name="login_title">Hi, \nPlease login</string>
+    <string name="insert_your_password">Insert your password</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="dont_have_an_account">Don\'t have an account?</string>
+    <string name="register">Register</string>
+    <string name="create_account_title">Create \nAccount</string>
+    <string name="password">Password</string>
+    <string name="repeate_password">Repeate Password</string>
+    <string name="name">Name</string>
+    <string name="insert_your_name">Insert your name</string>
+    <string name="sign_up">Sign up</string>
 </resources>

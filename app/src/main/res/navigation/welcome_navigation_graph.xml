@@ -21,6 +21,10 @@
             android:id="@+id/action_from_login_to_registration"
             app:destination="@id/fragment_registration"/>
 
+        <action
+            android:id="@+id/action_from_login_to_main"
+            app:destination="@id/activity_main"/>
+
     </fragment>
 
     <fragment
@@ -28,6 +32,10 @@
         android:name="com.example.bicoccahelp.ui.welcome.ForgotPasswordFragment"
         android:label="@string/forgotPasswordFragment"
         tools:layout="@layout/fragment_forgot_password">
+
+        <action
+            android:id="@+id/action_from_forgot_password_to_login"
+            app:destination="@id/fragment_login"/>
 
     </fragment>
 
@@ -42,5 +50,11 @@
             app:destination="@id/fragment_login"/>
 
     </fragment>
+
+    <activity
+        android:id="@+id/activity_main"
+        android:name="com.example.bicoccahelp.ui.MainActivity"
+        android:label="@string/mainActivity"
+        tools:layout="@layout/activity_main"/>
 
 </navigation>

@@ -25,7 +25,7 @@
         android:id="@+id/create_account_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create \nAccount"
+        android:text="@string/create_account_title"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:textSize="30sp"
@@ -61,26 +61,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Email"
+                android:text="@string/email"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/create_account_email_TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="12dp"
+                app:endIconMode="clear_text"
+                app:hintEnabled="false"
+                >
 
                 <EditText
                     android:id="@+id/create_account_email_editText"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/edittext_background"
-                    android:drawableLeft="@drawable/email_logo"
+                    android:drawableStart="@drawable/email_logo"
                     android:ems="10"
                     android:fontFamily="@font/lato"
-                    android:hint="Insert your email"
+                    android:hint="@string/insert_your_email"
                     android:inputType="textEmailAddress"
                     android:padding="12dp"
                     android:textColor="#707070"
@@ -95,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Password"
+                android:text="@string/password"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -103,18 +107,22 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/create_account_psw_TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="12dp"
+                app:endIconMode="password_toggle"
+                app:hintEnabled="false"
+                >
 
                 <EditText
                     android:id="@+id/create_account_password_editText"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/edittext_background"
-                    android:drawableLeft="@drawable/key_logo"
+                    android:drawableStart="@drawable/key_logo"
                     android:ems="10"
-                    android:hint="Insert your password"
+                    android:hint="@string/insert_your_password"
                     android:inputType="textPassword"
                     android:padding="12dp"
                     android:textColor="#707070"
@@ -129,25 +137,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Repeat Password"
+                android:text="@string/repeate_password"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/create_account_repsw_TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="12dp"
+                app:endIconMode="password_toggle"
+                app:hintEnabled="false"
+                >
 
                 <EditText
                     android:id="@+id/create_account_repeat_password_editText"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/edittext_background"
-                    android:drawableLeft="@drawable/key_logo"
+                    android:drawableStart="@drawable/key_logo"
                     android:ems="10"
-                    android:hint="Insert your password"
+                    android:hint="@string/insert_your_password"
                     android:inputType="textPassword"
                     android:padding="12dp"
                     android:textColor="#707070"
@@ -161,19 +173,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Name"
+                android:text="@string/name"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_account_name_TextInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:endIconMode="clear_text"
-                >
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/create_account_name_editText"
@@ -181,7 +194,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_background"
                     android:inputType="text"
-                    android:hint="Insert your name"
+                    android:hint="@string/insert_your_name"
                     android:drawableStart="@drawable/account_logo"
                     android:textColor="#707070"
                     android:padding="12dp"
@@ -200,7 +213,7 @@
                 android:layout_marginBottom="100dp"
                 android:background="@drawable/button_background"
                 android:fontFamily="@font/lato_bold"
-                android:text="Create Account"
+                android:text="@string/sign_up"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
                 android:textSize="22sp"
