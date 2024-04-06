@@ -18,8 +18,13 @@ public class UserRepository {
         userRemoteDataSource.sendEmailVerification(callback);
     }
 
-    public void reload(Callback<Void> callback){
+    public void reload(Callback<UserModel> callback){
+
         userRemoteDataSource.reload(callback);
+    }
+
+    public void refreshIdToken(Callback<Void> callback){
+        userRemoteDataSource.refreshIdToken(callback);
     }
 
 }

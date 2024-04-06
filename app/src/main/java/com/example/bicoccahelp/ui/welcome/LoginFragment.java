@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
+import com.example.bicoccahelp.data.user.UserModel;
+import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.databinding.FragmentLoginBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,7 +28,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private NavController navController;
     private FragmentLoginBinding binding;
     private AuthRepository authRepository;
-
+    private UserRepository userRepository;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -36,7 +38,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authRepository = ServiceLocator.getInstance().getAuthRepository();
-
+        userRepository = ServiceLocator.getInstance().getUserRepository();
     }
 
     @Override
@@ -92,8 +94,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         authRepository.login(email, password, new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
-                navController.navigate(R.id.action_from_login_to_main);
-                requireActivity().finish();
+                userRepository.reload(new Callback<UserModel>() {
+                    @Override
+                    public void onSucces(UserModel userModel) {
+                        if(!userModel.emailVerified){
+                            navController.navigate(R.id.action_from_login_to_verify_email);
+                            return;
+                        }
+
+                        navController.navigate(R.id.action_from_login_to_main);
+                        requireActivity().finish();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
             }
 
             @Override

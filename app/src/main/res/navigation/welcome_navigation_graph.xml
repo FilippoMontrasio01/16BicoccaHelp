@@ -25,6 +25,10 @@
             android:id="@+id/action_from_login_to_main"
             app:destination="@id/activity_main"/>
 
+        <action
+            android:id="@+id/action_from_login_to_verify_email"
+            app:destination="@id/fragment_verify_email"/>
+
     </fragment>
 
     <fragment
@@ -49,7 +53,25 @@
             android:id="@+id/action_from_registration_to_login"
             app:destination="@id/fragment_login"/>
 
+        <action
+            android:id="@+id/action_from_registration_to_verify_email"
+            app:destination="@id/fragment_verify_email"/>
+
     </fragment>
+
+    <fragment
+        android:id="@+id/fragment_verify_email"
+        android:name="com.example.bicoccahelp.ui.welcome.VerifyEmailFragment"
+        android:label="@string/verifyEmailFragment"
+        tools:layout="@layout/fragment_verify_email">
+
+        <action
+            android:id="@+id/action_from_verify_email_to_main"
+            app:destination="@id/activity_main"/>
+
+    </fragment>
+
+
 
     <activity
         android:id="@+id/activity_main"

@@ -126,14 +126,16 @@ View.OnFocusChangeListener{
                 userRepository.sendEmailVerification(new Callback<Void>() {
                     @Override
                     public void onSucces(Void unused) {
-                        navController.navigate(R.id.action_from_registration_to_login);
+                        navController.navigate(R.id.action_from_registration_to_verify_email);
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        Snackbar.make(view,"ACCOUNT NON CREATO, MAIL NON INVIATA", Snackbar.LENGTH_SHORT).show();
+                        navController.navigate(R.id.action_from_registration_to_verify_email);
                     }
                 });
+
+
 
             }
 

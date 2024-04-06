@@ -59,7 +59,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/send_email_verification_button"
+            android:id="@+id/continue_button"
             style="@android:style/Widget.Button"
             android:layout_width="300dp"
             android:layout_height="wrap_content"

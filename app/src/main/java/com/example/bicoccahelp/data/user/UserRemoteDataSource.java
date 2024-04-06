@@ -1,5 +1,7 @@
 package com.example.bicoccahelp.data.user;
 
+import androidx.annotation.Nullable;
+
 import com.example.bicoccahelp.data.Callback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -7,7 +9,14 @@ import com.google.firebase.auth.FirebaseUser;
 public class UserRemoteDataSource {
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private @Nullable UserModel getCurrentUser(){
+        FirebaseUser user = auth.getCurrentUser();
+        if(user == null){
+            return null;
+        }
 
+        return new UserModel(user.getUid(), user.getEmail(), user.isEmailVerified(), user.getDisplayName());
+    }
 
 
 
@@ -23,7 +32,7 @@ public class UserRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
-    public void reload(Callback<Void> callback) {
+    public void reload(Callback<UserModel> callback) {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
             callback.onFailure(null);
@@ -31,7 +40,19 @@ public class UserRemoteDataSource {
         }
 
         user.reload()
-                .addOnSuccessListener(callback::onSucces)
+                .addOnSuccessListener(command -> callback.onSucces(getCurrentUser()))
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void refreshIdToken(Callback<Void> callback){
+        FirebaseUser user = auth.getCurrentUser();
+        if(user == null){
+            callback.onFailure(null);
+            return;
+        }
+
+        user.getIdToken(true)
+                .addOnSuccessListener(command -> callback.onSucces(null))
                 .addOnFailureListener(callback::onFailure);
     }
 
