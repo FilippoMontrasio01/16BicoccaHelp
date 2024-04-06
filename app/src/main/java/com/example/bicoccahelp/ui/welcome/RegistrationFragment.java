@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +68,7 @@ View.OnFocusChangeListener{
         binding.createAccountPasswordEditText.setOnFocusChangeListener(this);
         binding.createAccountNameEditText.setOnFocusChangeListener(this);
         binding.createAccountButton.setOnClickListener(this);
+        binding.createAccountRepeatPasswordEditText.setOnFocusChangeListener(this);
     }
 
     public void onFocusChange(@NonNull View view, boolean hasFocus){
@@ -86,9 +88,12 @@ View.OnFocusChangeListener{
 
         if(view.getId() == binding.createAccountNameEditText.getId()){
             this.validateName();
+            return;
         }
 
-
+        if(view.getId() == binding.createAccountRepeatPasswordEditText.getId()){
+            this.checkPassword();
+        }
 
     }
 
@@ -103,8 +108,9 @@ View.OnFocusChangeListener{
         boolean isValidEmail = this.validateEmail();
         boolean isValidPsw = this.validatePassword();
         boolean isValiName = this.validateName();
+        boolean isCheckPsw = this.checkPassword();
 
-        if(!isValidEmail || !isValidPsw || !isValiName){
+        if(!isValidEmail || !isValidPsw || !isCheckPsw || !isValiName){
             return;
         }
 
@@ -116,7 +122,19 @@ View.OnFocusChangeListener{
         authRepository.register(email, psw, new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
-                navController.navigate(R.id.action_from_registration_to_login);
+
+                userRepository.sendEmailVerification(new Callback<Void>() {
+                    @Override
+                    public void onSucces(Void unused) {
+                        navController.navigate(R.id.action_from_registration_to_login);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Snackbar.make(view,"ACCOUNT NON CREATO, MAIL NON INVIATA", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+
             }
 
             @Override
@@ -124,6 +142,21 @@ View.OnFocusChangeListener{
                 Snackbar.make(view,"ACCOUNT NON CREATO", Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    private boolean checkPassword(){
+
+        String password = binding.createAccountPasswordEditText.getText().toString();
+        String rePassword = binding.createAccountRepeatPasswordEditText.getText().toString();
+
+        if(!rePassword.equals(password)){
+            binding.createAccountRepswTextInputLayout.setError("LA PASSWORD È DIVERSA");
+            return false;
+        }
+
+        binding.createAccountRepswTextInputLayout.setError(null);
+        return true;
     }
 
     private boolean validateName(){
@@ -142,7 +175,7 @@ View.OnFocusChangeListener{
     private boolean validateEmail(){
         String email = binding.createAccountEmailEditText.getText().toString();
 
-        if(!InputValidator.isValidEmail(email)){
+        if(!InputValidator.isValidEmail(email) ){
             binding.createAccountEmailTextInputLayout.setError("EMAIL NON VALIDA");
             return false;
         }
@@ -158,6 +191,8 @@ View.OnFocusChangeListener{
             binding.createAccountPswTextInputLayout.setError("PASSWORD NON VALIDA");
             return false;
         }
+
+
 
         binding.createAccountPswTextInputLayout.setError(null);
         return true;

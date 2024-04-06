@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F2"
+    android:background="@color/light_gray"
     tools:context=".ui.welcome.LoginFragment"
     android:id="@+id/fragment_create_account">
 
@@ -30,7 +30,7 @@
         android:layout_marginTop="32dp"
         android:textSize="30sp"
         android:fontFamily="@font/lato_bold"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
                 android:text="@string/email"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -74,6 +74,7 @@
                 android:layout_marginTop="12dp"
                 app:endIconMode="clear_text"
                 app:hintEnabled="false"
+                app:errorTextAppearance="@font/lato_bold"
                 >
 
                 <EditText
@@ -87,7 +88,7 @@
                     android:hint="@string/insert_your_email"
                     android:inputType="textEmailAddress"
                     android:padding="12dp"
-                    android:textColor="#707070"
+                    android:textColor="@color/dark_gray"
                     android:textSize="18sp" />
 
 
@@ -100,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="@string/password"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -113,6 +114,7 @@
                 android:layout_marginTop="12dp"
                 app:endIconMode="password_toggle"
                 app:hintEnabled="false"
+                app:errorTextAppearance="@font/lato_bold"
                 >
 
                 <EditText
@@ -125,7 +127,7 @@
                     android:hint="@string/insert_your_password"
                     android:inputType="textPassword"
                     android:padding="12dp"
-                    android:textColor="#707070"
+                    android:textColor="@color/dark_gray"
                     android:textSize="18sp" />
 
 
@@ -138,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="@string/repeate_password"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -150,6 +152,7 @@
                 android:layout_marginTop="12dp"
                 app:endIconMode="password_toggle"
                 app:hintEnabled="false"
+                app:errorTextAppearance="@font/lato_bold"
                 >
 
                 <EditText
@@ -162,7 +165,7 @@
                     android:hint="@string/insert_your_password"
                     android:inputType="textPassword"
                     android:padding="12dp"
-                    android:textColor="#707070"
+                    android:textColor="@color/dark_gray"
                     android:textSize="18sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -174,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="@string/name"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -186,7 +189,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:endIconMode="clear_text"
-                app:hintEnabled="false">
+                app:hintEnabled="false"
+                app:errorTextAppearance="@font/lato_bold">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/create_account_name_editText"
@@ -196,7 +200,7 @@
                     android:inputType="text"
                     android:hint="@string/insert_your_name"
                     android:drawableStart="@drawable/account_logo"
-                    android:textColor="#707070"
+                    android:textColor="@color/dark_gray"
                     android:padding="12dp"
                     android:textSize="18sp" />
 
@@ -215,7 +219,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:text="@string/sign_up"
                 android:textAlignment="center"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"

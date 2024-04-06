@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F2"
+    android:background="@color/light_gray"
     tools:context=".ui.welcome.LoginFragment"
     android:id="@+id/fragment_login">
 
@@ -29,7 +29,7 @@
         android:layout_marginTop="32dp"
         android:textSize="30sp"
         android:fontFamily="@font/lato_bold"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/email"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -80,7 +80,7 @@
 
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
-                android:textColor="#707070"
+                android:textColor="@color/dark_gray"
                 android:textSize="18sp" />
 
 
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/password"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -121,7 +121,7 @@
 
                 android:inputType="textPassword"
                 android:padding="12dp"
-                android:textColor="#707070"
+                android:textColor="@color/dark_gray"
                 android:textSize="18sp" />
 
 
@@ -153,7 +153,7 @@
         android:layout_marginTop="305dp"
         android:background="@drawable/button_background"
         android:text="@string/sign_in"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:textSize="22sp"
         android:fontFamily="@font/roboto_bold"
         android:textStyle="bold"
