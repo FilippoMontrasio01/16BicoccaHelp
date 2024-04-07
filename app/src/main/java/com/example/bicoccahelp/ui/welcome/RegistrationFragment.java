@@ -127,6 +127,7 @@ View.OnFocusChangeListener{
                     @Override
                     public void onSucces(Void unused) {
                         navController.navigate(R.id.action_from_registration_to_verify_email);
+                        requireActivity().finish();
                     }
 
                     @Override
@@ -135,8 +136,6 @@ View.OnFocusChangeListener{
                     }
                 });
 
-
-
             }
 
             @Override
@@ -144,6 +143,9 @@ View.OnFocusChangeListener{
                 Snackbar.make(view,"ACCOUNT NON CREATO", Snackbar.LENGTH_SHORT).show();
             }
         });
+
+
+
     }
 
 

@@ -27,7 +27,7 @@
 
         <action
             android:id="@+id/action_from_login_to_verify_email"
-            app:destination="@id/fragment_verify_email"/>
+            app:destination="@id/activity_verify_email"/>
 
     </fragment>
 
@@ -50,12 +50,8 @@
         tools:layout="@layout/fragment_registration">
 
         <action
-            android:id="@+id/action_from_registration_to_login"
-            app:destination="@id/fragment_login"/>
-
-        <action
             android:id="@+id/action_from_registration_to_verify_email"
-            app:destination="@id/fragment_verify_email"/>
+            app:destination="@id/activity_verify_email"/>
 
     </fragment>
 
@@ -69,6 +65,7 @@
             android:id="@+id/action_from_verify_email_to_main"
             app:destination="@id/activity_main"/>
 
+
     </fragment>
 
 
@@ -78,5 +75,16 @@
         android:name="com.example.bicoccahelp.ui.MainActivity"
         android:label="@string/mainActivity"
         tools:layout="@layout/activity_main"/>
+
+
+    <activity
+        android:id="@+id/activity_verify_email"
+        android:name="com.example.bicoccahelp.ui.welcome.VerifyEmailActivity"
+        android:label="@string/verifyEmailActivity"
+        tools:layout="@layout/activity_verify_email">
+
+    </activity>
+
+
 
 </navigation>
