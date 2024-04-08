@@ -21,6 +21,7 @@ import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.databinding.FragmentLoginBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
+import android.view.Window;
 
 
 public class LoginFragment extends Fragment implements View.OnClickListener{
@@ -39,6 +40,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         authRepository = ServiceLocator.getInstance().getAuthRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
+
     }
 
     @Override

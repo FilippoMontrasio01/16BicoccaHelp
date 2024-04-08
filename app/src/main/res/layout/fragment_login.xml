@@ -7,14 +7,16 @@
     android:layout_height="match_parent"
     android:background="@color/light_gray"
     tools:context=".ui.welcome.LoginFragment"
-    android:id="@+id/fragment_login">
+    android:id="@+id/fragment_login"
+    style="@android:style/Theme.Holo.NoActionBar">
 
     <ImageView
         android:id="@+id/login_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:src="@mipmap/top_background"
+        android:src="@drawable/wave_haikei_1_"
+        android:background="@color/light_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,19 +26,19 @@
         android:id="@+id/login_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_title"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:textSize="30sp"
         android:fontFamily="@font/lato_bold"
+        android:text="@string/login_title"
         android:textColor="@color/white"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/login_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_width="412dp"
+        android:layout_height="1255dp"
         android:orientation="vertical"
         android:padding="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +46,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_background"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.632">
 
         <TextView
             android:id="@+id/login_email_textView"
@@ -58,14 +60,13 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/login_email_TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:endIconMode="clear_text"
-            app:hintEnabled="false"
-            >
+            app:hintEnabled="false">
 
             <EditText
                 android:id="@+id/login_email_editText"
@@ -84,7 +85,6 @@
                 android:textSize="18sp" />
 
 
-
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -100,14 +100,13 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/login_password_TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:endIconMode="password_toggle"
-            app:hintEnabled="false"
-            >
+            app:hintEnabled="false">
 
             <EditText
                 android:id="@+id/login_password_editText"
@@ -128,7 +127,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-
         <Button
             android:id="@+id/button_login_forgot_password"
             style="@style/Widget.Material3.Button.TextButton"
@@ -136,12 +134,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="24dp"
-            android:text="@string/forgot_password"
             android:fontFamily="@font/lato_bold"
-            android:textColor="@color/light_green"
+            android:text="@string/forgot_password"
+            android:textColor="@color/cranberry_red"
             android:textSize="15sp"
             app:textAllCaps="false" />
-
 
 
     </LinearLayout>
@@ -184,7 +181,7 @@
         android:text="@string/register"
         android:textSize="15sp"
         android:fontFamily="@font/lato_bold"
-        android:textColor="@color/light_green"
+        android:textColor="@color/cranberry_red"
         app:layout_constraintBaseline_toBaselineOf="@id/login_new_account_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
