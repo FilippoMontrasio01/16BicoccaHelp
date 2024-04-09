@@ -118,6 +118,8 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
                 requireActivity().finish();
             }
 
+
+            //prova commit
             @Override
             public void onFailure(Exception e) {
                 Snackbar.make(getView(), "DEVI VERIFICARE LA TUA MAIL", Snackbar.LENGTH_SHORT).show();
