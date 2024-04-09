@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.example.bicoccahelp.data.Callback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class UserRemoteDataSource {
 
@@ -54,6 +55,24 @@ public class UserRemoteDataSource {
         user.getIdToken(true)
                 .addOnSuccessListener(command -> callback.onSucces(null))
                 .addOnFailureListener(callback::onFailure);
+    }
+
+    public void updateUsername(String name, Callback<Void> callback){
+        FirebaseUser user = auth.getCurrentUser();
+
+        if(user == null){
+            callback.onFailure(null);
+            return;
+        }
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnSuccessListener(callback:: onSucces)
+                .addOnFailureListener(callback::onFailure);
+
     }
 
 }

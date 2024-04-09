@@ -1,7 +1,9 @@
 package com.example.bicoccahelp.ui.welcome;
 
-import android.nfc.Tag;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,22 +11,16 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
-import com.example.bicoccahelp.data.auth.authException.EmailVerificationException;
 import com.example.bicoccahelp.data.user.UserRepository;
-import com.example.bicoccahelp.databinding.FragmentLoginBinding;
 import com.example.bicoccahelp.databinding.FragmentRegistrationBinding;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Objects;
 
 
 public class RegistrationFragment extends Fragment implements View.OnClickListener,
@@ -52,7 +48,7 @@ View.OnFocusChangeListener{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentRegistrationBinding.inflate(inflater, container, false);
@@ -116,31 +112,19 @@ View.OnFocusChangeListener{
 
 
 
-        String email = binding.createAccountEmailEditText.getText().toString();
-        String psw = binding.createAccountPasswordEditText.getText().toString();
+        String email = Objects.requireNonNull(binding.createAccountEmailEditText.getText()).toString();
+        String psw = Objects.requireNonNull(binding.createAccountPasswordEditText.getText()).toString();
+        String name = Objects.requireNonNull(binding.createAccountNameEditText.getText()).toString();
 
         authRepository.register(email, psw, new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
-
-                userRepository.sendEmailVerification(new Callback<Void>() {
-                    @Override
-                    public void onSucces(Void unused) {
-                        navController.navigate(R.id.action_from_registration_to_verify_email);
-                        requireActivity().finish();
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        navController.navigate(R.id.action_from_registration_to_verify_email);
-                    }
-                });
-
+                updateUsername(name);
             }
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(view,"ACCOUNT NON CREATO", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, "ACCOUNT NON CREATO", Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -148,11 +132,41 @@ View.OnFocusChangeListener{
 
     }
 
+    private void updateUsername(String name){
+        userRepository.updateUsername(name, new Callback<Void>() {
+            @Override
+            public void onSucces(Void unused) {
+                sendEmailVerification();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), "NOME NON IMPOSTATO", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendEmailVerification(){
+        userRepository.sendEmailVerification(new Callback<Void>() {
+            @Override
+            public void onSucces(Void unused) {
+                navController.navigate(R.id.action_from_registration_to_verify_email);
+                requireActivity().finish();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                navController.navigate(R.id.action_from_registration_to_verify_email);
+                Snackbar.make(requireView(), "MAIL NON INVIATA", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private boolean checkPassword(){
 
-        String password = binding.createAccountPasswordEditText.getText().toString();
-        String rePassword = binding.createAccountRepeatPasswordEditText.getText().toString();
+        String password = Objects.requireNonNull(binding.createAccountPasswordEditText.getText()).toString();
+        String rePassword = Objects.requireNonNull(binding.createAccountRepeatPasswordEditText.getText()).toString();
 
         if(!rePassword.equals(password)){
             binding.createAccountRepswTextInputLayout.setError("LA PASSWORD È DIVERSA");
@@ -164,7 +178,7 @@ View.OnFocusChangeListener{
     }
 
     private boolean validateName(){
-        String name = binding.createAccountNameEditText.getText().toString();
+        String name = Objects.requireNonNull(binding.createAccountNameEditText.getText()).toString();
 
         if(!InputValidator.isValidName(name)){
             binding.createAccountNameTextInputLayout.setError("NOME NON VALIDO");
@@ -177,7 +191,7 @@ View.OnFocusChangeListener{
 
 
     private boolean validateEmail(){
-        String email = binding.createAccountEmailEditText.getText().toString();
+        String email = Objects.requireNonNull(binding.createAccountEmailEditText.getText()).toString();
 
         if(!InputValidator.isValidEmail(email) ){
             binding.createAccountEmailTextInputLayout.setError("EMAIL NON VALIDA");
@@ -189,7 +203,7 @@ View.OnFocusChangeListener{
     }
 
     private boolean validatePassword(){
-        String psw = binding.createAccountPasswordEditText.getText().toString();
+        String psw = Objects.requireNonNull(binding.createAccountPasswordEditText.getText()).toString();
 
         if(!InputValidator.isValidPassword(psw)){
             binding.createAccountPswTextInputLayout.setError("PASSWORD NON VALIDA");

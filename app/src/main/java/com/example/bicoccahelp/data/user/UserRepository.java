@@ -27,4 +27,8 @@ public class UserRepository {
         userRemoteDataSource.refreshIdToken(callback);
     }
 
+    public void updateUsername(String name, Callback<Void> callback){
+        userRemoteDataSource.updateUsername(name, callback);
+    }
+
 }

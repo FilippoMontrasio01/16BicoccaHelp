@@ -8,6 +8,7 @@
     tools:context=".ui.MainActivity"
     android:id="@+id/activity_main">
     <TextView
+      android:id="@+id/prova_nome"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Hello World!"

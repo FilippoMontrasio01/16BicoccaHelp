@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
@@ -21,7 +22,6 @@ import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.databinding.FragmentLoginBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
-import android.view.Window;
 
 
 public class LoginFragment extends Fragment implements View.OnClickListener{
@@ -93,9 +93,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             return;
         }
 
+
+        createAndStartProgressBar().setVisibility(View.VISIBLE);
+        createAndStartProgressBar().playAnimation();
         authRepository.login(email, password, new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
+                createAndStartProgressBar().cancelAnimation();
                 userRepository.reload(new Callback<UserModel>() {
                     @Override
                     public void onSucces(UserModel userModel) {
@@ -110,7 +114,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        createAndStartProgressBar().cancelAnimation();
+                        Snackbar.make(getView(), "LOGIN FALLITO", Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -120,6 +125,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 Snackbar.make(getView(),"CREDENZIALI ERRATE", Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    public LottieAnimationView createAndStartProgressBar(){
+        LottieAnimationView animationView = binding.lottieAnimationView;
+        animationView.setAnimation("switch_loaders.json");
+
+        return animationView;
     }
 
     @Override

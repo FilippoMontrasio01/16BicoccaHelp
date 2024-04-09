@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.user.UserModel;
@@ -66,10 +67,15 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
     }
 
     private void resendOnClick(View v) {
+
+
         userRepository.reload(new Callback<UserModel>() {
+
+
             @Override
             public void onSucces(UserModel userModel) {
                 if(userModel.emailVerified){
+
                    Snackbar.make(getView(), "LA MAIL È GIA STATA VERIFICATA", Snackbar.LENGTH_SHORT).show();
                    navController.navigate(R.id.action_from_verify_email_fragment_to_main);
                    requireActivity().finish();
@@ -96,10 +102,14 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
     }
 
     private void continueOnclick(View v) {
+
+        createAndStartProgressBar().setVisibility(View.VISIBLE);
+        createAndStartProgressBar().playAnimation();
         userRepository.reload(new Callback<UserModel>() {
             @Override
             public void onSucces(UserModel userModel) {
                 if(!userModel.emailVerified){
+                    createAndStartProgressBar().cancelAnimation();
                     Snackbar.make(getView(), "UTENTE NON VERIFICATO", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
@@ -113,6 +123,13 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
                 Snackbar.make(getView(), "DEVI VERIFICARE LA TUA MAIL", Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public LottieAnimationView createAndStartProgressBar(){
+        LottieAnimationView animationView = binding.lottieAnimationView;
+        animationView.setAnimation("switch_loaders.json");
+
+        return animationView;
     }
 
 

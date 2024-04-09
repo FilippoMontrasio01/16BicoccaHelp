@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
@@ -72,9 +73,14 @@ View.OnFocusChangeListener{
             return;
         }
 
+
+
+        createAndStartProgressBar().setVisibility(View.VISIBLE);
+        createAndStartProgressBar().playAnimation();
         authRepository.forgotPassword(email, new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
+                createAndStartProgressBar().cancelAnimation();
                 navController.navigate(R.id.action_from_forgot_password_to_login);
             }
 
@@ -105,6 +111,13 @@ View.OnFocusChangeListener{
         }
         binding.forgotPasswordTextInputLayout.setError(null);
         return true;
+    }
+
+    public LottieAnimationView createAndStartProgressBar(){
+        LottieAnimationView animationView = binding.lottieAnimationView;
+        animationView.setAnimation("switch_loaders.json");
+
+        return animationView;
     }
 
     @Override
