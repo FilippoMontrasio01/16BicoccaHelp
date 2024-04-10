@@ -31,4 +31,22 @@ public class UserRepository {
         userRemoteDataSource.updateUsername(name, callback);
     }
 
+    public UserModel getCurrentUser(){
+        return userRemoteDataSource.getCurrentUser();
+    }
+
+    public void deleteUser(Callback<Void> callback){
+        userRemoteDataSource.deleteUser(callback);
+    }
+
+    public void reauthenticate(String password, Callback<Void> callback){
+        userRemoteDataSource.reauthenticate(password, callback);
+    }
+
+    public void updatePassword(String password, Callback<Void> callback){
+        userRemoteDataSource.updatePassword(password, callback);
+    }
+
+
+
 }

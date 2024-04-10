@@ -70,9 +70,12 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="verifyEmailActivity">Verify Email Activity</string>
-    <string name="delete_profile">Delete profile</string>
-    <string name="sign_out">Sign out</string>
+    <string name="delete_profile">Delete Account</string>
+    <string name="sign_out">Sign Out</string>
     <string name="history">History</string>
     <string name="review">Review</string>
     <string name="profile_title">Profile</string>
+    <string name="profileFragment">Profile Fragment</string>
+    <string name="welcomeActivity">Welcome Activity</string>
+    <string name="dialog_delete">Delete Account Dialog</string>
 </resources>

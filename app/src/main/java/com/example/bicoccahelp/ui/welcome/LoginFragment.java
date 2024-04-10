@@ -108,7 +108,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                             return;
                         }
 
-                        navController.navigate(R.id.action_from_login_to_main);
+                        navController.navigate(R.id.action_from_login_to_profile);
                         requireActivity().finish();
                     }
 
@@ -122,6 +122,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onFailure(Exception e) {
+                createAndStartProgressBar().setVisibility(View.GONE);
+                createAndStartProgressBar().cancelAnimation();
                 Snackbar.make(getView(),"CREDENZIALI ERRATE", Snackbar.LENGTH_SHORT).show();
             }
         });

@@ -12,18 +12,21 @@
         android:label="@string/verifyEmailFragment"
         tools:layout="@layout/fragment_verify_email">
 
-
         <action
-            android:id="@+id/action_from_verify_email_fragment_to_main"
+            android:id="@+id/action_from_verify_email_to_profile"
             app:destination="@id/activity_main"/>
+
     </fragment>
+
+
 
     <activity
         android:id="@+id/activity_main"
         android:name="com.example.bicoccahelp.ui.MainActivity"
         android:label="@string/mainActivity"
-        tools:layout="@layout/activity_main"/>
+        tools:layout="@layout/activity_main">
 
+    </activity>
 
 
 

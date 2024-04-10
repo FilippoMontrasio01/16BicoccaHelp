@@ -77,7 +77,7 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
                 if(userModel.emailVerified){
 
                    Snackbar.make(getView(), "LA MAIL È GIA STATA VERIFICATA", Snackbar.LENGTH_SHORT).show();
-                   navController.navigate(R.id.action_from_verify_email_fragment_to_main);
+                   navController.navigate(R.id.action_from_verify_email_to_profile);
                    requireActivity().finish();
                 }
 
@@ -108,13 +108,15 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
         userRepository.reload(new Callback<UserModel>() {
             @Override
             public void onSucces(UserModel userModel) {
+
                 if(!userModel.emailVerified){
-                    createAndStartProgressBar().cancelAnimation();
                     Snackbar.make(getView(), "UTENTE NON VERIFICATO", Snackbar.LENGTH_SHORT).show();
+                    createAndStartProgressBar().cancelAnimation();
+                    createAndStartProgressBar().setVisibility(View.GONE);
                     return;
                 }
 
-                navController.navigate(R.id.action_from_verify_email_fragment_to_main);
+                navController.navigate(R.id.action_from_verify_email_to_profile);
                 requireActivity().finish();
             }
 

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.profile.DeleteUserDialogFragment">
+
+
+
+
+    <LinearLayout
+        android:id="@+id/delete_user_dialog_LinearLayout"
+        android:elevation="100dp"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/delete_account_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/delete_profile"
+            android:textColor="@color/dark_gray"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/delete_account_password_TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="300dp"
+            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            app:errorTextAppearance="@font/lato_bold"
+            app:endIconMode="password_toggle"
+            app:hintEnabled="false"
+            app:startIconDrawable="@drawable/password_3_">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/delete_account_password_editText"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_background"
+                android:ems="10"
+                android:fontFamily="@font/lato"
+                android:hint="@string/insert_your_password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textColor="@color/dark_gray"
+                android:textSize="18sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/delete_account_button"
+            style="@android:style/Widget.Button"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/button_background"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/delete_profile"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

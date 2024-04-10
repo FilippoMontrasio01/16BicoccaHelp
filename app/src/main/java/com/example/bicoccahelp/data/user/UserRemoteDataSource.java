@@ -3,14 +3,19 @@ package com.example.bicoccahelp.data.user;
 import androidx.annotation.Nullable;
 
 import com.example.bicoccahelp.data.Callback;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.util.Objects;
+
 public class UserRemoteDataSource {
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private @Nullable UserModel getCurrentUser(){
+    public @Nullable UserModel getCurrentUser(){
         FirebaseUser user = auth.getCurrentUser();
         if(user == null){
             return null;
@@ -75,4 +80,46 @@ public class UserRemoteDataSource {
 
     }
 
+    public void deleteUser(Callback<Void> callback){
+        FirebaseUser user = auth.getCurrentUser();
+
+        if(user == null){
+            callback.onFailure(null);
+            return;
+        }
+
+        user.delete()
+                .addOnSuccessListener(callback::onSucces)
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void reauthenticate(String password, Callback<Void> callback){
+        FirebaseUser user = auth.getCurrentUser();
+
+        if(user == null){
+            callback.onFailure(null);
+            return;
+        }
+
+        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(user.getEmail()), password);
+
+        user.reauthenticate(credential)
+                .addOnSuccessListener(callback::onSucces)
+                .addOnFailureListener(callback::onFailure);
+
+
+    }
+
+    public void updatePassword(String password, Callback<Void> callback) {
+        FirebaseUser user = auth.getCurrentUser();
+
+        if(user == null){
+            callback.onFailure(null);
+            return;
+        }
+
+        user.updatePassword(password)
+                .addOnSuccessListener(callback:: onSucces)
+                .addOnFailureListener(callback::onFailure);
+    }
 }
