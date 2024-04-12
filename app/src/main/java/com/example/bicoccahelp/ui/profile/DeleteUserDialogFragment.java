@@ -7,11 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
@@ -22,44 +24,50 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-public class DeleteUserDialogFragment extends DialogFragment{
+public class DeleteUserDialogFragment extends DialogFragment implements View.OnClickListener{
+
+
+    private UserRepository userRepository;
+    private FragmentDeleteUserDialogBinding binding;
 
     private NavController navController;
-    private FragmentDeleteUserDialogBinding binding;
-    private UserRepository userRepository;
-
+    Button button;
     public DeleteUserDialogFragment() {
         // Required empty public constructor
     }
 
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         userRepository = ServiceLocator.getInstance().getUserRepository();
+
+        // Imposta lo stile del dialog come trasparente
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentDeleteUserDialogBinding.inflate(inflater, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentDeleteUserDialogBinding.inflate(inflater, container,false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        navController = NavHostFragment.findNavController(this.getParentFragment());
         binding.deleteAccountButton.setOnClickListener(this::onClick);
-        navController = NavHostFragment.findNavController(getParentFragment());
     }
 
 
-    private void onClick(View view) {
-        if(view.getId() == binding.deleteAccountButton.getId()){
-            this.onDeleteClick(view);
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == binding.deleteAccountButton.getId()){
+            this.onDeleteClick(v);
         }
     }
 
-    private void onDeleteClick(@NonNull View view) {
+    private void onDeleteClick(View v) {
         String password = Objects.requireNonNull(binding.deleteAccountPasswordEditText.getText()).toString();
 
         if (password.isEmpty()) {
@@ -79,25 +87,22 @@ public class DeleteUserDialogFragment extends DialogFragment{
 
                     @Override
                     public void onFailure(Exception e) {
-                        Snackbar.make(view,"Errore nell'eliminazione", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(v,"Errore nell'eliminazione", Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(view,"Errore nell'eliminazione", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(v,"Errore nell'eliminazione", Snackbar.LENGTH_SHORT).show();
             }
         });
+
     }
-
-
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
-
 }

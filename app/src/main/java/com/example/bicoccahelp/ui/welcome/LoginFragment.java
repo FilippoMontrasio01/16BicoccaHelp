@@ -1,5 +1,6 @@
 package com.example.bicoccahelp.ui.welcome;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -135,6 +136,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         animationView.setAnimation("switch_loaders.json");
 
         return animationView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(userRepository.getCurrentUser() != null){
+            navController.navigate(R.id.action_from_login_to_profile);
+        }
     }
 
     @Override

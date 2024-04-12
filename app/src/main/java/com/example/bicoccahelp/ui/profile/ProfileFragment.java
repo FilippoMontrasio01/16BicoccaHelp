@@ -1,6 +1,7 @@
 package com.example.bicoccahelp.ui.profile;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
+import com.example.bicoccahelp.data.NameUpdateListener;
 import com.example.bicoccahelp.data.auth.AuthRepository;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
@@ -62,8 +64,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         navController = Navigation.findNavController(view);
         binding.signOutItem.setOnClickListener(this);
         binding.deleteProfileItem.setOnClickListener(this);
-        binding.displayNameTextView.setText(user.name);
+        binding.updatePasswordItem.setOnClickListener(this);
+        binding.updateNameItem.setOnClickListener(this);
         binding.displayEmailTextView.setText(user.email);
+        binding.displayNameTextView.setText(user.name);
     }
 
     @Override
@@ -75,6 +79,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
         if(v.getId() == binding.deleteProfileItem.getId()){
             showConfirmDeleteDialog();
+            return;
+        }
+
+        if(v.getId() == binding.updatePasswordItem.getId()){
+            showUpdatePasswordDialog();
+            return;
+        }
+
+        if(v.getId() == binding.updateNameItem.getId()){
+            showUpdateNameDialog();
         }
     }
 
@@ -97,17 +111,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
 
-    private void showConfirmDeleteDialog() {;
+    private void showConfirmDeleteDialog() {
         navController.navigate(R.id.action_from_profile_to_delete_dialog);
     }
 
+    private void showUpdatePasswordDialog() {
+        navController.navigate(R.id.action_from_profile_to_update_password_dialog);
+    }
 
-
+    private void showUpdateNameDialog() {
+        navController.navigate(R.id.action_from_profile_to_update_name_dialog);
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 }

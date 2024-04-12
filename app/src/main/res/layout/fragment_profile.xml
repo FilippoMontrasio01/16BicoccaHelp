@@ -162,9 +162,9 @@
                         android:textSize="20sp"
 
                         android:layout_toEndOf="@+id/update_password_image"
-                        android:layout_toStartOf="@+id/update_email_arrow" />
+                        android:layout_toStartOf="@+id/update_password_arrow" />
                     <ImageView
-                        android:id="@+id/update_email_arrow"
+                        android:id="@+id/update_password_arrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/right_arrow_icon"
@@ -195,6 +195,7 @@
                         android:src="@drawable/review_1_"
                         tools:ignore="RtlSymmetry" />
                     <TextView
+                        android:id="@+id/review_textView"
                         android:layout_marginStart="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

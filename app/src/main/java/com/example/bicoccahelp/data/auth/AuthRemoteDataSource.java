@@ -25,9 +25,6 @@ public class AuthRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
-
-
-
     public void logout(){
         auth.signOut();
     }

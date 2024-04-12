@@ -18,7 +18,16 @@
 
         <action
             android:id="@+id/action_from_profile_to_delete_dialog"
-            app:destination="@id/delete_dialog"/>
+            app:destination="@id/delete_dialog" />
+
+        <action
+            android:id="@+id/action_from_profile_to_update_password_dialog"
+            app:destination="@id/update_password_dialog"/>
+
+        <action
+            android:id="@+id/action_from_profile_to_update_name_dialog"
+            app:destination="@id/update_name_dialog"/>
+
     </fragment>
 
     <activity
@@ -38,7 +47,29 @@
             android:id="@+id/action_from_delete_dialog_to_welcome_activity"
             app:destination="@id/activity_welcome"/>
 
+        <action
+            android:id="@+id/action_from_delete_dialog_to_profile_fragment"
+            app:destination="@id/profile_fragment"/>
 
+    </dialog>
+
+    <dialog
+        android:id="@+id/update_password_dialog"
+        android:name="com.example.bicoccahelp.ui.profile.UpdatePasswordDialogFragment"
+        android:label="@string/dialog_update_password"
+        tools:layout="@layout/fragment_update_password_dialog">
+
+        <action
+            android:id="@+id/action_from_update_password_dialog_to_welcome_Activity"
+            app:destination="@id/activity_welcome"/>
+
+    </dialog>
+
+    <dialog
+        android:id="@+id/update_name_dialog"
+        android:name="com.example.bicoccahelp.ui.profile.UpdateNameDialogFragment"
+        android:label="@string/dialog_update_name"
+        tools:layout="@layout/fragment_update_name_dialog">
     </dialog>
 
 </navigation>

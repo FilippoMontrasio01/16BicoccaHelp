@@ -78,4 +78,13 @@
     <string name="profileFragment">Profile Fragment</string>
     <string name="welcomeActivity">Welcome Activity</string>
     <string name="dialog_delete">Delete Account Dialog</string>
+    <string name="update_password">Update Password Dialog</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_update_password">Update password dialog</string>
+    <string name="update_password_title">Update Password</string>
+    <string name="insert_old_password">Insert old password</string>
+    <string name="insert_new_password">Insert new password</string>
+    <string name="update_name_title">Update Name</string>
+    <string name="dialog_update_name">Update name Dialog</string>
 </resources>
