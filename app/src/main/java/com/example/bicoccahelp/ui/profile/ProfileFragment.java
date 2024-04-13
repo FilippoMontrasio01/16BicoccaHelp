@@ -25,8 +25,6 @@ import com.example.bicoccahelp.utils.ServiceLocator;
 public class ProfileFragment extends Fragment implements View.OnClickListener,
         OnUpdateListener {
 
-
-    private AuthRepository authRepository;
     private FragmentProfileBinding binding;
     private NavController navController;
     private UserRepository userRepository;
@@ -40,7 +38,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        authRepository = ServiceLocator.getInstance().getAuthRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
 
 
@@ -106,8 +103,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
 
     private void showUpdateNameDialog() {
         UpdateNameDialogFragment dialogFragment = new UpdateNameDialogFragment();
-        dialogFragment.setOnNameUpdatedListener(this); // Imposta il listener correttamente
-        dialogFragment.show(getParentFragmentManager(), "UpdateNameDialogFragment"); // Mostra il DialogFragment
+        dialogFragment.setOnNameUpdatedListener(new OnUpdateListener() {
+            @Override
+            public void onUpdateListener(String newName) {
+                binding.displayNameTextView.setText(newName);
+            }
+        });
+        dialogFragment.show(getParentFragmentManager(), "UpdateNameDialogFragment");
     }
 
     @Override
