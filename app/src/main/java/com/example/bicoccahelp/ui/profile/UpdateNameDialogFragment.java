@@ -92,6 +92,10 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
 
         binding.updateNameTextInputLayout.setError(null);
 
+        updateName(newName);
+    }
+
+    private void updateName(String newName) {
         userRepository.updateUsername(newName, new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
@@ -106,7 +110,7 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(v, "IL NOME NON È STATO AGGIORNATO", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), "IL NOME NON È STATO AGGIORNATO", Snackbar.LENGTH_SHORT).show();
             }
         });
     }

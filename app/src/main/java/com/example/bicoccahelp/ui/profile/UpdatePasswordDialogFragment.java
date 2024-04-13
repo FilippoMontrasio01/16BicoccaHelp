@@ -91,34 +91,42 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
             return;
         }
 
-
-            userRepository.reauthenticate(oldPassword, new Callback<Void>() {
-                @Override
-                public void onSucces(Void unused) {
-                    userRepository.updatePassword(newPassword, new Callback<Void>() {
-                        @Override
-                        public void onSucces(Void unused) {
-                            authRepository.logout();
-                            navController.navigate(R.id.action_from_update_password_dialog_to_welcome_Activity);
-                            requireActivity().finish();
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            Snackbar.make(v, "LA PASSWORD NON È STATA AGGIORNATA", Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    Snackbar.make(v, "L'UTENTE NON SI È RIAUTENTICATO CORRETTAMENTE", Snackbar.LENGTH_SHORT).show();
-                }
-            });
+        reAuthAndUpdatePsw(oldPassword, newPassword);
     }
 
     private void onClickCancel(View v) {
         getDialog().cancel();
+    }
+
+
+    public void reAuthAndUpdatePsw(String oldPassword, String newPassword){
+        userRepository.reauthenticate(oldPassword, new Callback<Void>() {
+            @Override
+            public void onSucces(Void unused) {
+                updatePsw(newPassword);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(getView(), "L'UTENTE NON SI È RIAUTENTICATO CORRETTAMENTE", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void updatePsw(String newPassword){
+        userRepository.updatePassword(newPassword, new Callback<Void>() {
+            @Override
+            public void onSucces(Void unused) {
+                authRepository.logout();
+                navController.navigate(R.id.action_from_update_password_dialog_to_welcome_Activity);
+                requireActivity().finish();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(getView(), "LA PASSWORD NON È STATA AGGIORNATA", Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void onDestroyView() {

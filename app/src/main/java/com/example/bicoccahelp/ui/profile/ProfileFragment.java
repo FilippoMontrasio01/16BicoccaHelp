@@ -20,7 +20,6 @@ import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.databinding.FragmentProfileBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class ProfileFragment extends Fragment implements View.OnClickListener,
@@ -93,24 +92,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    private void onSignOutClick() {
-        authRepository.logout();
-        navController.navigate(R.id.action_from_profile_to_welcome_activity);
-        requireActivity().finish();
+    private void showConfirmSignOutDialog() {
+        navController.navigate(R.id.action_from_profile_to_confirm_sign_out);
     }
-
-    private void showConfirmSignOutDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.sign_out)
-                .setMessage("Sei sicuro di voler uscire?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    onSignOutClick();
-                })
-                .setNegativeButton("No", (dialog, which) -> dialog.cancel());
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
 
     private void showConfirmDeleteDialog() {
         navController.navigate(R.id.action_from_profile_to_delete_dialog);

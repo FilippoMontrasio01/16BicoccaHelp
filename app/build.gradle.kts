@@ -51,7 +51,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
 
 
-    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+    //annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
     implementation("com.airbnb.android:lottie:4.1.0")
 
 

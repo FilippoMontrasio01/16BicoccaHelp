@@ -28,6 +28,10 @@
             android:id="@+id/action_from_profile_to_update_name_dialog"
             app:destination="@id/update_name_dialog"/>
 
+        <action
+            android:id="@+id/action_from_profile_to_confirm_sign_out"
+            app:destination="@id/logout_dialog"/>
+
     </fragment>
 
     <activity
@@ -74,6 +78,18 @@
         <action
             android:id="@+id/action_from_update_name_dialog_to_profile_fragment"
             app:destination="@id/profile_fragment"/>
+    </dialog>
+
+    <dialog
+        android:id="@+id/logout_dialog"
+        android:name="com.example.bicoccahelp.ui.profile.LogoutDialogFragment"
+        android:label="@string/dialog_log_out"
+        tools:layout="@layout/fragment_logout_dialog"
+        >
+
+        <action
+            android:id="@+id/action_from_SignOut_to_welcome_activity"
+            app:destination="@id/activity_welcome"/>
     </dialog>
 
 </navigation>

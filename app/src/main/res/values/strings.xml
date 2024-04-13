@@ -87,4 +87,5 @@
     <string name="insert_new_password">Insert new password</string>
     <string name="update_name_title">Update Name</string>
     <string name="dialog_update_name">Update name Dialog</string>
+    <string name="dialog_log_out">Log Out Dialog</string>
 </resources>
