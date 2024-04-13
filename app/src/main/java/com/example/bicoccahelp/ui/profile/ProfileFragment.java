@@ -1,7 +1,6 @@
 package com.example.bicoccahelp.ui.profile;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,15 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
-import com.example.bicoccahelp.data.NameUpdateListener;
+import com.example.bicoccahelp.data.OnUpdateListener;
 import com.example.bicoccahelp.data.auth.AuthRepository;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.databinding.FragmentProfileBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.firebase.auth.FirebaseUser;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener,
+        OnUpdateListener {
 
 
     private AuthRepository authRepository;
@@ -120,12 +121,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     private void showUpdateNameDialog() {
-        navController.navigate(R.id.action_from_profile_to_update_name_dialog);
+        UpdateNameDialogFragment dialogFragment = new UpdateNameDialogFragment();
+        dialogFragment.setOnNameUpdatedListener(this); // Imposta il listener correttamente
+        dialogFragment.show(getParentFragmentManager(), "UpdateNameDialogFragment"); // Mostra il DialogFragment
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onUpdateListener(String newName) {
+        binding.displayNameTextView.setText(newName);
     }
 }

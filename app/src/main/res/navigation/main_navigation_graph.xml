@@ -70,6 +70,10 @@
         android:name="com.example.bicoccahelp.ui.profile.UpdateNameDialogFragment"
         android:label="@string/dialog_update_name"
         tools:layout="@layout/fragment_update_name_dialog">
+
+        <action
+            android:id="@+id/action_from_update_name_dialog_to_profile_fragment"
+            app:destination="@id/profile_fragment"/>
     </dialog>
 
 </navigation>
