@@ -13,28 +13,31 @@
         android:theme="@style/Theme.BicoccaHelp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:exported="false"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/Theme.BicoccaHelp"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
             android:name=".ui.welcome.VerifyEmailActivity"
             android:exported="false"
             android:label="@string/title_activity_verify_email"
-            android:theme="@style/Theme.BicoccaHelp" />
-
-
+            android:theme="@style/Theme.BicoccaHelp"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.welcome.WelcomeActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

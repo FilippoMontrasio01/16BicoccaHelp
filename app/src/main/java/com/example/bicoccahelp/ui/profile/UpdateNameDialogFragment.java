@@ -30,15 +30,11 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
     private UserRepository userRepository;
     private FragmentUpdateNameDialogBinding binding;
     private NavController navController;
-    private OnUpdateListener onUpdateListener;
+
 
 
     public UpdateNameDialogFragment() {
 
-    }
-
-    public void setOnNameUpdatedListener(OnUpdateListener listener) {
-        onUpdateListener = listener;
     }
 
     @Override
@@ -99,13 +95,7 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
         userRepository.updateUsername(newName, new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
-
-                if (onUpdateListener != null) {
-                    onUpdateListener.onUpdateListener(newName);
-                }
-
-                dismiss();
-                navController.popBackStack();
+                navController.navigate(R.id.action_from_update_name_dialog_to_profile_fragment);
             }
 
             @Override

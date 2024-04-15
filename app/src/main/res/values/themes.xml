@@ -1,4 +1,3 @@
-
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.BicoccaHelp" parent="Theme.Material3.DayNight.NoActionBar">
@@ -6,10 +5,26 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.BicoccaHelp" parent="Base.Theme.BicoccaHelp" />
+    <style name="Theme.BicoccaHelp" parent="Base.Theme.BicoccaHelp">
+
+        <item name="android:statusBarColor">@color/dark_red</item>
+        <item name="android:navigationBarColor">@color/light_gray</item>
+
+
+    </style>
+
     <style name="RoundedImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="BottomNavigationThemeCustom">
+        <item name="enforceTextAppearance">true</item>
+        <item name="enforceMaterialTheme">true</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemRippleColor">@android:color/transparent</item>
+        <item name="itemTextAppearanceInactive">?attr/textAppearanceCaption</item>
+        <item name="itemTextAppearanceActive">?attr/textAppearanceCaption</item>
+        <item name="itemTextColor">@color/white</item>
+    </style>
 </resources>

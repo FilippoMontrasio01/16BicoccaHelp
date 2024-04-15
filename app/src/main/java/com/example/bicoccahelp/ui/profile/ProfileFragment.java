@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,8 @@ import com.example.bicoccahelp.databinding.FragmentProfileBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener,
-        OnUpdateListener {
+public class ProfileFragment extends Fragment implements View.OnClickListener
+         {
 
     private FragmentProfileBinding binding;
     private NavController navController;
@@ -39,6 +40,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userRepository = ServiceLocator.getInstance().getUserRepository();
+
+
 
 
     }
@@ -58,7 +61,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         UserModel user = userRepository.getCurrentUser();
 
 
-        navController = Navigation.findNavController(view);
+        navController = NavHostFragment.findNavController(this);
         binding.signOutItem.setOnClickListener(this);
         binding.deleteProfileItem.setOnClickListener(this);
         binding.updatePasswordItem.setOnClickListener(this);
@@ -102,14 +105,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     }
 
     private void showUpdateNameDialog() {
-        UpdateNameDialogFragment dialogFragment = new UpdateNameDialogFragment();
-        dialogFragment.setOnNameUpdatedListener(new OnUpdateListener() {
-            @Override
-            public void onUpdateListener(String newName) {
-                binding.displayNameTextView.setText(newName);
-            }
-        });
-        dialogFragment.show(getParentFragmentManager(), "UpdateNameDialogFragment");
+        navController.navigate(R.id.action_from_profile_to_update_name_dialog);
     }
 
     @Override
@@ -118,8 +114,4 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
         binding = null;
     }
 
-    @Override
-    public void onUpdateListener(String newName) {
-        binding.displayNameTextView.setText(newName);
-    }
 }

@@ -32,6 +32,26 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="verifyEmailActivity">Verify Email Activity</string>
+    <string name="delete_profile">Delete Account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="history">History</string>
+    <string name="review">Review</string>
+    <string name="profile_title">Profile</string>
+    <string name="profileFragment">Profile Fragment</string>
+    <string name="welcomeActivity">Welcome Activity</string>
+    <string name="dialog_delete">Delete Account Dialog</string>
+    <string name="update_password">Update Password Dialog</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_update_password">Update password dialog</string>
+    <string name="update_password_title">Update Password</string>
+    <string name="insert_old_password">Insert old password</string>
+    <string name="insert_new_password">Insert new password</string>
+    <string name="update_name_title">Update Name</string>
+    <string name="dialog_update_name">Update name Dialog</string>
+    <string name="dialog_log_out">Log Out Dialog</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -69,23 +89,7 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
-    <string name="verifyEmailActivity">Verify Email Activity</string>
-    <string name="delete_profile">Delete Account</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="history">History</string>
-    <string name="review">Review</string>
-    <string name="profile_title">Profile</string>
-    <string name="profileFragment">Profile Fragment</string>
-    <string name="welcomeActivity">Welcome Activity</string>
-    <string name="dialog_delete">Delete Account Dialog</string>
-    <string name="update_password">Update Password Dialog</string>
-    <string name="confirm">Confirm</string>
-    <string name="cancel">Cancel</string>
-    <string name="dialog_update_password">Update password dialog</string>
-    <string name="update_password_title">Update Password</string>
-    <string name="insert_old_password">Insert old password</string>
-    <string name="insert_new_password">Insert new password</string>
-    <string name="update_name_title">Update Name</string>
-    <string name="dialog_update_name">Update name Dialog</string>
-    <string name="dialog_log_out">Log Out Dialog</string>
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <string name="home_fragment">Fragment Home</string>
 </resources>

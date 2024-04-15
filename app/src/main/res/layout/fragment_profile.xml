@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_host_fragment"
+    app:navGraph="@navigation/main_navigation_graph"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/light_gray"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment">
@@ -10,7 +13,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_gray">
+        android:background="@color/light_gray"
+        android:layout_marginBottom="100dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,6 +86,8 @@
                 android:fontFamily="@font/lato"
                 android:textColor="@color/dark_gray"
                 />
+
+
 
             <LinearLayout
                 android:id="@+id/profile_setting_linearLayout"
@@ -307,7 +313,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
                 <!-- Logout -->
