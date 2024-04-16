@@ -20,7 +20,6 @@
         android:label="@string/profileFragment"
         tools:layout="@layout/fragment_profile">
 
-
         <action
             android:id="@+id/action_from_profile_to_welcome_activity"
             app:destination="@id/activity_welcome"/>
@@ -43,7 +42,6 @@
 
 
     </fragment>
-
 
     <activity
         android:id="@+id/activity_welcome"

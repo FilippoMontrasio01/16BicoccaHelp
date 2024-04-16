@@ -2,6 +2,7 @@ package com.example.bicoccahelp.utils;
 
 import com.example.bicoccahelp.data.auth.AuthRemoteDataSource;
 import com.example.bicoccahelp.data.auth.AuthRepository;
+import com.example.bicoccahelp.data.user.UserAssetsRemoteDataSource;
 import com.example.bicoccahelp.data.user.UserRemoteDataSource;
 import com.example.bicoccahelp.data.user.UserRepository;
 
@@ -26,6 +27,6 @@ public class ServiceLocator {
     }
 
     public UserRepository getUserRepository(){
-        return new UserRepository(new UserRemoteDataSource());
+        return new UserRepository(new UserRemoteDataSource(), new UserAssetsRemoteDataSource());
     }
 }

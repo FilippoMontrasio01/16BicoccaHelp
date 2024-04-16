@@ -1,9 +1,10 @@
 package com.example.bicoccahelp.data.user;
 
+import android.net.Uri;
+
 import androidx.annotation.Nullable;
 
 import com.example.bicoccahelp.data.Callback;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -11,6 +12,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.Objects;
+
+import kotlin.reflect.KCallable;
 
 public class UserRemoteDataSource {
 
@@ -21,7 +24,7 @@ public class UserRemoteDataSource {
             return null;
         }
 
-        return new UserModel(user.getUid(), user.getEmail(), user.isEmailVerified(), user.getDisplayName());
+        return new UserModel(user.getUid(), user.getEmail(), user.isEmailVerified(), user.getDisplayName(), user.getPhotoUrl());
     }
 
 
@@ -50,7 +53,7 @@ public class UserRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
-    public void refreshIdToken(Callback<Void> callback){
+    /*public void refreshIdToken(Callback<Void> callback){
         FirebaseUser user = auth.getCurrentUser();
         if(user == null){
             callback.onFailure(null);
@@ -60,7 +63,7 @@ public class UserRemoteDataSource {
         user.getIdToken(true)
                 .addOnSuccessListener(command -> callback.onSucces(null))
                 .addOnFailureListener(callback::onFailure);
-    }
+    }*/
 
     public void updateUsername(String name, Callback<Void> callback){
         FirebaseUser user = auth.getCurrentUser();
@@ -78,6 +81,28 @@ public class UserRemoteDataSource {
                 .addOnSuccessListener(callback:: onSucces)
                 .addOnFailureListener(callback::onFailure);
 
+    }
+
+    public void updatePhoto(Uri photoUri, Callback<Void> callback){
+        FirebaseUser user = auth.getCurrentUser();
+
+        if(user == null){
+            callback.onFailure(null);
+            return;
+        }
+
+        if(photoUri == null){
+            callback.onFailure(null);
+            return;
+        }
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(photoUri)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnSuccessListener(callback::onSucces)
+                .addOnFailureListener(callback::onFailure);
     }
 
     public void deleteUser(Callback<Void> callback){

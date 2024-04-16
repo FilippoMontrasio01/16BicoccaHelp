@@ -1,17 +1,19 @@
 package com.example.bicoccahelp.data.user;
 
+import android.net.Uri;
+
 import com.example.bicoccahelp.data.Callback;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class UserRepository {
 
     private final UserRemoteDataSource userRemoteDataSource;
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private final FirebaseUser user = auth.getCurrentUser();
+    private final UserAssetsRemoteDataSource userAssetsRemoteDataSource;
 
-    public UserRepository(UserRemoteDataSource userRemoteDataSource) {
+    public UserRepository(UserRemoteDataSource userRemoteDataSource, UserAssetsRemoteDataSource userAssetsRemoteDataSource) {
         this.userRemoteDataSource = userRemoteDataSource;
+        this.userAssetsRemoteDataSource = userAssetsRemoteDataSource;
     }
 
     public void sendEmailVerification(Callback<Void> callback){
@@ -23,12 +25,35 @@ public class UserRepository {
         userRemoteDataSource.reload(callback);
     }
 
-    public void refreshIdToken(Callback<Void> callback){
+    /*public void refreshIdToken(Callback<Void> callback){
         userRemoteDataSource.refreshIdToken(callback);
-    }
+    }*/
 
     public void updateUsername(String name, Callback<Void> callback){
         userRemoteDataSource.updateUsername(name, callback);
+    }
+
+    public void updatePhoto(Uri photoUri, Callback<Void> callback){
+
+        UserModel user = userRemoteDataSource.getCurrentUser();
+
+        if(user == null){
+            callback.onFailure(null);
+            return;
+        }
+
+        String userPhotoPath = "user/" + user.uid + "/profile_photo.jpeg";
+        userAssetsRemoteDataSource.upload(userPhotoPath, photoUri, new Callback<String>() {
+            @Override
+            public void onSucces(String photoPath) {
+                userRemoteDataSource.updatePhoto(Uri.parse(photoPath), callback);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onFailure(e);
+            }
+        });
     }
 
     public UserModel getCurrentUser(){
