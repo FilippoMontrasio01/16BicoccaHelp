@@ -88,14 +88,14 @@ public class ProfilePhotoFragment extends Fragment implements View.OnClickListen
             public void onFailure(Exception e) {
                 Fragment parent = getParentFragment();
                         if(parent != null){
-                            Snackbar.make(parent.getView(), "ERRORE", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(parent.getView(),getString(R.string.load_photo_error), Snackbar.LENGTH_SHORT).show();
                         }
             }
         });
     }
 
     public void loadPhoto(Uri photoUri, boolean skipCache) {
-        if (photoUri.getScheme() != null && photoUri.getScheme().equals("https")) {
+        if (photoUri.getScheme() != null && photoUri.getScheme().equals(getString(R.string.https))) {
             Glide.with(requireActivity().getApplicationContext())
                     .load(photoUri)
                     .into(binding.userPhoto);

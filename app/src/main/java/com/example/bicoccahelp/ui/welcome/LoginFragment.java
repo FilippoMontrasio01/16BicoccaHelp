@@ -116,7 +116,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     @Override
                     public void onFailure(Exception e) {
                         createAndStartProgressBar().cancelAnimation();
-                        Snackbar.make(getView(), "LOGIN FALLITO", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), getString(R.string.login_fail), Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -125,7 +125,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             public void onFailure(Exception e) {
                 createAndStartProgressBar().setVisibility(View.GONE);
                 createAndStartProgressBar().cancelAnimation();
-                Snackbar.make(getView(),"CREDENZIALI ERRATE", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(),getString(R.string.invalid_email_and_password), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -133,7 +133,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     public LottieAnimationView createAndStartProgressBar(){
         LottieAnimationView animationView = binding.lottieAnimationView;
-        animationView.setAnimation("switch_loaders.json");
+        animationView.setAnimation(getString(R.string.switch_loaders_json));
 
         return animationView;
     }

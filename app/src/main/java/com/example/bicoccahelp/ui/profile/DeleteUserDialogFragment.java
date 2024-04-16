@@ -78,7 +78,7 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(),"Errore nell'eliminazione", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(),getString(R.string.reauth_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -93,7 +93,7 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(),"Errore nell'eliminazione", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(),getString(R.string.delete_account_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }

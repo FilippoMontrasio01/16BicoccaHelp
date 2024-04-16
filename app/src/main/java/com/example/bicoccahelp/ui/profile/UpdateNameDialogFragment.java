@@ -82,7 +82,7 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
         String newName = binding.updateNameEditText.getText().toString();
 
         if(newName.isEmpty() || !InputValidator.isValidName(newName)){
-            binding.updateNameTextInputLayout.setError("IL NOME INSERITO NON È VALIDO");
+            binding.updateNameTextInputLayout.setError(getString(R.string.invalid_name));
             return;
         }
 
@@ -100,7 +100,7 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(), "IL NOME NON È STATO AGGIORNATO", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), getString(R.string.name_update_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }

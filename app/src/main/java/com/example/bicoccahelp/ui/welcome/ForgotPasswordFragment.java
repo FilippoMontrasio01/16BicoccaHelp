@@ -74,7 +74,6 @@ View.OnFocusChangeListener{
         }
 
 
-
         createAndStartProgressBar().setVisibility(View.VISIBLE);
         createAndStartProgressBar().playAnimation();
         authRepository.forgotPassword(email, new Callback<Void>() {
@@ -86,7 +85,7 @@ View.OnFocusChangeListener{
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(), "mail non inviata", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), getString(R.string.email_not_send), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -106,7 +105,7 @@ View.OnFocusChangeListener{
         String email = binding.forgotPasswordEditText.getText().toString();
 
         if(!InputValidator.isValidEmail(email)) {
-            binding.forgotPasswordTextInputLayout.setError("Email non valida");
+            binding.forgotPasswordTextInputLayout.setError(getString(R.string.invalid_email));
             return false;
         }
         binding.forgotPasswordTextInputLayout.setError(null);
@@ -115,7 +114,7 @@ View.OnFocusChangeListener{
 
     public LottieAnimationView createAndStartProgressBar(){
         LottieAnimationView animationView = binding.lottieAnimationView;
-        animationView.setAnimation("switch_loaders.json");
+        animationView.setAnimation(getString(R.string.switch_loaders_json));
 
         return animationView;
     }

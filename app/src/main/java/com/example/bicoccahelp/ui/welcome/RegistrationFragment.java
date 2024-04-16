@@ -124,7 +124,7 @@ View.OnFocusChangeListener{
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(view, "ACCOUNT NON CREATO", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, getString(R.string.create_account_fail), Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -141,7 +141,7 @@ View.OnFocusChangeListener{
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), "NOME NON IMPOSTATO", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.set_name), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -157,7 +157,7 @@ View.OnFocusChangeListener{
             @Override
             public void onFailure(Exception e) {
                 navController.navigate(R.id.action_from_registration_to_verify_email);
-                Snackbar.make(requireView(), "MAIL NON INVIATA", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.email_not_send), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -169,7 +169,7 @@ View.OnFocusChangeListener{
         String rePassword = Objects.requireNonNull(binding.createAccountRepeatPasswordEditText.getText()).toString();
 
         if(!rePassword.equals(password)){
-            binding.createAccountRepswTextInputLayout.setError("LA PASSWORD È DIVERSA");
+            binding.createAccountRepswTextInputLayout.setError(getString(R.string.repeate_password_fail));
             return false;
         }
 
@@ -181,7 +181,7 @@ View.OnFocusChangeListener{
         String name = Objects.requireNonNull(binding.createAccountNameEditText.getText()).toString();
 
         if(!InputValidator.isValidName(name)){
-            binding.createAccountNameTextInputLayout.setError("NOME NON VALIDO");
+            binding.createAccountNameTextInputLayout.setError(getString(R.string.invalid_name));
             return false;
         }
 
@@ -194,7 +194,7 @@ View.OnFocusChangeListener{
         String email = Objects.requireNonNull(binding.createAccountEmailEditText.getText()).toString();
 
         if(!InputValidator.isValidEmail(email) ){
-            binding.createAccountEmailTextInputLayout.setError("EMAIL NON VALIDA");
+            binding.createAccountEmailTextInputLayout.setError(getString(R.string.invalid_email));
             return false;
         }
 
@@ -206,7 +206,7 @@ View.OnFocusChangeListener{
         String psw = Objects.requireNonNull(binding.createAccountPasswordEditText.getText()).toString();
 
         if(!InputValidator.isValidPassword(psw)){
-            binding.createAccountPswTextInputLayout.setError("PASSWORD NON VALIDA");
+            binding.createAccountPswTextInputLayout.setError(getString(R.string.invalid_password));
             return false;
         }
 

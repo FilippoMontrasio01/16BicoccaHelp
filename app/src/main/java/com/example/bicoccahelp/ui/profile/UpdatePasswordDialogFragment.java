@@ -76,18 +76,17 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
         String newPassword = binding.updatePasswordNewEditText.getText().toString();
 
         if(oldPassword.isEmpty()){
-            binding.updatePasswordOldTextInputLayout.setError("INSERISCI LA VECCHIA PASSWORD");
+            binding.updatePasswordOldTextInputLayout.setError(getString(R.string.old_password));
             return;
         }
 
         if(newPassword.equals(oldPassword)){
-            binding.updatePasswordNewTextInputLayout.setError("LA PASSWORD DEVE ESSERE DIVERSA" +
-                    "DA QUELLA VECCHIA");
+            binding.updatePasswordNewTextInputLayout.setError(getString(R.string.different_password));
             return;
         }
 
         if(!InputValidator.isValidPassword(newPassword)){
-            binding.updatePasswordNewTextInputLayout.setError("INSERISCI UNA PASSWORD VALIDA");
+            binding.updatePasswordNewTextInputLayout.setError(getString(R.string.invalid_password));
             return;
         }
 
@@ -108,7 +107,7 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(), "L'UTENTE NON SI È RIAUTENTICATO CORRETTAMENTE", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(),getString(R.string.reauth_error),Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -124,7 +123,7 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(), "LA PASSWORD NON È STATA AGGIORNATA", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), getString(R.string.password_update_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }

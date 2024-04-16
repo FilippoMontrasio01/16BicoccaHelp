@@ -92,4 +92,34 @@
     <string name="home">Home</string>
     <string name="explore">Explore</string>
     <string name="home_fragment">Fragment Home</string>
+
+
+
+    <!--Profile package-->
+    <string name="delete_account_error">We\'re Sorry, Account Deletion Error</string>
+    <string name="reauth_error">Unable to Re-authenticate</string>
+    <string name="load_photo_error">Unable to Upload Photo</string>
+    <string name="https">https</string>
+    <string name="invalid_name"> Invalid Name Entered</string>
+    <string name="name_update_error">Error: Name Not Updated</string>
+    <string name="old_password">Please enter your old password</string>
+    <string name="different_password">The password must be different from the old one</string>
+    <string name="invalid_password">Invalid Password Entered</string>
+    <string name="password_update_error">Error: Password Not Updated</string>
+    
+    
+    <!--Welcome Package -->
+    <string name="email_not_send">Failed to send email. Please try again later</string>
+    <string name="invalid_email">Invalid Email Entered</string>
+    <string name="switch_loaders_json">switch_loaders.json</string>
+    <string name="login_fail">Login failed. Please check your credentials and try again</string>
+    <string name="invalid_email_and_password">Invalid credentials. Please double-check your username and password</string>
+    <string name="create_account_fail">Account not created. Please verify your information and try again</string>
+    <string name="set_name">Name not set. Please provide your name to proceed</string>
+    <string name="repeate_password_fail">The passwords don\'t match</string>
+    <string name="email_verified">The email has already been verified</string>
+    <string name="verify_email_sent">The email has been sent</string>
+    <string name="user_not_verified">Before proceeding, please authenticate</string>
+
+
 </resources>
