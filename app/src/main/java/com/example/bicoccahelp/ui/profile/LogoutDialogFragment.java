@@ -15,15 +15,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
+import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
+import com.example.bicoccahelp.data.user.UserModel;
+import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.CreateStudentRequest;
+import com.example.bicoccahelp.data.user.student.StudentModel;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.databinding.FragmentLogoutDialogBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class LogoutDialogFragment extends DialogFragment implements  View.OnClickListener{
     private AuthRepository authRepository;
     private FragmentLogoutDialogBinding binding;
     private NavController navController;
+    private UserRepository userRepository;
+    private StudentRepository studentRepository;
 
     public LogoutDialogFragment() {
         // Required empty public constructor
@@ -32,6 +41,8 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authRepository = ServiceLocator.getInstance().getAuthRepository();
+        userRepository = ServiceLocator.getInstance().getUserRepository();
+        studentRepository = ServiceLocator.getInstance().getStudentRepository();
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
@@ -68,6 +79,23 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
     }
 
     private void onClickConfirm(View v) {
+
+       UserModel user = userRepository.getCurrentUser();
+       CreateStudentRequest request = new CreateStudentRequest(user.uid, user.email, user.emailVerified, user.name, user.photoUri, "Matematica");
+
+        /*studentRepository.createStudent(request, new Callback<StudentModel>() {
+            @Override
+            public void onSucces(StudentModel studentModel) {
+                dismiss();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(v, "ERRORE", Snackbar.LENGTH_SHORT).show();
+            }
+        });*/
+
+
         authRepository.logout();
         navController.navigate(R.id.action_from_SignOut_to_welcome_activity);
         requireActivity().finish();
