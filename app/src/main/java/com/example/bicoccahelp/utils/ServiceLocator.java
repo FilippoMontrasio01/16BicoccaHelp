@@ -2,6 +2,8 @@ package com.example.bicoccahelp.utils;
 
 import com.example.bicoccahelp.data.auth.AuthRemoteDataSource;
 import com.example.bicoccahelp.data.auth.AuthRepository;
+import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRemoteDataSource;
+import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 import com.example.bicoccahelp.data.user.UserAssetsRemoteDataSource;
 import com.example.bicoccahelp.data.user.UserRemoteDataSource;
 import com.example.bicoccahelp.data.user.UserRepository;
@@ -40,5 +42,9 @@ public class ServiceLocator {
 
     public TutorRepository getTutorRepository(){
         return new TutorRepository((new TutorRemoteDataSource()));
+    }
+
+    public CorsoDiStudiRepository getCorsoDiStudiRepository(){
+        return new CorsoDiStudiRepository(new CorsoDiStudiRemoteDataSource());
     }
 }
