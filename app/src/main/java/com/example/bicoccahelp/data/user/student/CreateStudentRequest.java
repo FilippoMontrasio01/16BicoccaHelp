@@ -6,21 +6,17 @@ import androidx.annotation.NonNull;
 
 public class CreateStudentRequest {
 
-    public final @NonNull String uid;
 
-    public final @NonNull String email;
-    public final @NonNull boolean emailVerified;
-    public final @NonNull String name;
-    public final @NonNull Uri photoUri;
+
     public final @NonNull String corsoDiStudi;
+    public final @NonNull boolean isTutor;
 
 
-    public CreateStudentRequest(@NonNull String uid, @NonNull String email, boolean emailVerified, @NonNull String name, @NonNull Uri photoUri, @NonNull String corsoDiStudi) {
-        this.uid = uid;
-        this.email = email;
-        this.emailVerified = emailVerified;
-        this.name = name;
-        this.photoUri = photoUri;
+    public CreateStudentRequest(@NonNull String corsoDiStudi, @NonNull boolean isTutor) {
         this.corsoDiStudi = corsoDiStudi;
+        this.isTutor = isTutor;
     }
+
+
+
 }

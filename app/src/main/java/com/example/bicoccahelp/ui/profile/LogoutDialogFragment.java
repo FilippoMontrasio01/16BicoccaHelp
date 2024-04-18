@@ -22,9 +22,15 @@ import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.CreateStudentRequest;
 import com.example.bicoccahelp.data.user.student.StudentModel;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
+import com.example.bicoccahelp.data.user.tutor.CreateTutorRequest;
+import com.example.bicoccahelp.data.user.tutor.TutorModel;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentLogoutDialogBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LogoutDialogFragment extends DialogFragment implements  View.OnClickListener{
@@ -33,6 +39,7 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
     private NavController navController;
     private UserRepository userRepository;
     private StudentRepository studentRepository;
+    private TutorRepository tutorRepository;
 
     public LogoutDialogFragment() {
         // Required empty public constructor
@@ -43,6 +50,7 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
         authRepository = ServiceLocator.getInstance().getAuthRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
         studentRepository = ServiceLocator.getInstance().getStudentRepository();
+        tutorRepository = ServiceLocator.getInstance().getTutorRepository();
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
@@ -80,10 +88,34 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
 
     private void onClickConfirm(View v) {
 
-       UserModel user = userRepository.getCurrentUser();
-       CreateStudentRequest request = new CreateStudentRequest(user.uid, user.email, user.emailVerified, user.name, user.photoUri, "Matematica");
+        Map<String, Boolean> disponibilities = new HashMap<>();
+        disponibilities.put("lunedì", true);
+        disponibilities.put("martedì", false);
+        disponibilities.put("mercoledi", true);
+        disponibilities.put("giovedi", false);
+        disponibilities.put("venerdi", true);
 
-        /*studentRepository.createStudent(request, new Callback<StudentModel>() {
+        UserModel user = userRepository.getCurrentUser();
+        CreateTutorRequest request = new CreateTutorRequest("Informatica", disponibilities);
+
+        tutorRepository.createTutor(request, new Callback<TutorModel>() {
+            @Override
+            public void onSucces(TutorModel tutorModel) {
+                dismiss();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(v, "ERRORE", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+       //UserModel user = userRepository.getCurrentUser();
+       CreateStudentRequest srequest = new CreateStudentRequest("informatica", true);
+
+        studentRepository.createStudent(srequest, new Callback<StudentModel>() {
             @Override
             public void onSucces(StudentModel studentModel) {
                 dismiss();
@@ -93,11 +125,11 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
             public void onFailure(Exception e) {
                 Snackbar.make(v, "ERRORE", Snackbar.LENGTH_SHORT).show();
             }
-        });*/
+        });
 
 
-        authRepository.logout();
-        navController.navigate(R.id.action_from_SignOut_to_welcome_activity);
-        requireActivity().finish();
+       // authRepository.logout();
+       // navController.navigate(R.id.action_from_SignOut_to_welcome_activity);
+       // requireActivity().finish();
     }
 }

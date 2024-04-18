@@ -7,6 +7,8 @@ import com.example.bicoccahelp.data.user.UserRemoteDataSource;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.StudentRemoteDataSource;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
+import com.example.bicoccahelp.data.user.tutor.TutorRemoteDataSource;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 
 public class ServiceLocator {
     public static volatile ServiceLocator INSTANCE = null;
@@ -34,5 +36,9 @@ public class ServiceLocator {
 
     public StudentRepository getStudentRepository(){
         return new StudentRepository(new StudentRemoteDataSource());
+    }
+
+    public TutorRepository getTutorRepository(){
+        return new TutorRepository((new TutorRemoteDataSource()));
     }
 }
