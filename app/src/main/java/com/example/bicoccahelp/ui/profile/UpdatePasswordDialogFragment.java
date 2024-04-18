@@ -5,9 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -22,6 +20,8 @@ import com.example.bicoccahelp.databinding.FragmentUpdatePasswordDialogBinding;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Objects;
 
 public class UpdatePasswordDialogFragment extends DialogFragment implements  View.OnClickListener{
 
@@ -44,9 +44,10 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentUpdatePasswordDialogBinding.inflate(inflater, container, false);
+        binding = FragmentUpdatePasswordDialogBinding
+                .inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -55,25 +56,27 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
         super.onViewCreated(view, savedInstanceState);
         navController = NavHostFragment.findNavController(this.getParentFragment());
 
-        binding.updatePasswordButtonConfirm.setOnClickListener(this::onClick);
-        binding.updatePasswordButtonCancel.setOnClickListener(this::onClick);
+        binding.updatePasswordButtonConfirm.setOnClickListener(this);
+        binding.updatePasswordButtonCancel.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == binding.updatePasswordButtonConfirm.getId()) {
-            this.onClickConfirm(v);
+            this.onClickConfirm();
             return;
         }
 
         if (v.getId() == binding.updatePasswordButtonCancel.getId()) {
-            this.onClickCancel(v);
+            this.onClickCancel();
         }
     }
 
-    private void onClickConfirm(View v) {
-        String oldPassword = binding.updatePasswordOldEditText.getText().toString();
-        String newPassword = binding.updatePasswordNewEditText.getText().toString();
+    private void onClickConfirm() {
+        String oldPassword = Objects.requireNonNull(binding.updatePasswordOldEditText.getText())
+                .toString();
+        String newPassword = Objects.requireNonNull(binding.updatePasswordNewEditText.getText())
+                .toString();
 
         if(oldPassword.isEmpty()){
             binding.updatePasswordOldTextInputLayout.setError(getString(R.string.old_password));
@@ -81,7 +84,8 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
         }
 
         if(newPassword.equals(oldPassword)){
-            binding.updatePasswordNewTextInputLayout.setError(getString(R.string.different_password));
+            binding.updatePasswordNewTextInputLayout.setError(
+                    getString(R.string.different_password));
             return;
         }
 
@@ -93,8 +97,8 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
         reAuthAndUpdatePsw(oldPassword, newPassword);
     }
 
-    private void onClickCancel(View v) {
-        getDialog().cancel();
+    private void onClickCancel() {
+        Objects.requireNonNull(getDialog()).cancel();
     }
 
 
@@ -107,7 +111,8 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(),getString(R.string.reauth_error),Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(),getString(R.string.reauth_error),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -123,7 +128,8 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(), getString(R.string.password_update_error), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.password_update_error),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

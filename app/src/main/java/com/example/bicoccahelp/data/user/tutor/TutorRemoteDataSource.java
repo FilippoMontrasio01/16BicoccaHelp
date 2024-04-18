@@ -13,10 +13,11 @@ public class TutorRemoteDataSource {
 
     private static final String UID = "uid";
     private static final String FIELD_EMAIL = "email";
-    private static final String NAME = "name";
+    private static final String NAME = "nome";
     private static final String PHOTO_URI = "photoUri";
-    private static final String CORSO_DI_STUDI = "corsoDiStudi";
-    private static final String DISPONIBILITIES = "disponibilities";
+    private static final String CORSO_DI_STUDI = "corso di Studi";
+    private static final String DISPONIBILITA_GIORNI = "disponibilità Giorni";
+    private static final String DISPONIBILITA_ORE = "disponibilità Ore";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference tutors = db.collection("tutor");
 
@@ -35,15 +36,17 @@ public class TutorRemoteDataSource {
         data.put(NAME, user.getDisplayName());
         data.put(PHOTO_URI, user.getPhotoUrl());
         data.put(CORSO_DI_STUDI, createTutorRequest.corsoDiStudi);
-        data.put(DISPONIBILITIES, createTutorRequest.disponibilities);
+        data.put(DISPONIBILITA_GIORNI, createTutorRequest.disponibilitaGiorni);
+        data.put(DISPONIBILITA_ORE, createTutorRequest.disponibilitaOre);
 
         tutors.add(data)
                 .addOnSuccessListener(documentReference -> {
                     TutorModel tutor = new TutorModel(user.getUid(),
                             user.getEmail(),user.isEmailVerified(),
                             user.getDisplayName(),
-                            user.getPhotoUrl(), createTutorRequest.disponibilities,
-                            createTutorRequest.corsoDiStudi, tutors.getId());
+                            user.getPhotoUrl(), createTutorRequest.disponibilitaGiorni,
+                            createTutorRequest.disponibilitaOre, createTutorRequest.corsoDiStudi,
+                            tutors.getId());
                     callback.onSucces(tutor);
                 })
                 .addOnFailureListener(callback::onFailure);

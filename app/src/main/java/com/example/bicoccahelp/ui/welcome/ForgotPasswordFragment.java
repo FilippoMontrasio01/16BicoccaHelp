@@ -17,10 +17,11 @@ import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
 import com.example.bicoccahelp.databinding.FragmentForgotPasswordBinding;
-import com.example.bicoccahelp.databinding.FragmentRegistrationBinding;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Objects;
 
 
 public class ForgotPasswordFragment extends Fragment implements View.OnClickListener,
@@ -45,7 +46,7 @@ View.OnFocusChangeListener{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentForgotPasswordBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -67,7 +68,7 @@ View.OnFocusChangeListener{
     }
 
     private void onSenEmailClick() {
-        String email = binding.forgotPasswordEditText.getText().toString();
+        String email = Objects.requireNonNull(binding.forgotPasswordEditText.getText()).toString();
 
         if(email.length() == 0){
             return;
@@ -85,7 +86,8 @@ View.OnFocusChangeListener{
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(), getString(R.string.email_not_send), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.email_not_send),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -102,7 +104,7 @@ View.OnFocusChangeListener{
     }
 
     private boolean validateEmail() {
-        String email = binding.forgotPasswordEditText.getText().toString();
+        String email = Objects.requireNonNull(binding.forgotPasswordEditText.getText()).toString();
 
         if(!InputValidator.isValidEmail(email)) {
             binding.forgotPasswordTextInputLayout.setError(getString(R.string.invalid_email));

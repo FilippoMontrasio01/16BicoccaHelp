@@ -112,9 +112,12 @@ View.OnFocusChangeListener{
 
 
 
-        String email = Objects.requireNonNull(binding.createAccountEmailEditText.getText()).toString();
-        String psw = Objects.requireNonNull(binding.createAccountPasswordEditText.getText()).toString();
-        String name = Objects.requireNonNull(binding.createAccountNameEditText.getText()).toString();
+        String email = Objects.requireNonNull(binding.createAccountEmailEditText
+                .getText()).toString();
+        String psw = Objects.requireNonNull(binding.createAccountPasswordEditText
+                .getText()).toString();
+        String name = Objects.requireNonNull(binding.createAccountNameEditText
+                .getText()).toString();
 
         authRepository.register(email, psw, new Callback<Void>() {
             @Override
@@ -124,7 +127,8 @@ View.OnFocusChangeListener{
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(view, getString(R.string.create_account_fail), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, getString(R.string.create_account_fail),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -141,7 +145,8 @@ View.OnFocusChangeListener{
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.set_name), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.set_name),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -157,7 +162,8 @@ View.OnFocusChangeListener{
             @Override
             public void onFailure(Exception e) {
                 navController.navigate(R.id.action_from_registration_to_verify_email);
-                Snackbar.make(requireView(), getString(R.string.email_not_send), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.email_not_send),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -165,11 +171,15 @@ View.OnFocusChangeListener{
 
     private boolean checkPassword(){
 
-        String password = Objects.requireNonNull(binding.createAccountPasswordEditText.getText()).toString();
-        String rePassword = Objects.requireNonNull(binding.createAccountRepeatPasswordEditText.getText()).toString();
+        String password = Objects.requireNonNull(binding.createAccountPasswordEditText
+                .getText()).toString();
+        String rePassword = Objects.requireNonNull(binding.createAccountRepeatPasswordEditText
+                .getText()).toString();
 
         if(!rePassword.equals(password)){
-            binding.createAccountRepswTextInputLayout.setError(getString(R.string.repeate_password_fail));
+            binding.createAccountRepswTextInputLayout
+                    .setError(getString(R.string.repeate_password_fail));
+
             return false;
         }
 
@@ -178,7 +188,8 @@ View.OnFocusChangeListener{
     }
 
     private boolean validateName(){
-        String name = Objects.requireNonNull(binding.createAccountNameEditText.getText()).toString();
+        String name = Objects.requireNonNull(binding.createAccountNameEditText.getText())
+                .toString();
 
         if(!InputValidator.isValidName(name)){
             binding.createAccountNameTextInputLayout.setError(getString(R.string.invalid_name));
@@ -191,7 +202,8 @@ View.OnFocusChangeListener{
 
 
     private boolean validateEmail(){
-        String email = Objects.requireNonNull(binding.createAccountEmailEditText.getText()).toString();
+        String email = Objects.requireNonNull(binding.createAccountEmailEditText.getText())
+                .toString();
 
         if(!InputValidator.isValidEmail(email) ){
             binding.createAccountEmailTextInputLayout.setError(getString(R.string.invalid_email));
@@ -203,7 +215,8 @@ View.OnFocusChangeListener{
     }
 
     private boolean validatePassword(){
-        String psw = Objects.requireNonNull(binding.createAccountPasswordEditText.getText()).toString();
+        String psw = Objects.requireNonNull(binding.createAccountPasswordEditText.getText())
+                .toString();
 
         if(!InputValidator.isValidPassword(psw)){
             binding.createAccountPswTextInputLayout.setError(getString(R.string.invalid_password));

@@ -11,7 +11,8 @@ public class StudentRepository {
         this.studentRemoteDataSource = studentRemoteDataSource;
     }
 
-    public void createStudent(CreateStudentRequest createStudentRequest, Callback<StudentModel> callback){
+    public void createStudent(CreateStudentRequest createStudentRequest,
+                              Callback<StudentModel> callback){
         studentRemoteDataSource.createStudent(createStudentRequest, callback);
     }
 }

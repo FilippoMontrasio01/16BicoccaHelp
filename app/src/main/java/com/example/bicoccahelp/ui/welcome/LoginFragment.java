@@ -1,6 +1,6 @@
 package com.example.bicoccahelp.ui.welcome;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +24,8 @@ import com.example.bicoccahelp.databinding.FragmentLoginBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Objects;
+
 
 public class LoginFragment extends Fragment implements View.OnClickListener{
 
@@ -45,7 +47,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false);
@@ -87,8 +89,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
 
     private void onLoginClick() {
-        String email = binding.loginEmailEditText.getText().toString();
-        String password = binding.loginPasswordEditText.getText().toString();
+        String email = Objects.requireNonNull(binding.loginEmailEditText.getText()).toString();
+        String password = Objects.requireNonNull(binding.loginPasswordEditText.getText())
+                .toString();
 
         if(email.length() == 0 || password.length() == 0){
             return;
@@ -116,7 +119,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     @Override
                     public void onFailure(Exception e) {
                         createAndStartProgressBar().cancelAnimation();
-                        Snackbar.make(getView(), getString(R.string.login_fail), Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(requireView(), getString(R.string.login_fail),
+                                Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -125,7 +129,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             public void onFailure(Exception e) {
                 createAndStartProgressBar().setVisibility(View.GONE);
                 createAndStartProgressBar().cancelAnimation();
-                Snackbar.make(getView(),getString(R.string.invalid_email_and_password), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(),getString(R.string.invalid_email_and_password),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

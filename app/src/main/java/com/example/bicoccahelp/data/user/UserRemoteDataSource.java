@@ -24,7 +24,8 @@ public class UserRemoteDataSource {
             return null;
         }
 
-        return new UserModel(user.getUid(), user.getEmail(), user.isEmailVerified(), user.getDisplayName(), user.getPhotoUrl());
+        return new UserModel(user.getUid(), user.getEmail(), user.isEmailVerified(),
+                user.getDisplayName(), user.getPhotoUrl());
     }
 
 
@@ -53,7 +54,7 @@ public class UserRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
-    /*public void refreshIdToken(Callback<Void> callback){
+    public void refreshIdToken(Callback<Void> callback){
         FirebaseUser user = auth.getCurrentUser();
         if(user == null){
             callback.onFailure(null);
@@ -63,7 +64,7 @@ public class UserRemoteDataSource {
         user.getIdToken(true)
                 .addOnSuccessListener(command -> callback.onSucces(null))
                 .addOnFailureListener(callback::onFailure);
-    }*/
+    }
 
     public void updateUsername(String name, Callback<Void> callback){
         FirebaseUser user = auth.getCurrentUser();
@@ -126,7 +127,8 @@ public class UserRemoteDataSource {
             return;
         }
 
-        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(user.getEmail()), password);
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(Objects.requireNonNull(user.getEmail()), password);
 
         user.reauthenticate(credential)
                 .addOnSuccessListener(callback::onSucces)

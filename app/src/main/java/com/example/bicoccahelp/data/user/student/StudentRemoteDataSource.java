@@ -20,10 +20,11 @@ public class StudentRemoteDataSource {
     private static final String PHOTO_URI = "photoUri";
     private static final String CORSO_DI_STUDI = "corsoDiStudi";
     private static final String IS_TUTOR = "isTutor";
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference students = db.collection("student");
 
-    public void createStudent(CreateStudentRequest createStudentRequest, Callback<StudentModel> callback){
+    public void createStudent(CreateStudentRequest createStudentRequest,
+                              Callback<StudentModel> callback){
         Map<String, Object> data = new HashMap<>();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

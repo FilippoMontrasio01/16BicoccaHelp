@@ -35,7 +35,8 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         binding = FragmentDeleteUserDialogBinding.inflate(inflater, container,false);
         return binding.getRoot();
     }
@@ -53,12 +54,13 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
     @Override
     public void onClick(View v) {
         if(v.getId() == binding.deleteAccountButton.getId()){
-            this.onDeleteClick(v);
+            this.onDeleteClick();
         }
     }
 
-    private void onDeleteClick(View v) {
-        String password = Objects.requireNonNull(binding.deleteAccountPasswordEditText.getText()).toString();
+    private void onDeleteClick() {
+        String password = Objects.requireNonNull(binding.deleteAccountPasswordEditText.getText())
+                .toString();
 
         if (password.isEmpty()) {
             binding.deleteAccountPasswordTextInputLayout.setError(getString(R.string.insert_your_password));
@@ -78,7 +80,8 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(),getString(R.string.reauth_error), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(),getString(R.string.reauth_error),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -93,7 +96,8 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(),getString(R.string.delete_account_error), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(),getString(R.string.delete_account_error),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

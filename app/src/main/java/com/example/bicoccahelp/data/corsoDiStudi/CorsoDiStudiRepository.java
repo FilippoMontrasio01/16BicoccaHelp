@@ -11,7 +11,9 @@ public class CorsoDiStudiRepository {
         this.corsoDiStudiRemoteDataSource = corsoDiStudiRemoteDataSource;
     }
 
-    public void createCorso(CreateCorsoDiStudiRequest request, Callback<CorsoDiStudiModel> callback){
+    public void createCorso(CreateCorsoDiStudiRequest request,
+                            Callback<CorsoDiStudiModel> callback){
+
         corsoDiStudiRemoteDataSource.createCorso(request, callback);
     }
 }

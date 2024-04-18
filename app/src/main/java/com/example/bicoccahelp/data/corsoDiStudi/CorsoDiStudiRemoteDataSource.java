@@ -17,7 +17,9 @@ public class CorsoDiStudiRemoteDataSource {
     private final CollectionReference corsoDiStudi = db.collection("corso di Studi");
 
 
-    public void createCorso(CreateCorsoDiStudiRequest request, Callback<CorsoDiStudiModel> callback){
+    public void createCorso(CreateCorsoDiStudiRequest request,
+                            Callback<CorsoDiStudiModel> callback){
+
         Map<String, Object> data = new HashMap<>();
 
         data.put(NOME_CORSO, request.nomeCorso);

@@ -10,7 +10,8 @@ public class InputValidator {
     private static final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=.*[a-z]).{8,}$";
     private static final String NAME_REGEX = "^[a-zA-Z\\s'-]{3,}$";
 
-    private static final Pattern emailPattern = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
+    private static final Pattern emailPattern = Pattern.compile(EMAIL_REGEX,
+            Pattern.CASE_INSENSITIVE);
     private static final Pattern passwordPattern = Pattern.compile(PASSWORD_REGEX);
     private static final Pattern namePattern = Pattern.compile(NAME_REGEX);
 
@@ -33,7 +34,8 @@ public class InputValidator {
     }
 
 
-    //Il nome può contenere tutti i caratteri, tranne i caratteri speciali e avere una lunghezza minima di 3 caratteri
+    //Il nome può contenere tutti i caratteri, tranne i caratteri speciali e avere una
+    // lunghezza minima di 3 caratteri
     public static boolean isValidName(String name) {
         Matcher matcher = namePattern.matcher(name);
         return !TextUtils.isEmpty(name)  && matcher.matches();

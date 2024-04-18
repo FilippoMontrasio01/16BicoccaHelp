@@ -40,7 +40,7 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentVerifyEmailBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -57,16 +57,16 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if(v.getId() == binding.continueButton.getId()){
-            this.continueOnclick(v);
+            this.continueOnclick();
             return;
         }
 
         if(v.getId() == binding.resendButton.getId()){
-            this.resendOnClick(v);
+            this.resendOnClick();
         }
     }
 
-    private void resendOnClick(View v) {
+    private void resendOnClick() {
 
 
         userRepository.reload(new Callback<UserModel>() {
@@ -76,19 +76,22 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
             public void onSucces(UserModel userModel) {
                 if(userModel.emailVerified){
 
-                   Snackbar.make(getView(), getString(R.string.email_verified), Snackbar.LENGTH_SHORT).show();
+                   Snackbar.make(requireView(), getString(R.string.email_verified),
+                           Snackbar.LENGTH_SHORT).show();
                    navController.navigate(R.id.action_from_verify_email_to_profile);
                    requireActivity().finish();
                 }else{
                     userRepository.sendEmailVerification(new Callback<Void>() {
                         @Override
                         public void onSucces(Void unused) {
-                            Snackbar.make(getView(), getString(R.string.verify_email_sent), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(requireView(), getString(R.string.verify_email_sent),
+                                    Snackbar.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(Exception e) {
-                            Snackbar.make(getView(), getString(R.string.email_not_send), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(requireView(), getString(R.string.email_not_send),
+                                    Snackbar.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -97,12 +100,13 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(), getString(R.string.email_not_send), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.email_not_send),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void continueOnclick(View v) {
+    private void continueOnclick() {
 
         createAndStartProgressBar().setVisibility(View.VISIBLE);
         createAndStartProgressBar().playAnimation();
@@ -111,7 +115,8 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
             public void onSucces(UserModel userModel) {
 
                 if(!userModel.emailVerified){
-                    Snackbar.make(getView(),getString(R.string.user_not_verified), Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(requireView(),getString(R.string.user_not_verified),
+                            Snackbar.LENGTH_SHORT).show();
                     createAndStartProgressBar().cancelAnimation();
                     createAndStartProgressBar().setVisibility(View.GONE);
                     return;
@@ -125,7 +130,8 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
             //prova commit
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(getView(), getString(R.string.user_not_verified), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.user_not_verified),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

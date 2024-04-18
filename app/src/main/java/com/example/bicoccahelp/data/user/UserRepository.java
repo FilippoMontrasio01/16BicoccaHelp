@@ -8,10 +8,10 @@ import com.google.firebase.auth.FirebaseAuth;
 public class UserRepository {
 
     private final UserRemoteDataSource userRemoteDataSource;
-    private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final UserAssetsRemoteDataSource userAssetsRemoteDataSource;
 
-    public UserRepository(UserRemoteDataSource userRemoteDataSource, UserAssetsRemoteDataSource userAssetsRemoteDataSource) {
+    public UserRepository(UserRemoteDataSource userRemoteDataSource,
+                          UserAssetsRemoteDataSource userAssetsRemoteDataSource) {
         this.userRemoteDataSource = userRemoteDataSource;
         this.userAssetsRemoteDataSource = userAssetsRemoteDataSource;
     }
@@ -25,9 +25,9 @@ public class UserRepository {
         userRemoteDataSource.reload(callback);
     }
 
-    /*public void refreshIdToken(Callback<Void> callback){
+    public void refreshIdToken(Callback<Void> callback){
         userRemoteDataSource.refreshIdToken(callback);
-    }*/
+    }
 
     public void updateUsername(String name, Callback<Void> callback){
         userRemoteDataSource.updateUsername(name, callback);

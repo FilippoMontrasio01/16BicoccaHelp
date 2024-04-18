@@ -95,7 +95,9 @@ public class ProfilePhotoFragment extends Fragment implements View.OnClickListen
     }
 
     public void loadPhoto(Uri photoUri, boolean skipCache) {
-        if (photoUri.getScheme() != null && photoUri.getScheme().equals(getString(R.string.https))) {
+        if (photoUri.getScheme() != null && photoUri.getScheme()
+                .equals(getString(R.string.https))) {
+
             Glide.with(requireActivity().getApplicationContext())
                     .load(photoUri)
                     .into(binding.userPhoto);
