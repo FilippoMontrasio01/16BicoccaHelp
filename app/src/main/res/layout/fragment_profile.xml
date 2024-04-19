@@ -268,6 +268,48 @@
                     android:layout_height="1dp"
                     app:dividerColor="@android:color/darker_gray"/>
 
+
+                <RelativeLayout
+                    android:id="@+id/complete_student_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="15dp">
+                    <ImageView
+                        android:id="@+id/complete_student_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_back_profile"
+                        android:padding="3dp"
+                        android:src="@drawable/student_profile" />
+                    <TextView
+                        android:id="@+id/complete_student_textView"
+                        android:layout_marginStart="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/complete_student"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/lato_bold"
+                        android:textSize="20sp"
+
+                        android:layout_toEndOf="@+id/complete_student_image"
+                        android:layout_toStartOf="@+id/complete_student_arrow" />
+                    <ImageView
+                        android:id="@+id/complete_student_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/right_arrow_icon"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:padding="4dp" />
+                </RelativeLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:dividerColor="@android:color/darker_gray"/>
+
                 <RelativeLayout
                     android:id="@+id/become_a_tutor_item"
                     android:layout_width="match_parent"

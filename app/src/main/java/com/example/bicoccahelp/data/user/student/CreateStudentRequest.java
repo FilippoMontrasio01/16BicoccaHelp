@@ -7,12 +7,11 @@ public class CreateStudentRequest {
 
 
     public final @NonNull String corsoDiStudi;
-    public final boolean isTutor;
+    public boolean isTutor = false;
 
 
-    public CreateStudentRequest(@NonNull String corsoDiStudi, boolean isTutor) {
+    public CreateStudentRequest(@NonNull String corsoDiStudi) {
         this.corsoDiStudi = corsoDiStudi;
-        this.isTutor = isTutor;
     }
 
 

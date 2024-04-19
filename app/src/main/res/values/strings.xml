@@ -94,7 +94,6 @@
     <string name="home_fragment">Fragment Home</string>
 
 
-
     <!--Profile package-->
     <string name="delete_account_error">We\'re Sorry, Account Deletion Error</string>
     <string name="reauth_error">Unable to Re-authenticate</string>
@@ -106,8 +105,8 @@
     <string name="different_password">The password must be different from the old one</string>
     <string name="invalid_password">Invalid Password Entered</string>
     <string name="password_update_error">Error: Password Not Updated</string>
-    
-    
+
+
     <!--Welcome Package -->
     <string name="email_not_send">Failed to send email. Please try again later</string>
     <string name="invalid_email">Invalid Email Entered</string>
@@ -122,6 +121,10 @@
     <string name="user_not_verified">Before proceeding, please authenticate</string>
     <string name="email_not_verified">Before proceeding, please verify you email</string>
     <string name="become_a_tutor">Join as a Tutor</string>
+    <string name="complete_student">Complete Student Profile</string>
+    <string name="details_title">Your\nDetails</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 
 </resources>
