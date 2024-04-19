@@ -121,6 +121,7 @@
     <string name="verify_email_sent">The email has been sent</string>
     <string name="user_not_verified">Before proceeding, please authenticate</string>
     <string name="email_not_verified">Before proceeding, please verify you email</string>
+    <string name="become_a_tutor">Join as a Tutor</string>
 
 
 </resources>

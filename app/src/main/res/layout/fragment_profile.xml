@@ -269,6 +269,54 @@
                     app:dividerColor="@android:color/darker_gray"/>
 
                 <RelativeLayout
+                    android:id="@+id/become_a_tutor_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="15dp">
+                    <ImageView
+                        android:id="@+id/become_a_tutor_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_back_profile"
+                        android:padding="6dp"
+                        android:src="@drawable/graduation" />
+                    <TextView
+                        android:id="@+id/become_a_tutor_textView"
+                        android:layout_marginStart="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/become_a_tutor"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/lato_bold"
+                        android:textSize="20sp"
+
+                        android:layout_toEndOf="@+id/become_a_tutor_image"
+                        android:layout_toStartOf="@+id/become_a_tutor_arrow" />
+                    <ImageView
+                        android:id="@+id/become_a_tutor_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/right_arrow_icon"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:padding="4dp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/delete_profile_linear_layout"
+                android:background="@drawable/round_back_background_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
                     android:id="@+id/sign_out_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -303,17 +351,12 @@
                         android:layout_centerVertical="true"
                         android:padding="4dp" />
                 </RelativeLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/delete_profile_linear_layout"
-                android:background="@drawable/round_back_background_profile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:dividerColor="@android:color/darker_gray"/>
 
                 <!-- Logout -->
                 <RelativeLayout

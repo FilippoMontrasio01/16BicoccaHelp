@@ -13,8 +13,8 @@ public class CorsoDiStudiRemoteDataSource {
     private static final String NOME_CORSO = "nome";
     private static final String AREA = "area di studi";
     private static final String LIVELLO = "tipo di laurea";
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference corsoDiStudi = db.collection("corso di Studi");
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference corsoDiStudi = db.collection("Corso Di Studi");
 
 
     public void createCorso(CreateCorsoDiStudiRequest request,

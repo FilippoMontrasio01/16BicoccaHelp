@@ -11,15 +11,15 @@ import java.util.Map;
 
 public class TutorRemoteDataSource {
 
-    private static final String UID = "uid";
+    private static final String UID = "uid studente";
     private static final String FIELD_EMAIL = "email";
     private static final String NAME = "nome";
     private static final String PHOTO_URI = "photoUri";
-    private static final String CORSO_DI_STUDI = "corso di Studi";
+    private static final String CORSO_DI_STUDI = "corso Di Studi";
     private static final String DISPONIBILITA_GIORNI = "disponibilità Giorni";
     private static final String DISPONIBILITA_ORE = "disponibilità Ore";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference tutors = db.collection("tutor");
+    private final CollectionReference tutors = db.collection("Tutor");
 
     public void createTutor(CreateTutorRequest createTutorRequest, Callback<TutorModel> callback){
         Map<String, Object> data = new HashMap<>();

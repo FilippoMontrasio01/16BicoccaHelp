@@ -16,12 +16,12 @@ import java.util.Map;
 
 public class StudentRemoteDataSource {
     private static final String FIELD_EMAIL = "email";
-    private static final String NAME = "name";
+    private static final String NAME = "nome";
     private static final String PHOTO_URI = "photoUri";
-    private static final String CORSO_DI_STUDI = "corsoDiStudi";
+    private static final String CORSO_DI_STUDI = "corso Di Studi";
     private static final String IS_TUTOR = "isTutor";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference students = db.collection("student");
+    private final CollectionReference students = db.collection("Student");
 
     public void createStudent(CreateStudentRequest createStudentRequest,
                               Callback<StudentModel> callback){
