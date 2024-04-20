@@ -40,6 +40,20 @@
             android:id="@+id/action_from_profile_to_confirm_sign_out"
             app:destination="@id/logout_dialog"/>
 
+        <action
+            android:id="@+id/action_from_profile_to_complete_student_fragment"
+            app:destination="@id/fragment_complete_student"/>
+    </fragment>
+
+    <fragment
+        android:id="@id/fragment_complete_student"
+        android:name="com.example.bicoccahelp.ui.profile.CompleteStudentProfileFragment"
+        android:label="@string/complete_student_fragment"
+        tools:layout="@layout/fragment_complete_student_profile">
+
+        <action
+            android:id="@+id/action_from_complete_profile_to_profile_fragment"
+            app:destination="@id/profile_fragment"/>
 
     </fragment>
 

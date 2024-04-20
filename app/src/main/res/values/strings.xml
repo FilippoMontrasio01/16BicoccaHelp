@@ -125,6 +125,11 @@
     <string name="details_title">Your\nDetails</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="create_student">Create Student</string>
+    <string name="complete_student_fragment">Fragment complete Student</string>
+    <string name="study_program">Insert your study program</string>
+    <string name="corso">Study Program</string>
+    <string name="create_student_profile">Create Student Profile</string>
 
 
 </resources>

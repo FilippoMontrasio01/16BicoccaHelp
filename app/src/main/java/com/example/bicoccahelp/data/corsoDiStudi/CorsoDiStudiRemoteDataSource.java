@@ -37,4 +37,34 @@ public class CorsoDiStudiRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
 
     }
+
+
+    public void corsoDiStudiExists(String nomeCorso, Callback<Boolean> callback) {
+        //String nomeCorsoFormatted = nomeCorso.trim().toLowerCase();
+
+        corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorso)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    boolean exists = !queryDocumentSnapshots.isEmpty();
+                    callback.onSucces(exists);
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void getCorsoDiStudiIdByName(String nomeCorso, Callback<String> callback) {
+        corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorso)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        String corsoId = queryDocumentSnapshots.getDocuments().get(0).getId();
+                        callback.onSucces(corsoId);
+                    } else {
+
+                        callback.onFailure(null);
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
 }

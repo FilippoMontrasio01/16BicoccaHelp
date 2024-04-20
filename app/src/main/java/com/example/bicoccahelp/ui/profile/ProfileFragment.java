@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
         binding.updateNameItem.setOnClickListener(this);
         binding.displayEmailTextView.setText(user.email);
         binding.displayNameTextView.setText(user.name);
+        binding.completeStudentItem.setOnClickListener(this);
     }
 
     @Override
@@ -95,7 +96,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
 
         if(v.getId() == binding.updateNameItem.getId()){
             showUpdateNameDialog();
+            return;
         }
+
+        if(v.getId() == binding.completeStudentItem.getId()){
+            completeStudentOnClick();
+        }
+    }
+
+    private void completeStudentOnClick() {
+        navController.navigate(R.id.action_from_profile_to_complete_student_fragment);
     }
 
     private void showConfirmSignOutDialog() {

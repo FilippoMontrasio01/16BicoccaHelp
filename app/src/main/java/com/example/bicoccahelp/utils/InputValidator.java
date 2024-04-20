@@ -2,6 +2,9 @@ package com.example.bicoccahelp.utils;
 
 import android.text.TextUtils;
 
+import com.example.bicoccahelp.data.Callback;
+import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +17,10 @@ public class InputValidator {
             Pattern.CASE_INSENSITIVE);
     private static final Pattern passwordPattern = Pattern.compile(PASSWORD_REGEX);
     private static final Pattern namePattern = Pattern.compile(NAME_REGEX);
+
+
+    private static CorsoDiStudiRepository corsoDiStudiRepository = ServiceLocator.getInstance()
+            .getCorsoDiStudiRepository();
 
 
 
@@ -39,6 +46,26 @@ public class InputValidator {
     public static boolean isValidName(String name) {
         Matcher matcher = namePattern.matcher(name);
         return !TextUtils.isEmpty(name)  && matcher.matches();
+    }
+
+    public static boolean isValidStudyProgram(String studyProgram){
+
+        final boolean[] corsoExists = {false};
+
+        corsoDiStudiRepository.corsoDiStudiExists(studyProgram, new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean aBoolean) {
+                corsoExists[0] = true;
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                corsoExists[0] = false;
+            }
+        });
+
+        return corsoExists[0];
+
     }
 
 

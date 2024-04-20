@@ -16,4 +16,13 @@ public class CorsoDiStudiRepository {
 
         corsoDiStudiRemoteDataSource.createCorso(request, callback);
     }
+
+
+    public void corsoDiStudiExists(String nomeCorso, Callback<Boolean> callback){
+        corsoDiStudiRemoteDataSource.corsoDiStudiExists(nomeCorso, callback);
+    }
+
+    public void getCorsoDiStudiIdByName(String nomeCorso, Callback<String> callback){
+        corsoDiStudiRemoteDataSource.getCorsoDiStudiIdByName(nomeCorso, callback);
+    }
 }
