@@ -1,5 +1,8 @@
 package com.example.bicoccahelp.data.corsoDiStudi;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import com.example.bicoccahelp.data.Callback;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -14,7 +17,7 @@ public class CorsoDiStudiRemoteDataSource {
     private static final String AREA = "area di studi";
     private static final String LIVELLO = "tipo di laurea";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference corsoDiStudi = db.collection("Corso Di Studi");
+    private final CollectionReference corsoDiStudi = db.collection("Corso di Studi");
 
 
     public void createCorso(CreateCorsoDiStudiRequest request,
@@ -52,17 +55,18 @@ public class CorsoDiStudiRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
-    public void getCorsoDiStudiIdByName(String nomeCorso, Callback<String> callback) {
+    public void getCorsoDiStudiId(String nomeCorso, Callback<String> callback) {
         corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorso)
-                .limit(1)
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        String corsoId = queryDocumentSnapshots.getDocuments().get(0).getId();
-                        callback.onSucces(corsoId);
-                    } else {
+                .addOnSuccessListener(task -> {
+                    if (!task.getDocuments().isEmpty()) {
+                        String id = task.getDocuments().get(0).getId();
 
-                        callback.onFailure(null);
+                        Log.d("","L'ID E': "+id);
+                        callback.onSucces(id);
+                    } else {
+                        Log.d("","L'ID NON ESISTE");
+                        callback.onSucces(null);
                     }
                 })
                 .addOnFailureListener(callback::onFailure);

@@ -77,17 +77,10 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     private void createStudentOnClick() {
         String studyProgram = Objects.requireNonNull(binding.createStudentEditText.getText()).toString();
 
-
-        if(!InputValidator.isValidStudyProgram(studyProgram)){
-            return;
-        }
-
-
         corsoDiStudiRepository.getCorsoDiStudiIdByName(studyProgram, new Callback<String>() {
             @Override
             public void onSucces(String idCorso) {
                 if(binding.noRadioButton.isChecked()){
-                    UserModel user = userRepository.getCurrentUser();
                     CreateStudentRequest srequest = new CreateStudentRequest(idCorso, false);
 
                     studentRepository.createStudent(srequest, new Callback<StudentModel>() {
@@ -105,7 +98,6 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
                 }
 
                 if(binding.yesRadioButton.isChecked()){
-                    UserModel user = userRepository.getCurrentUser();
                     CreateStudentRequest srequest = new CreateStudentRequest(idCorso, true);
 
                     studentRepository.createStudent(srequest, new Callback<StudentModel>() {
@@ -121,12 +113,11 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
                         }
                     });
                 }
-
             }
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), "NON ESISTE IL CORSO", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), "NON ESISTE CORSO", Snackbar.LENGTH_SHORT).show();
             }
         });
 

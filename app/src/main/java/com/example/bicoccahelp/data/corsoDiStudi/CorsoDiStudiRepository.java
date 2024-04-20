@@ -23,6 +23,6 @@ public class CorsoDiStudiRepository {
     }
 
     public void getCorsoDiStudiIdByName(String nomeCorso, Callback<String> callback){
-        corsoDiStudiRemoteDataSource.getCorsoDiStudiIdByName(nomeCorso, callback);
+        corsoDiStudiRemoteDataSource.getCorsoDiStudiId(nomeCorso, callback);
     }
 }
