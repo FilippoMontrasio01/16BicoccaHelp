@@ -71,7 +71,7 @@
                 />
 
 
-        <!-- Name -->
+            <!-- Name -->
             <RelativeLayout
                 android:id="@+id/update_name_item"
                 android:layout_width="match_parent"

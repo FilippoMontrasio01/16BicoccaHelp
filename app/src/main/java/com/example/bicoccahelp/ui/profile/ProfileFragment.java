@@ -121,7 +121,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
 
         if(v.getId() == binding.completeStudentItem.getId()){
             completeStudentOnClick();
+            return;
         }
+
+        if(v.getId() == binding.becomeATutorItem.getId()){
+            completeTutorOnclick();
+        }
+    }
+
+    private void completeTutorOnclick() {
+        navController.navigate(R.id.action_from_profile_to_complete_tutor_fragment);
     }
 
     private void completeStudentOnClick() {

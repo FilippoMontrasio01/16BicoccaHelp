@@ -43,6 +43,11 @@
         <action
             android:id="@+id/action_from_profile_to_complete_student_fragment"
             app:destination="@id/fragment_complete_student"/>
+
+        <action
+            android:id="@+id/action_from_profile_to_complete_tutor_fragment"
+            app:destination="@id/fragment_complete_student"/>
+
     </fragment>
 
     <fragment
@@ -54,6 +59,18 @@
         <action
             android:id="@+id/action_from_complete_profile_to_profile_fragment"
             app:destination="@id/profile_fragment"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_complete_tutor"
+        android:name="com.example.bicoccahelp.ui.profile.CompleteTutorProfileFragment"
+        android:label="@string/complete_tutor_fragment"
+        tools:layout="@layout/fragment_complete_tutor_profile">
+
+        <action
+            android:id="@+id/action_from_complete_tutor_to_profile_fragment"
+            app:destination="@id/profile_fragment"/>
+
 
     </fragment>
 
