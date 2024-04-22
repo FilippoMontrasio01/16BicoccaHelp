@@ -15,4 +15,8 @@ public class StudentRepository {
                               Callback<StudentModel> callback){
         studentRemoteDataSource.createStudent(createStudentRequest, callback);
     }
+
+    public void studentExist(String uid, Callback<Boolean> callback){
+        studentRemoteDataSource.studentExist(uid, callback);
+    }
 }

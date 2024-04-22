@@ -14,10 +14,14 @@ import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
 
+import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
 
+import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.databinding.FragmentLogoutDialogBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
@@ -66,7 +70,6 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
     }
 
     private void onClickCancel() {
-
         Objects.requireNonNull(getDialog()).cancel();
     }
 

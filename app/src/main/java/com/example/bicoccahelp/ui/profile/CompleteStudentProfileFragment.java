@@ -54,10 +54,11 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = FragmentCompleteStudentProfileBinding.inflate(inflater, container, false);
+        binding = FragmentCompleteStudentProfileBinding.inflate(inflater,
+                container, false);
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
@@ -77,12 +78,13 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     }
 
     private void createStudentOnClick() {
-        String studyProgram = Objects.requireNonNull(binding.createStudentEditText.getText()).toString();
+        String studyProgram = Objects.requireNonNull(binding.createStudentEditText
+                .getText()).toString();
 
 
 
         if(binding.createStudentCheckBox.isChecked()){
-            livello = "Magistrale";
+            livello = getString(R.string.magistrale);
         }
 
         InputValidator.isValidStudyProgram(studyProgram, new Callback<Boolean>() {
@@ -91,13 +93,14 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
                 if(exist){
                     getCorsoId(studyProgram, livello);
                 }else{
-                    binding.createStudentTextInputLayout.setError("Il corso di studi inserito non esiste");
+                    binding.createStudentTextInputLayout
+                            .setError(getString(R.string.insert_a_valid_studyProgram));
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), "Generic error", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -107,22 +110,24 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     public void getCorsoId(String studyProgram, String livello){
 
 
-        corsoDiStudiRepository.getCorsoDiStudiIdByName(studyProgram, livello, new Callback<String>() {
+        corsoDiStudiRepository.getCorsoDiStudiIdByName(
+                studyProgram, livello, new Callback<String>() {
             @Override
             public void onSucces(String idCorso) {
 
-                if(binding.yesRadioButton.isChecked()){
+                if(binding.yesRadioButton.isChecked()) {
                     yesRadioButtonAnswer(idCorso);
-                }
-
-                if(binding.noRadioButton.isChecked()){
+                }else if(binding.noRadioButton.isChecked()){
                     noRadioButtonAnswer(idCorso);
+                }else{
+                    Snackbar.make(requireView(), getString(R.string.tutor_radioButton),
+                            Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), "ERRRORE DI PROVA", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -140,7 +145,7 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), "ERRORE", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -157,7 +162,7 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), "ERRORE", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }

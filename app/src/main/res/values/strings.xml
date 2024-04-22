@@ -131,6 +131,11 @@
     <string name="corso">Study Program</string>
     <string name="create_student_profile">Create Student Profile</string>
     <string name="masters_degree">Master\'s degree</string>
-
+    <string name="tutor_radioButton">Please indicate your interest in becoming a tutor by making a selection. A choice is mandatory.</string>
+    <string name="insert_a_valid_studyProgram">Invalid Study Program Entered</string>
+    <string name="magistrale">Magistrale</string>
+    <string name="triennale">Triennale</string>
+    <string name="generic_error">Generic Error</string>
+    <string name="update_student">Update Student Profile</string>
 
 </resources>

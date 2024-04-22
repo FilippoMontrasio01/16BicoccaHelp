@@ -49,6 +49,7 @@ public class InputValidator {
     }
 
     public static void isValidStudyProgram(String studyProgram, Callback<Boolean> callback){
+        //String nomeCorsoFormatted = studyProgram.toLowerCase();
         corsoDiStudiRepository.corsoDiStudiExists(studyProgram, new Callback<Boolean>() {
             @Override
             public void onSucces(Boolean exist) {

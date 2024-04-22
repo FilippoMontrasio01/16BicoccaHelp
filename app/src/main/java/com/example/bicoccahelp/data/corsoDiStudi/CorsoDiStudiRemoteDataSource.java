@@ -45,7 +45,6 @@ public class CorsoDiStudiRemoteDataSource {
 
     public void corsoDiStudiExists(String nomeCorso, Callback<Boolean> callback) {
         String nomeCorsoFormatted = nomeCorso.toLowerCase();
-
         corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorsoFormatted)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -60,7 +59,8 @@ public class CorsoDiStudiRemoteDataSource {
 
 
     public void getCorsoDiStudiId(String nomeCorso, String livello, Callback<String> callback) {
-        corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorso)
+        String nomeCorsoFormatted = nomeCorso.toLowerCase();
+        corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorsoFormatted)
                 .whereEqualTo(LIVELLO, livello)
                 .get()
                 .addOnSuccessListener(task -> {

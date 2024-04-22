@@ -7,21 +7,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
+import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.OnUpdateListener;
 import com.example.bicoccahelp.data.auth.AuthRepository;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.databinding.FragmentProfileBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class ProfileFragment extends Fragment implements View.OnClickListener
@@ -30,6 +35,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     private FragmentProfileBinding binding;
     private NavController navController;
     private UserRepository userRepository;
+    private StudentRepository studentRepository;
+    private StudentViewModel studentViewModel;
 
 
     public ProfileFragment() {
@@ -41,9 +48,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userRepository = ServiceLocator.getInstance().getUserRepository();
-
-
-
+        studentRepository = ServiceLocator.getInstance().getStudentRepository();
+        studentViewModel = new ViewModelProvider(requireActivity(),
+                new StudentViewModelFactory(studentRepository, userRepository)).get(StudentViewModel.class);
 
     }
 
@@ -51,8 +58,24 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         binding = FragmentProfileBinding.inflate(inflater, container, false);
+
+
+        studentViewModel.getStudentExists().observe(getViewLifecycleOwner(), exist -> {
+            if (exist) {
+                binding.completeStudentTextView.setText(getString(R.string.update_student));
+            } else {
+                binding.completeStudentTextView.setText(getString(R.string.complete_student));
+            }
+        });
+
+        studentViewModel.getErrorMessage().observe(getViewLifecycleOwner(), message -> {
+            Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+        });
+
+        studentViewModel.checkStudentExists();
+
+
         return binding.getRoot();
     }
 
@@ -123,6 +146,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     private void showUpdateNameDialog() {
         navController.navigate(R.id.action_from_profile_to_update_name_dialog);
     }
+
 
     @Override
     public void onDestroyView() {

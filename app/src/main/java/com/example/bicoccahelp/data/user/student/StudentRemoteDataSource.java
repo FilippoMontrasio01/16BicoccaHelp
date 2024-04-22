@@ -2,6 +2,8 @@ package com.example.bicoccahelp.data.user.student;
 
 import static android.provider.Settings.System.getString;
 
+import android.util.Log;
+
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.user.UserModel;
@@ -9,6 +11,7 @@ import com.example.bicoccahelp.data.user.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -52,6 +55,20 @@ public class StudentRemoteDataSource {
                             createStudentRequest.corsoDiStudi,
                             createStudentRequest.isTutor);
                     callback.onSucces(student);
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void studentExist(String uid, Callback<Boolean> callback){
+        students.whereEqualTo(FieldPath.documentId(), uid)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        callback.onSucces(true);
+                        Log.d("ciao", "UID: "+uid + " STUDENT ID: "+ students.getId());
+                    }else{
+                        callback.onSucces(false);
+                    }
                 })
                 .addOnFailureListener(callback::onFailure);
     }
