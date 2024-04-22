@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +33,9 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
 
 
     private StudentRepository studentRepository;
-    private UserRepository userRepository;
     private FragmentCompleteStudentProfileBinding binding;
     private NavController navController;
+    private String livello = "Triennale";
     private CorsoDiStudiRepository corsoDiStudiRepository;
 
 
@@ -42,12 +43,13 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         studentRepository = ServiceLocator.getInstance().getStudentRepository();
-        userRepository = ServiceLocator.getInstance().getUserRepository();
         corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
     }
 
@@ -77,50 +79,88 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     private void createStudentOnClick() {
         String studyProgram = Objects.requireNonNull(binding.createStudentEditText.getText()).toString();
 
-        corsoDiStudiRepository.getCorsoDiStudiIdByName(studyProgram, new Callback<String>() {
+
+
+        if(binding.createStudentCheckBox.isChecked()){
+            livello = "Magistrale";
+        }
+
+        InputValidator.isValidStudyProgram(studyProgram, new Callback<Boolean>() {
             @Override
-            public void onSucces(String idCorso) {
-                if(binding.noRadioButton.isChecked()){
-                    CreateStudentRequest srequest = new CreateStudentRequest(idCorso, false);
-
-                    studentRepository.createStudent(srequest, new Callback<StudentModel>() {
-                        @Override
-                        public void onSucces(StudentModel studentModel) {
-                            navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
-                            requireActivity().finish();
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            Snackbar.make(requireView(), "ERRORE", Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                if(binding.yesRadioButton.isChecked()){
-                    CreateStudentRequest srequest = new CreateStudentRequest(idCorso, true);
-
-                    studentRepository.createStudent(srequest, new Callback<StudentModel>() {
-                        @Override
-                        public void onSucces(StudentModel studentModel) {
-                            navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
-                            requireActivity().finish();
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            Snackbar.make(requireView(), "ERRORE", Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
+            public void onSucces(Boolean exist) {
+                if(exist){
+                    getCorsoId(studyProgram, livello);
+                }else{
+                    binding.createStudentTextInputLayout.setError("Il corso di studi inserito non esiste");
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), "NON ESISTE CORSO", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), "Generic error", Snackbar.LENGTH_SHORT).show();
             }
         });
-
     }
+
+
+
+    public void getCorsoId(String studyProgram, String livello){
+
+
+        corsoDiStudiRepository.getCorsoDiStudiIdByName(studyProgram, livello, new Callback<String>() {
+            @Override
+            public void onSucces(String idCorso) {
+
+                if(binding.yesRadioButton.isChecked()){
+                    yesRadioButtonAnswer(idCorso);
+                }
+
+                if(binding.noRadioButton.isChecked()){
+                    noRadioButtonAnswer(idCorso);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), "ERRRORE DI PROVA", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public void noRadioButtonAnswer(String idCorso){
+        CreateStudentRequest srequest = new CreateStudentRequest(idCorso, false);
+
+        studentRepository.createStudent(srequest, new Callback<StudentModel>() {
+            @Override
+            public void onSucces(StudentModel studentModel) {
+                navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
+                requireActivity().finish();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), "ERRORE", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void yesRadioButtonAnswer(String idCorso){
+        CreateStudentRequest srequest = new CreateStudentRequest(idCorso, true);
+
+        studentRepository.createStudent(srequest, new Callback<StudentModel>() {
+            @Override
+            public void onSucces(StudentModel studentModel) {
+                navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
+                requireActivity().finish();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), "ERRORE", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }

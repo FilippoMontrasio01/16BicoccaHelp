@@ -130,6 +130,7 @@
     <string name="study_program">Insert your study program</string>
     <string name="corso">Study Program</string>
     <string name="create_student_profile">Create Student Profile</string>
+    <string name="masters_degree">Master\'s degree</string>
 
 
 </resources>

@@ -51,8 +51,8 @@
             android:background="@drawable/round_back_background_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:layout_marginStart="25dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="25dp"
             android:orientation="vertical">
 
@@ -67,7 +67,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:text="@string/study_program"
                 android:textColor="@color/dark_gray"
-                android:textSize="20sp"
+                android:textSize="23sp"
                 />
 
 
@@ -103,8 +103,33 @@
                         android:textSize="18sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+
+
             </RelativeLayout>
 
+
+            <RelativeLayout
+                android:id="@+id/checkbox_item"
+                android:layout_width="match_parent"
+                android:paddingHorizontal="15dp"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/create_student_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/masters_degree"
+                    android:button= "@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp"
+                    />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/join_as_a_tutor_id"
@@ -116,7 +141,7 @@
                 android:fontFamily="@font/lato_bold"
                 android:text="@string/become_a_tutor"
                 android:textColor="@color/dark_gray"
-                android:textSize="20sp"
+                android:textSize="23sp"
                 />
 
             <RelativeLayout
@@ -181,6 +206,7 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
     </LinearLayout>
 
 

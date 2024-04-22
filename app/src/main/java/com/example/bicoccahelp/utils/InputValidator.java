@@ -48,24 +48,18 @@ public class InputValidator {
         return !TextUtils.isEmpty(name)  && matcher.matches();
     }
 
-    public static boolean isValidStudyProgram(String studyProgram){
-
-        final boolean[] corsoExists = {false};
-
+    public static void isValidStudyProgram(String studyProgram, Callback<Boolean> callback){
         corsoDiStudiRepository.corsoDiStudiExists(studyProgram, new Callback<Boolean>() {
             @Override
-            public void onSucces(Boolean aBoolean) {
-                corsoExists[0] = true;
+            public void onSucces(Boolean exist) {
+                callback.onSucces(exist);
             }
 
             @Override
             public void onFailure(Exception e) {
-                corsoExists[0] = false;
+                callback.onFailure(e);
             }
         });
-
-        return corsoExists[0];
-
     }
 
 

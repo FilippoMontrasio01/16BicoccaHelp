@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.bicoccahelp.data.Callback;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -43,20 +44,24 @@ public class CorsoDiStudiRemoteDataSource {
 
 
     public void corsoDiStudiExists(String nomeCorso, Callback<Boolean> callback) {
-        //String nomeCorsoFormatted = nomeCorso.trim().toLowerCase();
+        String nomeCorsoFormatted = nomeCorso.toLowerCase();
 
-        corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorso)
-                .limit(1)
+        corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorsoFormatted)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    boolean exists = !queryDocumentSnapshots.isEmpty();
-                    callback.onSucces(exists);
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        callback.onSucces(true);
+                    }else{
+                        callback.onSucces(false);
+                    }
                 })
                 .addOnFailureListener(callback::onFailure);
     }
 
-    public void getCorsoDiStudiId(String nomeCorso, Callback<String> callback) {
+
+    public void getCorsoDiStudiId(String nomeCorso, String livello, Callback<String> callback) {
         corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorso)
+                .whereEqualTo(LIVELLO, livello)
                 .get()
                 .addOnSuccessListener(task -> {
                     if (!task.getDocuments().isEmpty()) {

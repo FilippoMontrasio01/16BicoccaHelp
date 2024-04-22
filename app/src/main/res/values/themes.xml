@@ -21,10 +21,15 @@
     <style name="BottomNavigationThemeCustom">
         <item name="enforceTextAppearance">true</item>
         <item name="enforceMaterialTheme">true</item>
-        <item name="itemIconTint">@color/white</item>
-        <item name="itemRippleColor">@android:color/transparent</item>
         <item name="itemTextAppearanceInactive">?attr/textAppearanceCaption</item>
         <item name="itemTextAppearanceActive">?attr/textAppearanceCaption</item>
         <item name="itemTextColor">@color/white</item>
+    </style>
+
+    <style name="colored_checkbox" parent="Theme.AppCompat.Light">
+        <!-- SELECTED CHECKBOX COLOR-->
+        <item name="colorAccent">@color/dark_red</item>
+        <!-- DEFAULT/UNSELECTED CHECBOX COLOR-->
+        <item name="android:textColorSecondary">@color/dark_gray</item>
     </style>
 </resources>
