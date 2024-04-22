@@ -9,18 +9,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
-import com.example.bicoccahelp.data.Callback;
-import com.example.bicoccahelp.data.OnUpdateListener;
-import com.example.bicoccahelp.data.auth.AuthRepository;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
