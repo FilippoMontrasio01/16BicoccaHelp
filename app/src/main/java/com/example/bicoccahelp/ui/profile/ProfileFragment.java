@@ -47,7 +47,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
         userRepository = ServiceLocator.getInstance().getUserRepository();
         studentRepository = ServiceLocator.getInstance().getStudentRepository();
         studentViewModel = new ViewModelProvider(requireActivity(),
-                new StudentViewModelFactory(studentRepository, userRepository)).get(StudentViewModel.class);
+                new StudentViewModelFactory(studentRepository, userRepository))
+                .get(StudentViewModel.class);
 
     }
 
@@ -95,6 +96,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
         binding.displayEmailTextView.setText(user.email);
         binding.displayNameTextView.setText(user.name);
         binding.completeStudentItem.setOnClickListener(this);
+        binding.becomeATutorItem.setOnClickListener(this);
     }
 
     @Override

@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,6 @@ import android.view.ViewGroup;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
-import com.example.bicoccahelp.data.user.UserModel;
-import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.CreateStudentRequest;
 import com.example.bicoccahelp.data.user.student.StudentModel;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
@@ -140,7 +137,6 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
             @Override
             public void onSucces(StudentModel studentModel) {
                 navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
-                requireActivity().finish();
             }
 
             @Override

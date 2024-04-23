@@ -6,16 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
-    tools:context=".ui.profile.CompleteTutorProfileFragment"
-    android:id="@+id/fragment_complete_tutor">
+    tools:context=".ui.profile.CompleteStudentProfileFragment"
+    android:id="@+id/fragment_complete_student">
 
     <ImageView
         android:id="@+id/complete_student_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/light_gray"
         android:scaleType="centerCrop"
         android:src="@drawable/wave_haikei_4_"
+        android:background="@color/light_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,73 +34,260 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/login_linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/light_gray"
-
-        app:layout_constraintBottom_toBottomOf="@id/complete_student_background"
-        app:layout_constraintTop_toBottomOf="@+id/complete_student_title">
+        android:layout_height="1255dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/complete_student_background"
+        app:layout_constraintVertical_bias="0.632">
 
         <LinearLayout
-            android:id="@+id/login_linear_layout"
+            android:id="@+id/profile_setting_linearLayout"
+            android:background="@drawable/round_back_background_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/complete_student_background"
-            app:layout_constraintVertical_bias="0.632">
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="25dp"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/profile_setting_linearLayout"
+            <TextView
+                android:id="@+id/insert_corso_di_studi"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="25dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="50dp"
-                android:layout_marginEnd="25dp"
-                android:background="@drawable/round_back_background_profile"
-                android:orientation="vertical">
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/study_program"
+                android:textColor="@color/dark_gray"
+                android:textSize="23sp"
+                />
 
-                <TextView
 
-                    android:id="@+id/insert_corso_di_studi"
+            <!-- Name -->
+            <RelativeLayout
+                android:id="@+id/create_tutor_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="15dp">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/create_tutor_TextInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="15dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:text="Insert your disponibilities"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/graduation"
+                    app:errorTextAppearance="@font/lato_bold"
                     android:textColor="@color/dark_gray"
-                    android:textSize="23sp" />
+                    app:hintEnabled="false">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/create_tutor_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:ems="10"
+                        android:background="@drawable/completeprofile_edittext_background"
+                        android:hint="@string/corso"
+                        android:fontFamily="@font/lato"
+                        android:padding="12dp"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="18sp" />
 
+                </com.google.android.material.textfield.TextInputLayout>
+            </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/checkbox_item_magistrale"
+                android:layout_width="match_parent"
+                android:paddingHorizontal="15dp"
+                android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/create_student_button"
-                    style="@android:style/Widget.Button"
-                    android:layout_width="300dp"
+                <CheckBox
+                    android:id="@+id/livello_checkbox"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginBottom="50dp"
-                    android:background="@drawable/button_background"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="@string/create_student_profile"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:text="@string/masters_degree"
+                    android:button= "@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp"
+                    />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/insert_disponibilities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="Select your disponibilities"
+                android:textColor="@color/dark_gray"
+                android:textSize="23sp" />
+
+
+            <LinearLayout
+                android:id="@+id/checkbox_item"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
+
+                <CheckBox
+                    android:id="@+id/monday_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="Monday"
+                    android:button="@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp" />
+
+                <CheckBox
+                    android:id="@+id/friday_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="Friday"
+                    android:button="@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/checkbox_item1"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
+
+                <CheckBox
+                    android:id="@+id/tuesday_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="Tuesday"
+                    android:button="@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp" />
+
+                <CheckBox
+                    android:id="@+id/saturday_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Saturday"
+                    android:button="@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/checkbox_item2"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
+
+                <CheckBox
+                    android:id="@+id/wednesday_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="Wednesday"
+                    android:button="@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp" />
+
+                <CheckBox
+                    android:id="@+id/sunday_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="Sunday"
+                    android:button="@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/checkbox_item3"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
+
+                <CheckBox
+                    android:id="@+id/thursday_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="Thursday"
+                    android:button="@null"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/image_checbox"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/create_tutor_button"
+                style="@android:style/Widget.Button"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="50dp"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Create Tutor Profile"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-    </ScrollView>
-
-
+    </LinearLayout>
 
 
 

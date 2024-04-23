@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentDeleteUserDialogBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
@@ -24,6 +26,8 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
     private UserRepository userRepository;
     private FragmentDeleteUserDialogBinding binding;
     private NavController navController;
+    private TutorRepository tutorRepository;
+    private StudentRepository studentRepository;
     public DeleteUserDialogFragment() {
         // Required empty public constructor
     }
@@ -31,6 +35,8 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userRepository = ServiceLocator.getInstance().getUserRepository();
+        studentRepository = ServiceLocator.getInstance().getStudentRepository();
+        tutorRepository = ServiceLocator.getInstance().getTutorRepository();
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
@@ -87,9 +93,15 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
     }
 
     public void deleteUser(){
+
+        String uidUser = userRepository.getCurrentUser().uid;
+
+
+
         userRepository.deleteUser(new Callback<Void>() {
             @Override
             public void onSucces(Void unused) {
+                isTutorAndDelete(uidUser);
                 navController.navigate(R.id.action_from_delete_dialog_to_welcome_activity);
                 requireActivity().finish();
             }
@@ -98,6 +110,24 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
             public void onFailure(Exception e) {
                 Snackbar.make(requireView(),getString(R.string.delete_account_error),
                         Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void isTutorAndDelete(String uidUser){
+        studentRepository.isTutor(uidUser, true, new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean isTutor) {
+                if(isTutor){
+                    tutorRepository.deleteTutor(uidUser);
+                }
+
+                studentRepository.deleteStudent(uidUser);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), getString(R.string.generic_error),Snackbar.LENGTH_SHORT).show();
             }
         });
     }

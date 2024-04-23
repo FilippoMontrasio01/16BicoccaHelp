@@ -4,13 +4,19 @@ import static android.provider.Settings.System.getString;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.tutor.TutorModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -65,7 +71,6 @@ public class StudentRemoteDataSource {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if(!queryDocumentSnapshots.isEmpty()){
                         callback.onSucces(true);
-                        Log.d("ciao", "UID: "+uid + " STUDENT ID: "+ students.getId());
                     }else{
                         callback.onSucces(false);
                     }
@@ -73,5 +78,38 @@ public class StudentRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
+
+    public void isTutor(String uid, boolean isTutor, Callback<Boolean> callback){
+        students.whereEqualTo(FieldPath.documentId(), uid)
+                .whereEqualTo(IS_TUTOR, isTutor)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        callback.onSucces(true);
+                    }else{
+                        callback.onSucces(false);
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void updateStudentName(String uid, String name){
+        students.document(uid)
+                .update(NAME, name)
+                .addOnSuccessListener(aVoid -> Log.d("",
+                        "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e -> Log.w("",
+                        "Error updating document", e));
+    }
+
+
+    public void deleteStudent(String uid){
+        students.document(uid)
+                .delete()
+                .addOnSuccessListener(aVoid -> Log.d("",
+                        "DocumentSnapshot successfully deleted!"))
+                .addOnFailureListener(e -> Log.w("",
+                        "Error deleting document", e));
+    }
 
 }

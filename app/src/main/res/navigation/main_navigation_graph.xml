@@ -46,7 +46,7 @@
 
         <action
             android:id="@+id/action_from_profile_to_complete_tutor_fragment"
-            app:destination="@id/fragment_complete_student"/>
+            app:destination="@id/fragment_complete_tutor"/>
 
     </fragment>
 
