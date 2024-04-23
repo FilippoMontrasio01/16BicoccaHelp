@@ -20,8 +20,12 @@ public class StudentRepository {
         studentRemoteDataSource.studentExist(uid, callback);
     }
 
-    public void updateStudentName(String uri, String name){
-        studentRemoteDataSource.updateStudentName(uri, name);
+    public void updateStudentName(String uid, String name){
+        studentRemoteDataSource.updateStudentName(uid, name);
+    }
+
+    public void updateiSTutor(String uid, boolean isTutor){
+        studentRemoteDataSource.updateIsTutor(uid, isTutor);
     }
 
     public void deleteStudent(String uid){

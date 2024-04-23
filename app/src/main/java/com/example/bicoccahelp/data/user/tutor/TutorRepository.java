@@ -17,17 +17,25 @@ public class TutorRepository {
         tutorRemoteDataSource.deleteTutor(uid);
     }
 
-    public void updateTutor(CreateTutorRequest createTutorRequest,
-                            String idTutor, Callback<TutorModel> callback){
-
-        tutorRemoteDataSource.updateTutor(createTutorRequest, idTutor, callback);
+    public void tutorExist(String uid, Callback<Boolean> callback){
+        tutorRemoteDataSource.tutorExist(uid, callback);
     }
+
+
 
     public void updateTutorName(String uid, String name){
         tutorRemoteDataSource.updateTutorName(uid, name);
     }
 
+
+
+
     public void getTutorId(String uid, Callback<String> callback){
         tutorRemoteDataSource.getTutorId(uid, callback);
+    }
+    public void updateTutor(CreateTutorRequest createTutorRequest,
+                             String idTutor, Callback<TutorModel> callback){
+
+        tutorRemoteDataSource.updateTutor(createTutorRequest, idTutor, callback);
     }
 }

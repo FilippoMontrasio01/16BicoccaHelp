@@ -60,6 +60,10 @@
             android:id="@+id/action_from_complete_profile_to_profile_fragment"
             app:destination="@id/profile_fragment"/>
 
+        <action
+            android:id="@+id/action_from_complete_student_to_complete_tutor"
+            app:destination="@id/fragment_complete_tutor"/>
+
     </fragment>
     <fragment
         android:id="@+id/fragment_complete_tutor"

@@ -15,9 +15,11 @@ import android.view.ViewGroup;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
+import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.CreateStudentRequest;
 import com.example.bicoccahelp.data.user.student.StudentModel;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentCompleteStudentProfileBinding;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
@@ -32,6 +34,8 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     private StudentRepository studentRepository;
     private FragmentCompleteStudentProfileBinding binding;
     private NavController navController;
+    private UserRepository userRepository;
+    private TutorRepository tutorRepository;
     private String livello = "Triennale";
     private CorsoDiStudiRepository corsoDiStudiRepository;
 
@@ -48,6 +52,8 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
         super.onCreate(savedInstanceState);
         studentRepository = ServiceLocator.getInstance().getStudentRepository();
         corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
+        userRepository = ServiceLocator.getInstance().getUserRepository();
+        tutorRepository = ServiceLocator.getInstance().getTutorRepository();
     }
 
     @Override
@@ -80,10 +86,9 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
 
 
 
-        if(binding.createStudentCheckBox.isChecked()){
+        if(binding.createStudentCheckBox.isChecked()) {
             livello = getString(R.string.magistrale);
         }
-
         InputValidator.isValidStudyProgram(studyProgram, new Callback<Boolean>() {
             @Override
             public void onSucces(Boolean exist) {
@@ -97,7 +102,8 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.generic_error),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -152,13 +158,33 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
         studentRepository.createStudent(srequest, new Callback<StudentModel>() {
             @Override
             public void onSucces(StudentModel studentModel) {
-                navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
-                requireActivity().finish();
+                tutorExist();
             }
 
             @Override
             public void onFailure(Exception e) {
                 Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void tutorExist(){
+        String uid = userRepository.getCurrentUser().uid;
+
+        tutorRepository.tutorExist(uid, new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean exist) {
+                if(!exist){
+                    navController.navigate(R.id.action_from_complete_student_to_complete_tutor);
+                }else{
+                    navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), getString(R.string.generic_error),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

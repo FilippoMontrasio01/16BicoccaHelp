@@ -18,6 +18,7 @@ import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.CreateTutorRequest;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
@@ -38,6 +39,8 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     private TutorRepository tutorRepository;
     private NavController navController;
     private CorsoDiStudiRepository corsoDiStudiRepository;
+    private UserRepository userRepository;
+    private StudentRepository studentRepository;
     private String livello = "Triennale";
 
     public CompleteTutorProfileFragment() {
@@ -48,6 +51,8 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
+        studentRepository = ServiceLocator.getInstance().getStudentRepository();
+        userRepository = ServiceLocator.getInstance().getUserRepository();
         corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
     }
 
@@ -128,10 +133,27 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     }
 
     private void createTutor(CreateTutorRequest request){
+
+        String uid = userRepository.getCurrentUser().uid;
         tutorRepository.createTutor(request, new Callback<TutorModel>() {
             @Override
             public void onSucces(TutorModel tutorModel) {
-                navController.navigate(R.id.action_from_complete_tutor_to_profile_fragment);
+
+                studentRepository.studentExist(uid, new Callback<Boolean>() {
+                    @Override
+                    public void onSucces(Boolean exist) {
+                        if(exist){
+                            studentRepository.updateiSTutor(uid, true);
+                        }
+
+                        navController.navigate(R.id.action_from_complete_tutor_to_profile_fragment);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override

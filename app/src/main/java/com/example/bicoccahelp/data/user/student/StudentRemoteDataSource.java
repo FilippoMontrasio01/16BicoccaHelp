@@ -102,6 +102,15 @@ public class StudentRemoteDataSource {
                         "Error updating document", e));
     }
 
+    public void updateIsTutor(String uid, Boolean isTutor){
+        students.document(uid)
+                .update(IS_TUTOR, isTutor)
+                .addOnSuccessListener(aVoid -> Log.d("",
+                        "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e -> Log.w("",
+                        "Error updating document", e));
+    }
+
 
     public void deleteStudent(String uid){
         students.document(uid)

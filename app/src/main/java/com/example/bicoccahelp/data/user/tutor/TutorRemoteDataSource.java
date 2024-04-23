@@ -83,6 +83,19 @@ public class TutorRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
+    public void tutorExist(String uid, Callback<Boolean> callback){
+        tutors.whereEqualTo(FieldPath.documentId(), uid)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        callback.onSucces(true);
+                    }else{
+                        callback.onSucces(false);
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
 
     public void getTutorId(String uid, Callback<String> callback) {
 
