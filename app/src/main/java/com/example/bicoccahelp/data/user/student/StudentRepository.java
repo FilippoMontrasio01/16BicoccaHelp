@@ -36,4 +36,8 @@ public class StudentRepository {
         studentRemoteDataSource.isTutor(uid, isTutor, callback);
     }
 
+    public void getCorsoDiStudi(String uid, Callback<String > callback){
+        studentRemoteDataSource.getCorsoDiStudi(uid, callback);
+    }
+
 }

@@ -30,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,8 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     private UserRepository userRepository;
     private StudentRepository studentRepository;
     private String livello = "Triennale";
+    private ArrayList<String> subject = new ArrayList<>();
+
 
     public CompleteTutorProfileFragment() {
         // Required empty public constructor
@@ -72,6 +75,25 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         navController = Navigation.findNavController(view);
         binding.createTutorButton.setOnClickListener(this);
         binding.tutorBackButton.setOnClickListener(this);
+        binding.addSubjectButton.setOnClickListener(this);
+
+        String uid = userRepository.getCurrentUser().uid;
+
+        studentRepository.isTutor(uid, true, new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean exist) {
+                if(exist){
+                    getCorsoDiStudiId(uid);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     @Override
@@ -84,7 +106,22 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
 
         if(v.getId() == binding.tutorBackButton.getId()){
             backOnclick();
+            return;
         }
+
+        if(v.getId() == binding.addSubjectButton.getId()){
+            addSubjectOnClick();
+        }
+
+    }
+
+    private void addSubjectOnClick() {
+        String skill = binding.bestSubjectEditText.getText().toString();
+
+        subject.add(skill);
+        Snackbar.make(requireView(), "Subject successfully added!", Snackbar.LENGTH_SHORT).show();
+        binding.bestSubjectEditText.getText().clear();
+
 
     }
 
@@ -147,6 +184,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
 
         String uid = userRepository.getCurrentUser().uid;
         tutorRepository.createTutor(request, new Callback<TutorModel>() {
+
             @Override
             public void onSucces(TutorModel tutorModel) {
 
@@ -157,7 +195,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
                             studentRepository.updateiSTutor(uid, true);
                         }
 
-                        navController.popBackStack();
+                        navController.navigate(R.id.action_from_complete_tutor_to_profile_fragment);
                     }
 
                     @Override
@@ -187,7 +225,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
                     @Override
                     public void onSucces(String idCorso) {
                         CreateTutorRequest request = new CreateTutorRequest(idCorso,
-                                disponibilitaGiorni);
+                                disponibilitaGiorni, subject);
                         createTutor(request);
                     }
 
@@ -197,6 +235,55 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
                     }
                 });
     }
+
+    public void getCorsoDiStudiId(String uid){
+        studentRepository.getCorsoDiStudi(uid, new Callback<String>() {
+            @Override
+            public void onSucces(String idCorso) {
+                getCorsoDiStudiName(idCorso);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void  getCorsoDiStudiName(String idCorso){
+        corsoDiStudiRepository.getCorsodiStudiName(idCorso, new Callback<String>() {
+            @Override
+            public void onSucces(String name) {
+                getCorsoDiStudiLivello(idCorso, name);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getCorsoDiStudiLivello(String idCorso, String name){
+        corsoDiStudiRepository.getCorsoDiStudiLivello(idCorso, new Callback<String>() {
+            @Override
+            public void onSucces(String livello) {
+                if(livello.equals("Magistrale")){
+                    binding.livelloCheckbox.setChecked(true);
+                    binding.createTutorEditText.setText(name);
+                }else{
+                    binding.createTutorEditText.setText(name);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 
     public void onDestroyView() {
         super.onDestroyView();

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
+import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
@@ -102,6 +103,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+
+
+
         if(v.getId() == binding.signOutItem.getId()){
             showConfirmSignOutDialog();
             return;
@@ -133,7 +137,27 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     }
 
     private void completeTutorOnclick() {
-        navController.navigate(R.id.action_from_profile_to_complete_tutor_fragment);
+
+        String uid = userRepository.getCurrentUser().uid;
+
+        studentRepository.studentExist(uid, new Callback<Boolean>()  {
+            @Override
+            public void onSucces(Boolean exist) {
+                if(exist){
+                    navController.navigate(R.id.action_from_profile_to_complete_tutor_fragment);
+                }else{
+                    Snackbar.make(requireView(), "Complete the student profile before proceeding", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
+
     }
 
     private void completeStudentOnClick() {

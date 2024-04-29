@@ -22,6 +22,7 @@ public class TutorRemoteDataSource {
     private static final String PHOTO_URI = "photoUri";
     private static final String CORSO_DI_STUDI = "corso Di Studi";
     private static final String DISPONIBILITA_GIORNI = "disponibilità Giorni";
+    private static final String SKILLS = "skills";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference tutors = db.collection("Tutor");
 
@@ -40,6 +41,7 @@ public class TutorRemoteDataSource {
         data.put(PHOTO_URI, user.getPhotoUrl());
         data.put(CORSO_DI_STUDI, createTutorRequest.corsoDiStudi);
         data.put(DISPONIBILITA_GIORNI, createTutorRequest.disponibilitaGiorni);
+        data.put(SKILLS, createTutorRequest.skills);
 
         tutors.document(user.getUid())
                 .set(data)
@@ -48,7 +50,8 @@ public class TutorRemoteDataSource {
                             user.getEmail(),user.isEmailVerified(),
                             user.getDisplayName(),
                             user.getPhotoUrl(), createTutorRequest.disponibilitaGiorni,
-                            createTutorRequest.corsoDiStudi);
+                            createTutorRequest.corsoDiStudi,
+                            createTutorRequest.skills);
                     callback.onSucces(tutor);
                 })
                 .addOnFailureListener(callback::onFailure);
@@ -77,7 +80,8 @@ public class TutorRemoteDataSource {
                             user.getEmail(),user.isEmailVerified(),
                             user.getDisplayName(),
                             user.getPhotoUrl(), createTutorRequest.disponibilitaGiorni,
-                            createTutorRequest.corsoDiStudi);
+                            createTutorRequest.corsoDiStudi,
+                            createTutorRequest.skills);
                     callback.onSucces(tutor);
                 })
                 .addOnFailureListener(callback::onFailure);

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.bicoccahelp.data.Callback;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -52,6 +53,37 @@ public class CorsoDiStudiRemoteDataSource {
                         callback.onSucces(true);
                     }else{
                         callback.onSucces(false);
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void getCorsodiStudiName(String idCorso, Callback<String> callback){
+        corsoDiStudi.whereEqualTo(FieldPath.documentId(), idCorso)
+                .get()
+                .addOnSuccessListener(task -> {
+
+                    if (!task.getDocuments().isEmpty()) {
+                        DocumentSnapshot documentSnapshot = task.getDocuments().get(0);
+                        String nome = documentSnapshot.getString(NOME_CORSO);
+                        callback.onSucces(nome);
+                    }else{
+                        callback.onSucces(null);
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void getCorsoDiStudiLivello(String idCorso, Callback<String> callback){
+        corsoDiStudi.whereEqualTo(FieldPath.documentId(), idCorso)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if(!task.getDocuments().isEmpty()){
+                        DocumentSnapshot documentSnapshot = task.getDocuments().get(0);
+                        String livello = documentSnapshot.getString(LIVELLO);
+                        callback.onSucces(livello);
+                    }else {
+                        callback.onSucces(null);
                     }
                 })
                 .addOnFailureListener(callback::onFailure);

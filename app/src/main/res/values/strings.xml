@@ -139,5 +139,6 @@
     <string name="update_student">Update Student Profile</string>
     <string name="complete_tutor_fragment">Fragment Complete Tutor</string>
     <string name="back">Back to profile</string>
+    <string name="subject">Input your top skills</string>
 
 </resources>
