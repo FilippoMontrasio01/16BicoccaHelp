@@ -21,17 +21,23 @@ import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentProfileBinding;
 import com.example.bicoccahelp.databinding.FragmentProfilePhotoBinding;
 import com.example.bicoccahelp.utils.GlideLoadModel;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Objects;
+
 
 public class ProfilePhotoFragment extends Fragment implements View.OnClickListener{
 
     private FragmentProfilePhotoBinding binding;
     private UserRepository userRepository;
+    private StudentRepository studentRepository;
+    private TutorRepository tutorRepository;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                if(uri != null){
@@ -46,10 +52,12 @@ public class ProfilePhotoFragment extends Fragment implements View.OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userRepository = ServiceLocator.getInstance().getUserRepository();
+        studentRepository = ServiceLocator.getInstance().getStudentRepository();
+        tutorRepository = ServiceLocator.getInstance().getTutorRepository();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentProfilePhotoBinding.inflate(inflater, container, false);
@@ -73,7 +81,13 @@ public class ProfilePhotoFragment extends Fragment implements View.OnClickListen
             pickMedia.launch(new PickVisualMediaRequest.Builder()
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                     .build());
+
+
+
         }
+
+
+
     }
 
     public void updatePhoto(Uri photoUri) {
@@ -82,13 +96,30 @@ public class ProfilePhotoFragment extends Fragment implements View.OnClickListen
             public void onSucces(Void unused) {
                 UserModel user = userRepository.getCurrentUser();
                 loadPhoto(user.photoUri, true);
+
+                studentRepository.isTutor(user.uid, true, new Callback<Boolean>() {
+                    @Override
+                    public void onSucces(Boolean exist) {
+                        if(exist){
+                            tutorRepository.updateTutorPhoto(user.uid, user.photoUri);
+                        }
+
+                        studentRepository.updateStudentPhoto(user.uid, user.photoUri);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Snackbar.make(requireView(), getString(R.string.generic_error),Snackbar.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onFailure(Exception e) {
                 Fragment parent = getParentFragment();
                         if(parent != null){
-                            Snackbar.make(parent.getView(),getString(R.string.load_photo_error), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(requireView(),getString(R.string.load_photo_error),
+                                    Snackbar.LENGTH_SHORT).show();
                         }
             }
         });
@@ -115,5 +146,7 @@ public class ProfilePhotoFragment extends Fragment implements View.OnClickListen
         super.onDestroyView();
         binding = null;
     }
+
+
 
 }

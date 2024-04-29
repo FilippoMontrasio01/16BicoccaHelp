@@ -1,13 +1,16 @@
 package com.example.bicoccahelp.data.user.tutor;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.bicoccahelp.data.Callback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.checkerframework.checker.guieffect.qual.UI;
 
@@ -128,6 +131,15 @@ public class TutorRemoteDataSource {
                         "Error updating document", e));
     }
 
+    public void updateTutorPhoto(String uid, Uri photoUri){
+        tutors.document(uid)
+                .update(PHOTO_URI, photoUri)
+                .addOnSuccessListener(aVoid -> Log.d("",
+                        "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e -> Log.w("",
+                        "Error updating document", e));
+    }
+
     public void deleteTutor(String uid){
         tutors.document(uid)
                 .delete()
@@ -136,4 +148,5 @@ public class TutorRemoteDataSource {
                 .addOnFailureListener(e -> Log.w("",
                         "Error deleting document", e));
     }
+
 }

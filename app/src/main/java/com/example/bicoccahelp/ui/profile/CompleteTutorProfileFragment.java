@@ -33,6 +33,7 @@ import org.checkerframework.checker.units.qual.C;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class CompleteTutorProfileFragment extends Fragment implements View.OnClickListener{
@@ -118,8 +119,13 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     private void addSubjectOnClick() {
         String skill = binding.bestSubjectEditText.getText().toString();
 
+        if(skill.isEmpty()){
+            binding.bestSubjectTextInputLayout.setError(getString(R.string.insert_skill));
+            return;
+        }
+
         subject.add(skill);
-        Snackbar.make(requireView(), "Subject successfully added!", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(requireView(), getString(R.string.add_subject), Snackbar.LENGTH_SHORT).show();
         binding.bestSubjectEditText.getText().clear();
 
 
@@ -130,7 +136,8 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     }
 
     private void createTutorOnClick() {
-        String studyProgram = binding.createTutorEditText.getText().toString();
+        String studyProgram = Objects.requireNonNull(
+                binding.createTutorEditText.getText()).toString();
 
         if(binding.livelloCheckbox.isChecked()){
             livello = getString(R.string.magistrale);
@@ -219,6 +226,28 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         setDisponibilities(disponibilitaGiorni);
 
 
+        String uid = userRepository.getCurrentUser().uid;
+        tutorRepository.tutorExist(uid, new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean exist) {
+                if(!exist){
+                    if(disponibilitaGiorni.size() == 0){
+                        Snackbar.make(requireView(), getString(R.string.disponibility_error),
+                                Snackbar.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
 
         corsoDiStudiRepository.getCorsoDiStudiIdByName(
                 studyProgram, livello, new Callback<String>() {
@@ -268,12 +297,12 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         corsoDiStudiRepository.getCorsoDiStudiLivello(idCorso, new Callback<String>() {
             @Override
             public void onSucces(String livello) {
-                if(livello.equals("Magistrale")){
+                if(livello.equals(getString(R.string.magistrale))){
                     binding.livelloCheckbox.setChecked(true);
-                    binding.createTutorEditText.setText(name);
-                }else{
-                    binding.createTutorEditText.setText(name);
                 }
+
+                binding.createTutorEditText.setText(name);
+
             }
 
             @Override

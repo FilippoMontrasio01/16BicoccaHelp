@@ -1,5 +1,7 @@
 package com.example.bicoccahelp.data.user.student;
 
+import android.net.Uri;
+
 import com.example.bicoccahelp.data.Callback;
 
 import java.util.concurrent.Callable;
@@ -38,6 +40,10 @@ public class StudentRepository {
 
     public void getCorsoDiStudi(String uid, Callback<String > callback){
         studentRemoteDataSource.getCorsoDiStudi(uid, callback);
+    }
+
+    public void updateStudentPhoto(String uid, Uri photoUri){
+        studentRemoteDataSource.updateStudentPhoto(uid, photoUri);
     }
 
 }

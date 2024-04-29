@@ -140,5 +140,22 @@
     <string name="complete_tutor_fragment">Fragment Complete Tutor</string>
     <string name="back">Back to profile</string>
     <string name="subject">Input your top skills</string>
+    <string name="insert_skill">Please enter a skill</string>
+    <string name="disponibility_error">Please insert at least one day to proceed</string>
+    <string name="class_booking">Book a\nClass</string>
+    <string name="tutor_fragment">Fragment Tutor</string>
+    <string name="select_disponibilities">Select your disponibilities</string>
+    <string name="monday">Monday</string>
+    <string name="friday">Friday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="saturday">Saturday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="sunday">Sunday</string>
+    <string name="thursday">Thursday</string>
+    <string name="best_skill">Indicate your key competencies</string>
+    <string name="add">Add</string>
+    <string name="create_tutor">Create Tutor Profile</string>
+    <string name="add_subject">Subject successfully added!</string>
+    <string name="add_at_least_a_skill">Complete the student profile before proceeding</string>
 
 </resources>

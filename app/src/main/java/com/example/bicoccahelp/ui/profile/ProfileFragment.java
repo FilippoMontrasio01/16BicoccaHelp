@@ -146,13 +146,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
                 if(exist){
                     navController.navigate(R.id.action_from_profile_to_complete_tutor_fragment);
                 }else{
-                    Snackbar.make(requireView(), "Complete the student profile before proceeding", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(requireView(), getString(R.string.add_at_least_a_skill),
+                            Snackbar.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), getString(R.string.generic_error),
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
 

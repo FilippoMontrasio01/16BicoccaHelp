@@ -2,6 +2,7 @@ package com.example.bicoccahelp.data.user.student;
 
 import static android.provider.Settings.System.getString;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -139,6 +140,15 @@ public class StudentRemoteDataSource {
                         "DocumentSnapshot successfully deleted!"))
                 .addOnFailureListener(e -> Log.w("",
                         "Error deleting document", e));
+    }
+
+    public void updateStudentPhoto(String uid, Uri photoUri){
+        students.document(uid)
+                .update(PHOTO_URI, photoUri)
+                .addOnSuccessListener(aVoid -> Log.d("",
+                        "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e -> Log.w("",
+                        "Error updating document", e));
     }
 
 }

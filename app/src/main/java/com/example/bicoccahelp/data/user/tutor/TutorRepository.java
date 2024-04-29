@@ -1,5 +1,7 @@
 package com.example.bicoccahelp.data.user.tutor;
 
+import android.net.Uri;
+
 import com.example.bicoccahelp.data.Callback;
 
 public class TutorRepository {
@@ -27,7 +29,9 @@ public class TutorRepository {
         tutorRemoteDataSource.updateTutorName(uid, name);
     }
 
-
+    public void updateTutorPhoto(String uid, Uri photouri){
+        tutorRemoteDataSource.updateTutorPhoto(uid, photouri);
+    }
 
 
     public void getTutorId(String uid, Callback<String> callback){
