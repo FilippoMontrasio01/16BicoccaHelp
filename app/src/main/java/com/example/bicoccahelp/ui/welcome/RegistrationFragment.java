@@ -45,6 +45,7 @@ View.OnFocusChangeListener{
         authRepository = ServiceLocator.getInstance().getAuthRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
 
+
     }
 
     @Override
@@ -156,7 +157,6 @@ View.OnFocusChangeListener{
             @Override
             public void onSucces(Void unused) {
                 navController.navigate(R.id.action_from_registration_to_verify_email);
-                requireActivity().finish();
             }
 
             @Override
@@ -228,6 +228,7 @@ View.OnFocusChangeListener{
         binding.createAccountPswTextInputLayout.setError(null);
         return true;
     }
+
 
     public void onDestroyView() {
 

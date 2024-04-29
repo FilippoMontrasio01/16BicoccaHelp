@@ -138,5 +138,6 @@
     <string name="generic_error">Generic Error</string>
     <string name="update_student">Update Student Profile</string>
     <string name="complete_tutor_fragment">Fragment Complete Tutor</string>
+    <string name="back">Back to profile</string>
 
 </resources>

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -68,8 +69,9 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
+        navController = Navigation.findNavController(view);
         binding.createTutorButton.setOnClickListener(this);
+        binding.tutorBackButton.setOnClickListener(this);
     }
 
     @Override
@@ -77,8 +79,17 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
 
         if(v.getId() == binding.createTutorButton.getId()){
             createTutorOnClick();
+            return;
         }
 
+        if(v.getId() == binding.tutorBackButton.getId()){
+            backOnclick();
+        }
+
+    }
+
+    private void backOnclick() {
+        navController.navigate(R.id.action_from_complete_tutor_to_profile_fragment);
     }
 
     private void createTutorOnClick() {
@@ -146,7 +157,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
                             studentRepository.updateiSTutor(uid, true);
                         }
 
-                        navController.navigate(R.id.action_from_complete_tutor_to_profile_fragment);
+                        navController.popBackStack();
                     }
 
                     @Override
@@ -185,6 +196,11 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
                         Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
 }

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -69,15 +70,25 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = NavHostFragment.findNavController(this);
+        navController = Navigation.findNavController(view);
         binding.createStudentButton.setOnClickListener(this);
+        binding.studentBackButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == binding.createStudentButton.getId()){
             createStudentOnClick();
+            return;
         }
+
+        if(v.getId() == binding.studentBackButton.getId()){
+            backOnClick();
+        }
+    }
+
+    private void backOnClick() {
+        navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
     }
 
     private void createStudentOnClick() {
@@ -176,6 +187,7 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
             public void onSucces(Boolean exist) {
                 if(!exist){
                     navController.navigate(R.id.action_from_complete_student_to_complete_tutor);
+
                 }else{
                     navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
                 }
@@ -187,6 +199,11 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
                         Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
 

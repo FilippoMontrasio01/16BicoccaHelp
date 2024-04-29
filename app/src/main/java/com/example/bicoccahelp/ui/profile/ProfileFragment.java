@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 
@@ -88,7 +89,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
 
 
 
-        navController = NavHostFragment.findNavController(this);
+        navController = Navigation.findNavController(view);
         binding.signOutItem.setOnClickListener(this);
         binding.deleteProfileItem.setOnClickListener(this);
         binding.updatePasswordItem.setOnClickListener(this);

@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +51,7 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        navController = NavHostFragment.findNavController(this.getParentFragment());
         binding.continueButton.setOnClickListener(this);
         binding.resendButton.setOnClickListener(this);
     }
@@ -78,8 +80,9 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
 
                    Snackbar.make(requireView(), getString(R.string.email_verified),
                            Snackbar.LENGTH_SHORT).show();
-                   navController.navigate(R.id.action_from_verify_email_to_profile);
+                   navController.navigate(R.id.action_from_verify_email_to_main);
                    requireActivity().finish();
+
                 }else{
                     userRepository.sendEmailVerification(new Callback<Void>() {
                         @Override
@@ -115,22 +118,20 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
             public void onSucces(UserModel userModel) {
 
                 if(!userModel.emailVerified){
-                    Snackbar.make(requireView(),getString(R.string.user_not_verified),
+                    Snackbar.make(requireView(),getString(R.string.email_not_verified),
                             Snackbar.LENGTH_SHORT).show();
                     createAndStartProgressBar().cancelAnimation();
                     createAndStartProgressBar().setVisibility(View.GONE);
                     return;
                 }
 
-                navController.navigate(R.id.action_from_verify_email_to_profile);
+                navController.navigate(R.id.action_from_verify_email_to_main);
                 requireActivity().finish();
             }
 
-
-            //prova commit
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.user_not_verified),
+                Snackbar.make(requireView(), getString(R.string.email_not_verified),
                         Snackbar.LENGTH_SHORT).show();
             }
         });

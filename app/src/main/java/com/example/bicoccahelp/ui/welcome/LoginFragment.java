@@ -59,6 +59,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
+        UserModel user = userRepository.getCurrentUser();
+
+        if (user != null) {
+            this.handleAuthUser(user);
+            return;
+        }
+
+
        binding.loginButtonRegister.setOnClickListener(this);
        binding.buttonLoginForgotPassword.setOnClickListener(this);
        binding.loginButton.setOnClickListener(this);
@@ -97,7 +105,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             return;
         }
 
-
         createAndStartProgressBar().setVisibility(View.VISIBLE);
         createAndStartProgressBar().playAnimation();
         authRepository.login(email, password, new Callback<Void>() {
@@ -107,13 +114,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 userRepository.reload(new Callback<UserModel>() {
                     @Override
                     public void onSucces(UserModel userModel) {
-                        if(!userModel.emailVerified){
-                            navController.navigate(R.id.action_from_login_to_verify_email);
-                            return;
-                        }
-
-                        navController.navigate(R.id.action_from_login_to_profile);
-                        requireActivity().finish();
+                        handleAuthUser(userRepository.getCurrentUser());
                     }
 
                     @Override
@@ -135,20 +136,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         });
     }
 
+    private void handleAuthUser(@NonNull UserModel user){
+        if (!user.emailVerified) {
+            navController.navigate(R.id.action_from_login_to_verify_email);
+            return;
+        }
+
+        requireActivity().finish();
+        navController.navigate(R.id.action_from_login_to_main);
+
+    }
+
 
     public LottieAnimationView createAndStartProgressBar(){
         LottieAnimationView animationView = binding.lottieAnimationView;
         animationView.setAnimation(getString(R.string.switch_loaders_json));
 
         return animationView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(userRepository.getCurrentUser() != null){
-            navController.navigate(R.id.action_from_login_to_profile);
-        }
     }
 
     @Override

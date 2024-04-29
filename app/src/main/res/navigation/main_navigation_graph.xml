@@ -42,7 +42,8 @@
 
         <action
             android:id="@+id/action_from_profile_to_complete_student_fragment"
-            app:destination="@id/fragment_complete_student"/>
+            app:destination="@id/fragment_complete_student"
+            />
 
         <action
             android:id="@+id/action_from_profile_to_complete_tutor_fragment"
