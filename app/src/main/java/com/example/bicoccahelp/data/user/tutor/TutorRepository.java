@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.example.bicoccahelp.data.Callback;
 
+import java.util.List;
+
 public class TutorRepository {
     private final TutorRemoteDataSource tutorRemoteDataSource;
 
@@ -28,6 +30,9 @@ public class TutorRepository {
     public void updateTutorName(String uid, String name){
         tutorRemoteDataSource.updateTutorName(uid, name);
     }
+
+    public void listTutors(Long limit, Callback<List<TutorModel>> callback) {
+        tutorRemoteDataSource.listTutors(limit, callback);}
 
     public void updateTutorPhoto(String uid, Uri photouri){
         tutorRemoteDataSource.updateTutorPhoto(uid, photouri);

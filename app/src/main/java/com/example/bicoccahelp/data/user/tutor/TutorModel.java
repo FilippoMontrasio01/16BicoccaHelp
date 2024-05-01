@@ -20,10 +20,10 @@ public class TutorModel extends UserModel {
     public final @NonNull ArrayList<String> skills;
 
 
-    public TutorModel(String uid, String email, boolean emailVerified, String name, Uri photoUri, 
+    public TutorModel(String uid, String email, boolean emailVerified, String name, Uri photoUri,
                       @NonNull Map<String, Boolean> disponibilitaGiorni,
                       @NonNull String corsoDiStudi, @NonNull ArrayList<String> skills) {
-        super(uid, email, emailVerified, name, photoUri);
+        super(uid, email, emailVerified, name, photoUri != null ? photoUri : Uri.parse(""));
         this.corsoDiStudi = corsoDiStudi;
         this.disponibilitaGiorni = disponibilitaGiorni;
         this.skills = skills;

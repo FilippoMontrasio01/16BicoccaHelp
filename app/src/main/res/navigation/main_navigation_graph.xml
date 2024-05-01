@@ -85,6 +85,9 @@
         android:label="@string/tutor_fragment"
         tools:layout="@layout/fragment_tutor">
 
+        <action
+            android:id="@+id/actionToSignOutDialog"
+            app:destination="@id/logout_dialog" />
 
     </fragment>
 

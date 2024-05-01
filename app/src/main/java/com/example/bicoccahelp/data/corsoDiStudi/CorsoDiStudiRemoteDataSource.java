@@ -89,6 +89,19 @@ public class CorsoDiStudiRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
+    public void getArea(String idCorso, Callback<String> callback){
+        corsoDiStudi.whereEqualTo(FieldPath.documentId(), idCorso)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if(!task.getDocuments().isEmpty()){
+                        DocumentSnapshot documentSnapshot = task.getDocuments().get(0);
+                        String areaStudi = documentSnapshot.getString(AREA);
+                        callback.onSucces(areaStudi);
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
 
     public void getCorsoDiStudiId(String nomeCorso, String livello, Callback<String> callback) {
         String nomeCorsoFormatted = nomeCorso.toLowerCase();

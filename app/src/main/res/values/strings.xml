@@ -157,5 +157,8 @@
     <string name="create_tutor">Create Tutor Profile</string>
     <string name="add_subject">Subject successfully added!</string>
     <string name="add_at_least_a_skill">Complete the student profile before proceeding</string>
+    <string name="search">Search</string>
+    <string name="find_tutor">Find your tutor</string>
+    <string name="filter">Filter</string>
 
 </resources>

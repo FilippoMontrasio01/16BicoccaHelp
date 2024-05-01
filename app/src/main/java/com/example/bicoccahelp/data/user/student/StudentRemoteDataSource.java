@@ -28,7 +28,7 @@ public class StudentRemoteDataSource {
     private static final String FIELD_EMAIL = "email";
     private static final String NAME = "nome";
     private static final String PHOTO_URI = "photoUri";
-    private static final String CORSO_DI_STUDI = "corso Di Studi";
+    private static final String CORSO_DI_STUDI = "corso di studi";
     private static final String IS_TUTOR = "isTutor";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference students = db.collection("Student");

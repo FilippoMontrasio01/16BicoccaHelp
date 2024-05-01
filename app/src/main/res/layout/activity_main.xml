@@ -30,8 +30,9 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            app:itemPaddingBottom="8dp"
+            android:layout_height="50dp"
+            app:itemPaddingBottom="1dp"
+            app:itemPaddingTop="7dp"
             app:menu="@menu/bottom_nav_menu"
             />
 

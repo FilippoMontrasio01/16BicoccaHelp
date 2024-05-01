@@ -8,13 +8,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import org.checkerframework.checker.guieffect.qual.UI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TutorRemoteDataSource {
@@ -23,11 +28,13 @@ public class TutorRemoteDataSource {
     private static final String FIELD_EMAIL = "email";
     private static final String NAME = "nome";
     private static final String PHOTO_URI = "photoUri";
-    private static final String CORSO_DI_STUDI = "corso Di Studi";
-    private static final String DISPONIBILITA_GIORNI = "disponibilità Giorni";
+    private static final String EMAIL_VERIFIED = "emailVerified";
+    private static final String CORSO_DI_STUDI = "corso di studi";
+    private static final String DISPONIBILITA_GIORNI = "disponibilità giorni";
     private static final String SKILLS = "skills";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference tutors = db.collection("Tutor");
+    private DocumentSnapshot lastDocument;
 
     public void createTutor(CreateTutorRequest createTutorRequest, Callback<TutorModel> callback){
         Map<String, Object> data = new HashMap<>();
@@ -59,6 +66,58 @@ public class TutorRemoteDataSource {
                 })
                 .addOnFailureListener(callback::onFailure);
     }
+
+    public void listTutors(Long limit, Callback<List<TutorModel>> callback) {
+        Query query = tutors.orderBy(NAME, Query.Direction.ASCENDING).limit(limit);
+        if (lastDocument != null) {
+            query = query.startAfter(lastDocument);
+        }
+        query.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    if (documents.size() > 0) {
+                        lastDocument = documents.get(documents.size() - 1);
+                    }
+                    List<TutorModel> tutorList = new ArrayList<>();
+
+                    for (DocumentSnapshot document: documents) {
+                        String id = document.getId() != null ? document.getId() : "";
+                        String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
+                        Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
+                        String name = document.getString(NAME) != null ? document.getString(NAME) : "";
+                        String photoUriString = document.getString(PHOTO_URI);
+                        if (photoUriString == null) {
+                            photoUriString = "";
+                        }
+                        Uri photoUri = Uri.parse(photoUriString);
+                        Map<String, Boolean> disponibilitaGiorni = (Map<String, Boolean>) document.get(DISPONIBILITA_GIORNI);
+                        if (disponibilitaGiorni == null) {
+                            disponibilitaGiorni = new HashMap<>();
+                        }
+                        String corsoDiStudi = document.getString(CORSO_DI_STUDI) != null ? document.getString(CORSO_DI_STUDI) : "";
+                        ArrayList<String> skills = (ArrayList<String>) document.get(SKILLS);
+                        if (skills == null) {
+                            skills = new ArrayList<>();
+                        }
+
+                        TutorModel tutorModel = new TutorModel(
+                                id,
+                                email,
+                                emailVerified,
+                                name,
+                                photoUri,
+                                disponibilitaGiorni,
+                                corsoDiStudi,
+                                skills);
+                        tutorList.add(tutorModel);
+                    }
+
+                    callback.onSucces(tutorList);
+                })
+                .addOnFailureListener(callback::onFailure);
+
+    }
+
 
 
     public void updateTutor(CreateTutorRequest createTutorRequest, String idTutor,
@@ -121,6 +180,7 @@ public class TutorRemoteDataSource {
                 })
                 .addOnFailureListener(callback::onFailure);
     }
+
 
     public void updateTutorName(String uid, String name){
         tutors.document(uid)

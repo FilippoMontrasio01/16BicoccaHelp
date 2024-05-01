@@ -119,7 +119,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/name"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:textSize="20sp"
                         android:fontFamily="@font/lato_bold"
                         android:layout_toEndOf="@+id/update_name_image"
@@ -163,7 +163,7 @@
                         android:layout_centerVertical="true"
                         android:text="@string/password"
                         android:fontFamily="@font/lato_bold"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:textSize="20sp"
 
                         android:layout_toEndOf="@+id/update_password_image"
@@ -206,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/review"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:fontFamily="@font/lato_bold"
                         android:textSize="20sp"
 
@@ -247,7 +247,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/history"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:fontFamily="@font/lato_bold"
                         android:textSize="20sp"
 
@@ -288,7 +288,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:fontFamily="@font/lato_bold"
                         android:textSize="20sp"
 
@@ -329,7 +329,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/become_a_tutor"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:fontFamily="@font/lato_bold"
                         android:textSize="20sp"
 
@@ -377,7 +377,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/sign_out"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:fontFamily="@font/lato_bold"
                         android:textSize="20sp"
 
@@ -423,7 +423,7 @@
                         android:layout_centerVertical="true"
                         android:text="@string/delete_profile"
                         android:fontFamily="@font/lato_bold"
-                        android:textColor="@color/black"
+                        android:textColor="@color/dark_gray"
                         android:textSize="20sp"
 
                         android:layout_toEndOf="@+id/delete_profile_image"

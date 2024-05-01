@@ -36,5 +36,9 @@ public class CorsoDiStudiRepository {
         corsoDiStudiRemoteDataSource.getCorsoDiStudiLivello(idCorso, callback);
     }
 
+    public void getArea(String idCorso, Callback<String> callback){
+        corsoDiStudiRemoteDataSource.getArea(idCorso, callback);
+    }
+
 
 }
