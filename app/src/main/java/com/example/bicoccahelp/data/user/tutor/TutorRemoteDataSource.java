@@ -122,8 +122,17 @@ public class TutorRemoteDataSource {
     }
 
     public void listTutorName(String name, Long limit, Callback<List<TutorModel>> callback){
-        Query query = tutors.whereEqualTo(NAME, name).orderBy(NAME, Query.Direction.ASCENDING).limit(limit);
+
+        String endOfName = name + "\uf8ff";
+
+        Query query = tutors.whereGreaterThanOrEqualTo(NAME, name)
+                .whereLessThanOrEqualTo(NAME, endOfName)
+                .orderBy(NAME, Query.Direction.ASCENDING)
+                .limit(limit);
+
+
         Log.d("", "NAME USER: "+ name);
+
 
 
 

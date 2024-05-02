@@ -1,6 +1,8 @@
 package com.example.bicoccahelp.ui.classBooking;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,11 +80,8 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
         binding.filterNameButton.setOnClickListener(this);
 
 
+
     }
-
-
-
-
 
 
     private void configureRecyclerView() {
@@ -163,15 +162,17 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
     }
 
     private void filterNameOnClick() {
-        String name = binding.searchTutorEditText.getText().toString();
+       String name = binding.searchTutorEditText.getText().toString();
 
         if (name.isEmpty()) {
-            // Se la EditText è vuota, ripristina la lista originale
+
             tutorViewModel.restoreOriginalList();
         } else {
-            // Altrimenti, esegui la ricerca
+
             tutorViewModel.getTutorNamePage(name);
         }
+
+
 
     }
 

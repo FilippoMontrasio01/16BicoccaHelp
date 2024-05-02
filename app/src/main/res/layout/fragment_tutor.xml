@@ -160,7 +160,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tutorRecyclerView"
             android:layout_width="match_parent"
-            android:paddingBottom="40dp"
+            android:paddingBottom="200dp"
             android:layout_height="600dp"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
