@@ -102,6 +102,60 @@
         </RelativeLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:paddingHorizontal="15dp"
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:id="@+id/myToggleButton1"
+                android:layout_marginEnd="10dp"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/toggle_button_background"
+                android:textOn="Study Program"
+                android:textOff="Study Program"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:fontFamily="@font/lato_bold"
+                android:textSize="14sp"/>
+
+            <ToggleButton
+                android:id="@+id/myToggleButton2"
+                android:layout_width="110dp"
+                android:layout_marginEnd="10dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/toggle_button_background"
+                android:textOn="Disponibilty"
+                android:textOff="Disponibilty"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:fontFamily="@font/lato_bold"
+                android:textSize="14sp"/>
+
+            <ToggleButton
+                android:id="@+id/myToggleButton3"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/toggle_button_background"
+                android:textColor="@color/white"
+                android:fontFamily="@font/lato_bold"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:textOff="Skills"
+                android:textOn="Skills" />
+
+
+        </LinearLayout>
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tutorRecyclerView"
