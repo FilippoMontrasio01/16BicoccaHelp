@@ -87,10 +87,10 @@ public class StudentRemoteDataSource {
                         DocumentSnapshot documentSnapshot = task.getDocuments().get(0);
                         String corsoDiStudi = documentSnapshot.getString(CORSO_DI_STUDI);
 
-                        Log.d("","L'ID E': "+corsoDiStudi);
+
                         callback.onSucces(corsoDiStudi);
                     } else {
-                        Log.d("","L'ID NON ESISTE");
+
                         callback.onSucces(null);
                     }
                 })

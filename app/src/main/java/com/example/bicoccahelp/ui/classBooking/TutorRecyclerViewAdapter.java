@@ -45,6 +45,12 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         return tutorList.size();
     }
 
+    public void aggiornaDati(List<TutorModel> nuoviDati) {
+        this.tutorList.clear();
+        this.tutorList.addAll(nuoviDati);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ServiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -80,7 +86,6 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         public void bind(TutorModel tutorModel, OnItemClickListener listener) {
             tutorName.setText(tutorModel.name);
             itemView.setOnClickListener(view -> listener.onServiceItemClick(tutorModel));
-            Log.d("", "CORSO DI STUDI: "+tutorModel.corsoDiStudi);
             getCorsoId(tutorModel.uid);
 
 
@@ -135,6 +140,8 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
                 }
             });
         }
+
+
 
         private void setAreaLogo(String area){
             switch (area){

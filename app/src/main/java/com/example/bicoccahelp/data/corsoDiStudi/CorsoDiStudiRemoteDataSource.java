@@ -111,11 +111,8 @@ public class CorsoDiStudiRemoteDataSource {
                 .addOnSuccessListener(task -> {
                     if (!task.getDocuments().isEmpty()) {
                         String id = task.getDocuments().get(0).getId();
-
-                        Log.d("","L'ID E': "+id);
                         callback.onSucces(id);
                     } else {
-                        Log.d("","L'ID NON ESISTE");
                         callback.onSucces(null);
                     }
                 })

@@ -32,7 +32,12 @@ public class TutorRepository {
     }
 
     public void listTutors(Long limit, Callback<List<TutorModel>> callback) {
-        tutorRemoteDataSource.listTutors(limit, callback);}
+        tutorRemoteDataSource.listTutors(limit, callback);
+    }
+
+    public void listTutorName(String name, Long limit, Callback<List<TutorModel>> callback){
+        tutorRemoteDataSource.listTutorName(name, limit, callback);
+    }
 
     public void updateTutorPhoto(String uid, Uri photouri){
         tutorRemoteDataSource.updateTutorPhoto(uid, photouri);

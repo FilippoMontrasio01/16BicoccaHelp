@@ -1,5 +1,7 @@
 package com.example.bicoccahelp.ui.classBooking;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -25,10 +27,13 @@ public class TutorViewModel extends ViewModel {
     }
 
     private final MutableLiveData<UiState> uiState;
+    private final MutableLiveData<List<TutorModel>> updateTutorList;
+    private List<TutorModel> originalTutorList;
     private final MutableLiveData<String> errorMessage;
     public final List<TutorModel> tutorList;
+
     private final TutorRepository tutorRepository;
-    private final Long limit = 25L;
+    private final Long limit = 50L;
     private boolean hasMore = true;
     private int currentPage = 0;
 
@@ -36,6 +41,8 @@ public class TutorViewModel extends ViewModel {
         this.uiState = new MutableLiveData<>(new UiState(0, 0));
         this.errorMessage = new MutableLiveData<>(null);
         this.tutorList = new ArrayList<>();
+        this.originalTutorList = new ArrayList<>();
+        this.updateTutorList = new MutableLiveData<>(new ArrayList<>());
         this.tutorRepository = tutorRepository;
     }
 
@@ -52,7 +59,11 @@ public class TutorViewModel extends ViewModel {
         return currentPage;
     }
 
-    public void getNextServicesPage() {
+    public LiveData<List<TutorModel>> getTutorList() {
+        return updateTutorList;
+    }
+
+    public void getNextTutorsPage() {
         if (!hasMore) {
             return;
         }
@@ -61,7 +72,37 @@ public class TutorViewModel extends ViewModel {
             @Override
             public void onSucces(List<TutorModel> data) {
                 currentPage += 1;
+                if (data.size() < limit) {
+                    hasMore = false;
+                }
 
+                if (data.size() == 0) {
+                    return;
+                }
+
+                int initialSize = tutorList.size();
+                int newItemsCount = data.size();
+                tutorList.addAll(data);
+                originalTutorList.addAll(data);
+                uiState.postValue(new UiState(initialSize, newItemsCount));
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+            }
+        });
+    }
+
+
+    public void getTutorNamePage(String name) {
+
+
+        tutorRepository.listTutorName(name, limit, new Callback<List<TutorModel>>() {
+            @Override
+            public void onSucces(List<TutorModel> data) {
+                currentPage += 1;
                 if (data.size() < limit) {
                     hasMore = false;
                 }
@@ -82,6 +123,13 @@ public class TutorViewModel extends ViewModel {
             }
         });
     }
+
+    public void restoreOriginalList() {
+        tutorList.clear();
+        tutorList.addAll(originalTutorList); // Ripristina la lista originale
+    }
+
+
 
 
 
