@@ -41,7 +41,8 @@ BicoccaHelp è sviluppato utilizzando le seguenti tecnologie:
 - **Android Studio**: IDE di sviluppo per applicazioni Android.
 - **Java**: Linguaggio di programmazione utilizzato per lo sviluppo dell'applicazione.
 - **Firebase Auth**: Servizio di autenticazione fornito da Firebase per gestire l'autenticazione degli utenti.
-
+- **Firebase Storage**
+- **Firebase firestore**
 ## Contatti
 
 Per ulteriori informazioni, domande o feedback, contattare:
