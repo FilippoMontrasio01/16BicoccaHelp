@@ -188,6 +188,122 @@ public class TutorRemoteDataSource {
 
     }
 
+    public void listTutorsCorsodiStudi(String idCorso, Long limit, Callback<List<TutorModel>> callback){
+        Query query = tutors.whereEqualTo(CORSO_DI_STUDI, idCorso)
+                .orderBy(NAME, Query.Direction.ASCENDING)
+                .limit(limit);
+
+
+        query.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    if (documents.size() > 0) {
+                        lastDocument = documents.get(documents.size() - 1);
+                    }
+                    List<TutorModel> tutorList = new ArrayList<>();
+
+                    for (DocumentSnapshot document: documents) {
+                        String id = document.getId() != null ? document.getId() : "";
+                        String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
+                        Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
+                        String tutorName = document.getString(NAME) != null ? document.getString(NAME) : "";
+
+                        String photoUriString = document.getString(PHOTO_URI);
+                        if (photoUriString == null) {
+                            photoUriString = "";
+                        }
+                        Uri photoUri = Uri.parse(photoUriString);
+                        Map<String, Boolean> disponibilitaGiorni = (Map<String, Boolean>) document.get(DISPONIBILITA_GIORNI);
+                        if (disponibilitaGiorni == null) {
+                            disponibilitaGiorni = new HashMap<>();
+                        }
+                        String corsoDiStudi = document.getString(CORSO_DI_STUDI) != null ? document.getString(CORSO_DI_STUDI) : "";
+                        ArrayList<String> skills = (ArrayList<String>) document.get(SKILLS);
+                        if (skills == null) {
+                            skills = new ArrayList<>();
+                        }
+
+                        TutorModel tutorModel = new TutorModel(
+                                id,
+                                email,
+                                emailVerified,
+                                tutorName,
+                                photoUri,
+                                disponibilitaGiorni,
+                                corsoDiStudi,
+                                skills);
+
+                        tutorList.add(tutorModel);
+
+
+                    }
+
+                    callback.onSucces(tutorList);
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+
+    public void listTutorSkill(String skill, Long limit, Callback<List<TutorModel>> callback){
+
+
+
+        Query query = tutors.whereArrayContains(SKILLS, skill)
+                .orderBy(NAME, Query.Direction.ASCENDING)
+                .limit(limit);
+
+
+
+        query.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    if (documents.size() > 0) {
+                        lastDocument = documents.get(documents.size() - 1);
+                    }
+                    List<TutorModel> tutorList = new ArrayList<>();
+
+                    for (DocumentSnapshot document: documents) {
+                        String id = document.getId() != null ? document.getId() : "";
+                        String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
+                        Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
+                        String tutorName = document.getString(NAME) != null ? document.getString(NAME) : "";
+
+                        String photoUriString = document.getString(PHOTO_URI);
+                        if (photoUriString == null) {
+                            photoUriString = "";
+                        }
+                        Uri photoUri = Uri.parse(photoUriString);
+                        Map<String, Boolean> disponibilitaGiorni = (Map<String, Boolean>) document.get(DISPONIBILITA_GIORNI);
+                        if (disponibilitaGiorni == null) {
+                            disponibilitaGiorni = new HashMap<>();
+                        }
+                        String corsoDiStudi = document.getString(CORSO_DI_STUDI) != null ? document.getString(CORSO_DI_STUDI) : "";
+                        ArrayList<String> skills = (ArrayList<String>) document.get(SKILLS);
+                        if (skills == null) {
+                            skills = new ArrayList<>();
+                        }
+
+                        TutorModel tutorModel = new TutorModel(
+                                id,
+                                email,
+                                emailVerified,
+                                tutorName,
+                                photoUri,
+                                disponibilitaGiorni,
+                                corsoDiStudi,
+                                skills);
+
+                        tutorList.add(tutorModel);
+
+
+                    }
+
+                    callback.onSucces(tutorList);
+                })
+                .addOnFailureListener(callback::onFailure);
+
+    }
+
 
 
     public void updateTutor(CreateTutorRequest createTutorRequest, String idTutor,

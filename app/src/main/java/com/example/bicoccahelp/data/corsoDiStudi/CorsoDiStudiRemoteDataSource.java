@@ -102,8 +102,23 @@ public class CorsoDiStudiRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
+    public void getCorsoId(String nomeCorso, Callback<String> callback) {
+        String nomeCorsoFormatted = nomeCorso.toLowerCase();
+        corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorsoFormatted)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if (!task.getDocuments().isEmpty()) {
+                        String id = task.getDocuments().get(0).getId();
+                        callback.onSucces(id);
+                    } else {
+                        callback.onSucces(null);
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
 
-    public void getCorsoDiStudiId(String nomeCorso, String livello, Callback<String> callback) {
+
+    public void getCorsoDiStudiIdByName(String nomeCorso, String livello, Callback<String> callback) {
         String nomeCorsoFormatted = nomeCorso.toLowerCase();
         corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorsoFormatted)
                 .whereEqualTo(LIVELLO, livello)

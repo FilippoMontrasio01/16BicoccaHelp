@@ -43,6 +43,14 @@ public class TutorRepository {
         tutorRemoteDataSource.updateTutorPhoto(uid, photouri);
     }
 
+    public void listTutorSkill(String skill, Long limit, Callback<List<TutorModel>> callback){
+        tutorRemoteDataSource.listTutorSkill(skill, limit, callback);
+    }
+
+    public void listTutorsCorsodiStudi(String idCorso, Long limit, Callback<List<TutorModel>> callback){
+        tutorRemoteDataSource.listTutorsCorsodiStudi(idCorso, limit, callback);
+    }
+
 
     public void getTutorId(String uid, Callback<String> callback){
         tutorRemoteDataSource.getTutorId(uid, callback);
@@ -52,4 +60,5 @@ public class TutorRepository {
 
         tutorRemoteDataSource.updateTutor(createTutorRequest, idTutor, callback);
     }
+
 }

@@ -162,14 +162,17 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
     }
 
     private void filterNameOnClick() {
-       String name = binding.searchTutorEditText.getText().toString();
+       String filter = binding.searchTutorEditText.getText().toString();
 
-        if (name.isEmpty()) {
 
-            tutorViewModel.restoreOriginalList();
-        } else {
-
-            tutorViewModel.getTutorNamePage(name);
+        if (filter.isEmpty()) {
+            tutorViewModel.getTutorList();
+        } else if(binding.skillsToggle.isChecked()) {
+            tutorViewModel.getTutorSkillPage(filter);
+        }else if(binding.corsoToggle.isChecked()){
+            tutorViewModel.getTutorCorsoDiStudiPage(filter);
+        }else{
+            tutorViewModel.getTutorNamePage(filter);
         }
 
 

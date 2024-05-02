@@ -7,8 +7,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bicoccahelp.data.Callback;
+import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
+import com.example.bicoccahelp.utils.ServiceLocator;
+
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,7 @@ public class TutorViewModel extends ViewModel {
     private List<TutorModel> originalTutorList;
     private final MutableLiveData<String> errorMessage;
     public final List<TutorModel> tutorList;
+    public final CorsoDiStudiRepository corsoDiStudiRepository;
 
     private final TutorRepository tutorRepository;
     private final Long limit = 50L;
@@ -44,6 +49,7 @@ public class TutorViewModel extends ViewModel {
         this.originalTutorList = new ArrayList<>();
         this.updateTutorList = new MutableLiveData<>(new ArrayList<>());
         this.tutorRepository = tutorRepository;
+        this.corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
     }
 
     public LiveData<UiState> getUiState() {
@@ -110,6 +116,73 @@ public class TutorViewModel extends ViewModel {
                 if (data.size() == 0) {
                     return;
                 }
+
+                int initialSize = tutorList.size();
+                int newItemsCount = data.size();
+                tutorList.addAll(data);
+                uiState.postValue(new UiState(initialSize, newItemsCount));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+            }
+        });
+    }
+
+    public void getTutorCorsoDiStudiPage(String corsoDiStudi){
+        corsoDiStudiRepository.getCorsoId(corsoDiStudi, new Callback<String>() {
+
+            @Override
+            public void onSucces(String idCorso) {
+                tutorRepository.listTutorsCorsodiStudi(idCorso, limit, new Callback<List<TutorModel>>() {
+                    @Override
+                    public void onSucces(List<TutorModel> data) {
+                        currentPage += 1;
+                        if (data.size() < limit) {
+                            hasMore = false;
+                        }
+
+                        if (data.size() == 0) {
+                            return;
+                        }
+
+                        Log.d("", data.toString());
+
+                        int initialSize = tutorList.size();
+                        int newItemsCount = data.size();
+                        tutorList.addAll(data);
+                        uiState.postValue(new UiState(initialSize, newItemsCount));
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        errorMessage.postValue(e.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+            }
+        });
+    }
+
+    public void getTutorSkillPage(String skill){
+        tutorRepository.listTutorSkill(skill, limit, new Callback<List<TutorModel>>() {
+            @Override
+            public void onSucces(List<TutorModel> data) {
+                currentPage += 1;
+                if (data.size() < limit) {
+                    hasMore = false;
+                }
+
+                if (data.size() == 0) {
+                    return;
+                }
+
+                Log.d("", data.toString());
 
                 int initialSize = tutorList.size();
                 int newItemsCount = data.size();

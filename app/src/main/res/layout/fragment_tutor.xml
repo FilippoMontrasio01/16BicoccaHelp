@@ -112,7 +112,7 @@
             android:orientation="horizontal">
 
             <ToggleButton
-                android:id="@+id/myToggleButton1"
+                android:id="@+id/corsoToggle"
                 android:layout_marginEnd="10dp"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                 android:textSize="14sp"/>
 
             <ToggleButton
-                android:id="@+id/myToggleButton3"
+                android:id="@+id/skillsToggle"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
