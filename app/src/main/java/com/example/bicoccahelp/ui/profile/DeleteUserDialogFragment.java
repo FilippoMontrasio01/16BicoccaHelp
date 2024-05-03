@@ -94,7 +94,7 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
 
     public void deleteUser(){
 
-        String uidUser = userRepository.getCurrentUser().uid;
+        String uidUser = userRepository.getCurrentUser().getUid();
 
 
 

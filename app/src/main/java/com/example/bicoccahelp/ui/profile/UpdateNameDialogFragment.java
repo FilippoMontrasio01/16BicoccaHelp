@@ -96,7 +96,7 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
 
     private void updateName(String newName) {
 
-        String uidUser = userRepository.getCurrentUser().uid;
+        String uidUser = userRepository.getCurrentUser().getUid();
 
         userRepository.updateUsername(newName, new Callback<Void>() {
             @Override

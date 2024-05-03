@@ -14,10 +14,10 @@ import java.util.Map;
 public class TutorModel extends UserModel {
 
 
-    public final @NonNull Map<String, Boolean> disponibilitaGiorni;
+    private final @NonNull Map<String, Boolean> disponibilitaGiorni;
     
-    public final @NonNull String corsoDiStudi;
-    public final @NonNull ArrayList<String> skills;
+    private final @NonNull String corsoDiStudi;
+    private final @NonNull ArrayList<String> skills;
 
 
     public TutorModel(String uid, String email, boolean emailVerified, String name, Uri photoUri,
@@ -34,5 +34,18 @@ public class TutorModel extends UserModel {
         disponibilitaGiorni.put(day, isAvailable);
     }
 
+    @NonNull
+    public Map<String, Boolean> getDisponibilitaGiorni() {
+        return disponibilitaGiorni;
+    }
 
+    @NonNull
+    public String getCorsoDiStudi() {
+        return corsoDiStudi;
+    }
+
+    @NonNull
+    public ArrayList<String> getSkills() {
+        return skills;
+    }
 }

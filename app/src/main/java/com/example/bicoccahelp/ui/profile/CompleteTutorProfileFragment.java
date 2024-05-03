@@ -78,7 +78,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         binding.tutorBackButton.setOnClickListener(this);
         binding.addSubjectButton.setOnClickListener(this);
 
-        String uid = userRepository.getCurrentUser().uid;
+        String uid = userRepository.getCurrentUser().getUid();
 
         studentRepository.isTutor(uid, true, new Callback<Boolean>() {
             @Override
@@ -189,7 +189,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
 
     private void createTutor(CreateTutorRequest request){
 
-        String uid = userRepository.getCurrentUser().uid;
+        String uid = userRepository.getCurrentUser().getUid();
         tutorRepository.createTutor(request, new Callback<TutorModel>() {
 
             @Override
@@ -226,7 +226,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         setDisponibilities(disponibilitaGiorni);
 
 
-        String uid = userRepository.getCurrentUser().uid;
+        String uid = userRepository.getCurrentUser().getUid();
         tutorRepository.tutorExist(uid, new Callback<Boolean>() {
             @Override
             public void onSucces(Boolean exist) {

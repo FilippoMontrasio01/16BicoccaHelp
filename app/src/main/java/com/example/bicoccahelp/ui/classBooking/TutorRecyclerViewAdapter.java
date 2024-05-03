@@ -85,15 +85,15 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         }
 
         public void bind(TutorModel tutorModel, OnItemClickListener listener) {
-            tutorName.setText(tutorModel.name);
+            tutorName.setText(tutorModel.getName());
             itemView.setOnClickListener(view -> listener.onServiceItemClick(tutorModel));
-            getCorsoId(tutorModel.uid);
+            getCorsoId(tutorModel.getUid());
 
-            if(tutorModel.photoUri == null || TextUtils.isEmpty(tutorModel.photoUri.toString()) ){
+            if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel.getPhotoUri().toString()) ){
                 photo.setImageResource(R.drawable.profile_icon);
             }else{
                 Glide.with(application.getApplicationContext())
-                        .load(GlideLoadModel.get(tutorModel.photoUri.toString()))
+                        .load(GlideLoadModel.get(tutorModel.getPhotoUri().toString()))
                         .into(photo);
             }
 

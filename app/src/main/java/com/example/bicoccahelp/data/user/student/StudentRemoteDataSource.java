@@ -48,8 +48,8 @@ public class StudentRemoteDataSource {
         data.put(FIELD_EMAIL, user.getEmail());
         data.put(NAME, user.getDisplayName());
         data.put(PHOTO_URI, user.getPhotoUrl());
-        data.put(CORSO_DI_STUDI, createStudentRequest.corsoDiStudi);
-        data.put(IS_TUTOR, createStudentRequest.isTutor);
+        data.put(CORSO_DI_STUDI, createStudentRequest.getCorsoDiStudi());
+        data.put(IS_TUTOR, createStudentRequest.isTutor());
 
 
 
@@ -59,8 +59,8 @@ public class StudentRemoteDataSource {
                     StudentModel student = new StudentModel(user.getUid(),
                            user.getEmail(), user.isEmailVerified(),
                             user.getDisplayName(), user.getPhotoUrl(),
-                            createStudentRequest.corsoDiStudi,
-                            createStudentRequest.isTutor);
+                            createStudentRequest.getCorsoDiStudi(),
+                            createStudentRequest.isTutor());
                     callback.onSucces(student);
                 })
                 .addOnFailureListener(callback::onFailure);

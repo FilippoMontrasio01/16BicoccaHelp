@@ -8,8 +8,8 @@ public class CreateStudentRequest {
 
 
 
-    public final @NonNull String corsoDiStudi;
-    public final  boolean isTutor;
+    private final @NonNull String corsoDiStudi;
+    private final  boolean isTutor;
 
 
     public CreateStudentRequest(@NonNull String corsoDiStudi,  boolean isTutor) {
@@ -17,6 +17,12 @@ public class CreateStudentRequest {
         this.isTutor = isTutor;
     }
 
+    @NonNull
+    public String getCorsoDiStudi() {
+        return corsoDiStudi;
+    }
 
-
+    public boolean isTutor() {
+        return isTutor;
+    }
 }

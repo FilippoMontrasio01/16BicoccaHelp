@@ -76,7 +76,7 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onSucces(UserModel userModel) {
-                if(userModel.emailVerified){
+                if(userModel.isEmailVerified()){
 
                    Snackbar.make(requireView(), getString(R.string.email_verified),
                            Snackbar.LENGTH_SHORT).show();
@@ -117,7 +117,7 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
             @Override
             public void onSucces(UserModel userModel) {
 
-                if(!userModel.emailVerified){
+                if(!userModel.isEmailVerified()){
                     Snackbar.make(requireView(),getString(R.string.email_not_verified),
                             Snackbar.LENGTH_SHORT).show();
                     createAndStartProgressBar().cancelAnimation();

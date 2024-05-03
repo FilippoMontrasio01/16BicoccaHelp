@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class CreateTutorRequest {
-    public final @NonNull String corsoDiStudi;
-    public final @NonNull Map<String, Boolean> disponibilitaGiorni;
-    public final @NonNull ArrayList<String> skills;
+    private final @NonNull String corsoDiStudi;
+    private final @NonNull Map<String, Boolean> disponibilitaGiorni;
+    private final @NonNull ArrayList<String> skills;
 
 
     public CreateTutorRequest(@NonNull String corsoDiStudi,
@@ -21,5 +21,20 @@ public class CreateTutorRequest {
         this.corsoDiStudi = corsoDiStudi;
         this.disponibilitaGiorni = disponibilitaGiorni;
         this.skills = skills;
+    }
+
+    @NonNull
+    public String getCorsoDiStudi() {
+        return corsoDiStudi;
+    }
+
+    @NonNull
+    public Map<String, Boolean> getDisponibilitaGiorni() {
+        return disponibilitaGiorni;
+    }
+
+    @NonNull
+    public ArrayList<String> getSkills() {
+        return skills;
     }
 }

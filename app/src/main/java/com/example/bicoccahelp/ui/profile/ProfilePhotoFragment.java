@@ -69,8 +69,8 @@ public class ProfilePhotoFragment extends Fragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         UserModel user = userRepository.getCurrentUser();
 
-        if(user.photoUri != null){
-            loadPhoto(user.photoUri, false);
+        if(user.getPhotoUri() != null){
+            loadPhoto(user.getPhotoUri(), false);
         }
 
         binding.userPhoto.setOnClickListener(this);
@@ -95,16 +95,16 @@ public class ProfilePhotoFragment extends Fragment implements View.OnClickListen
             @Override
             public void onSucces(Void unused) {
                 UserModel user = userRepository.getCurrentUser();
-                loadPhoto(user.photoUri, true);
+                loadPhoto(user.getPhotoUri(), true);
 
-                studentRepository.isTutor(user.uid, true, new Callback<Boolean>() {
+                studentRepository.isTutor(user.getUid(), true, new Callback<Boolean>() {
                     @Override
                     public void onSucces(Boolean exist) {
                         if(exist){
-                            tutorRepository.updateTutorPhoto(user.uid, user.photoUri);
+                            tutorRepository.updateTutorPhoto(user.getUid(), user.getPhotoUri());
                         }
 
-                        studentRepository.updateStudentPhoto(user.uid, user.photoUri);
+                        studentRepository.updateStudentPhoto(user.getUid(), user.getPhotoUri());
                     }
 
                     @Override

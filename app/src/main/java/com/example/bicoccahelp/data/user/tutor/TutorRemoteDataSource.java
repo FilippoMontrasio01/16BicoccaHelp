@@ -50,9 +50,9 @@ public class TutorRemoteDataSource {
         data.put(FIELD_EMAIL, user.getEmail());
         data.put(NAME, user.getDisplayName());
         data.put(PHOTO_URI, user.getPhotoUrl());
-        data.put(CORSO_DI_STUDI, createTutorRequest.corsoDiStudi);
-        data.put(DISPONIBILITA_GIORNI, createTutorRequest.disponibilitaGiorni);
-        data.put(SKILLS, createTutorRequest.skills);
+        data.put(CORSO_DI_STUDI, createTutorRequest.getCorsoDiStudi());
+        data.put(DISPONIBILITA_GIORNI, createTutorRequest.getDisponibilitaGiorni());
+        data.put(SKILLS, createTutorRequest.getSkills());
 
         tutors.document(user.getUid())
                 .set(data)
@@ -60,9 +60,9 @@ public class TutorRemoteDataSource {
                     TutorModel tutor = new TutorModel(user.getUid(),
                             user.getEmail(),user.isEmailVerified(),
                             user.getDisplayName(),
-                            user.getPhotoUrl(), createTutorRequest.disponibilitaGiorni,
-                            createTutorRequest.corsoDiStudi,
-                            createTutorRequest.skills);
+                            user.getPhotoUrl(), createTutorRequest.getDisponibilitaGiorni(),
+                            createTutorRequest.getCorsoDiStudi(),
+                            createTutorRequest.getSkills());
                     callback.onSucces(tutor);
                 })
                 .addOnFailureListener(callback::onFailure);
@@ -383,8 +383,8 @@ public class TutorRemoteDataSource {
             return;
         }
 
-        data.put(CORSO_DI_STUDI, createTutorRequest.corsoDiStudi);
-        data.put(DISPONIBILITA_GIORNI, createTutorRequest.disponibilitaGiorni);
+        data.put(CORSO_DI_STUDI, createTutorRequest.getCorsoDiStudi());
+        data.put(DISPONIBILITA_GIORNI, createTutorRequest.getDisponibilitaGiorni());
 
         tutors.document(idTutor)
                 .update(data)
@@ -392,9 +392,9 @@ public class TutorRemoteDataSource {
                     TutorModel tutor = new TutorModel(user.getUid(),
                             user.getEmail(),user.isEmailVerified(),
                             user.getDisplayName(),
-                            user.getPhotoUrl(), createTutorRequest.disponibilitaGiorni,
-                            createTutorRequest.corsoDiStudi,
-                            createTutorRequest.skills);
+                            user.getPhotoUrl(), createTutorRequest.getDisponibilitaGiorni(),
+                            createTutorRequest.getCorsoDiStudi(),
+                            createTutorRequest.getSkills());
                     callback.onSucces(tutor);
                 })
                 .addOnFailureListener(callback::onFailure);

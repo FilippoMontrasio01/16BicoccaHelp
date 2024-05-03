@@ -32,7 +32,7 @@ public class StudentViewModel extends ViewModel {
     }
 
     public void checkStudentExists() {
-        String uid = userRepository.getCurrentUser().uid;
+        String uid = userRepository.getCurrentUser().getUid();
 
         studentRepository.studentExist(uid, new Callback<Boolean>() {
             @Override

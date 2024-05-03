@@ -3,11 +3,11 @@ package com.example.bicoccahelp.data.user;
 import android.net.Uri;
 
 public class UserModel {
-    public final String uid;
-    public final String email;
-    public boolean emailVerified;
-    public final String name;
-    public final Uri photoUri;
+    private final String uid;
+    private final String email;
+    private boolean emailVerified;
+    private final String name;
+    private final Uri photoUri;
 
 
     public UserModel(String uid, String email, boolean emailVerified, String name, Uri photoUri) {
@@ -18,5 +18,28 @@ public class UserModel {
         this.photoUri = photoUri;
     }
 
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Uri getPhotoUri() {
+        return photoUri;
+    }
 }
 

@@ -137,7 +137,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
 
     private void handleAuthUser(@NonNull UserModel user){
-        if (!user.emailVerified) {
+        if (!user.isEmailVerified()) {
             navController.navigate(R.id.action_from_login_to_verify_email);
             return;
         }

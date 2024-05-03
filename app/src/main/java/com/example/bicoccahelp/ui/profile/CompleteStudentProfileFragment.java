@@ -56,7 +56,7 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
         userRepository = ServiceLocator.getInstance().getUserRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
 
-        String uid = userRepository.getCurrentUser().uid;
+        String uid = userRepository.getCurrentUser().getUid();
 
 
     }
@@ -133,7 +133,7 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
             @Override
             public void onSucces(String idCorso) {
 
-                String studentUid = userRepository.getCurrentUser().uid;
+                String studentUid = userRepository.getCurrentUser().getUid();
 
                 studentRepository.studentExist(studentUid, new Callback<Boolean>() {
                     @Override
@@ -201,7 +201,7 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     }
 
     public void tutorExist(){
-        String uid = userRepository.getCurrentUser().uid;
+        String uid = userRepository.getCurrentUser().getUid();
 
         tutorRepository.tutorExist(uid, new Callback<Boolean>() {
             @Override

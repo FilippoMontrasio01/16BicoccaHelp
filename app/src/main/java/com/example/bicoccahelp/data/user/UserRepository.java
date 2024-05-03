@@ -42,7 +42,7 @@ public class UserRepository {
             return;
         }
 
-        String userPhotoPath = "user/" + user.uid + "/profile_photo.jpeg";
+        String userPhotoPath = "user/" + user.getUid() + "/profile_photo.jpeg";
         userAssetsRemoteDataSource.upload(userPhotoPath, photoUri, new Callback<String>() {
             @Override
             public void onSucces(String photoPath) {

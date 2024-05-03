@@ -95,8 +95,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
         binding.deleteProfileItem.setOnClickListener(this);
         binding.updatePasswordItem.setOnClickListener(this);
         binding.updateNameItem.setOnClickListener(this);
-        binding.displayEmailTextView.setText(user.email);
-        binding.displayNameTextView.setText(user.name);
+        binding.displayEmailTextView.setText(user.getEmail());
+        binding.displayNameTextView.setText(user.getName());
         binding.completeStudentItem.setOnClickListener(this);
         binding.becomeATutorItem.setOnClickListener(this);
     }
@@ -138,7 +138,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
 
     private void completeTutorOnclick() {
 
-        String uid = userRepository.getCurrentUser().uid;
+        String uid = userRepository.getCurrentUser().getUid();
 
         studentRepository.studentExist(uid, new Callback<Boolean>()  {
             @Override
