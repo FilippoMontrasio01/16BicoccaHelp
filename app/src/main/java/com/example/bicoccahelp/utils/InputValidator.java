@@ -66,6 +66,11 @@ public class InputValidator {
 
     public static String capitalizeFirstLetter(String str) {
 
+        if (str == null) {
+            return null; // or throw IllegalArgumentException
+        }
+
+
         str = str.toLowerCase();
 
         char[] chars = str.toCharArray();

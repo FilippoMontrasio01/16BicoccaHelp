@@ -38,7 +38,7 @@ public class TutorViewModel extends ViewModel {
     public final CorsoDiStudiRepository corsoDiStudiRepository;
 
     private final TutorRepository tutorRepository;
-    private final Long limit = 50L;
+    private final Long limit = 80L;
     private boolean hasMore = true;
     private int currentPage = 0;
 
