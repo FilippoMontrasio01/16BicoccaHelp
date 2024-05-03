@@ -158,7 +158,9 @@
     <string name="add_subject">Subject successfully added!</string>
     <string name="add_at_least_a_skill">Complete the student profile before proceeding</string>
     <string name="search">Search</string>
-    <string name="find_tutor">Find your tutor</string>
+    <string name="find_tutor">Find your tutor by name</string>
     <string name="filter">Filter</string>
+    <string name="db_error">Firestore Database Error</string>
+    <string name="search_field">Search field</string>
 
 </resources>

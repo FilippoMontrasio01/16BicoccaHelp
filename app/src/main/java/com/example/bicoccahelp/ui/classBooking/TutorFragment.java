@@ -116,7 +116,7 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
     private void observeErrorMessage(View view) {
         tutorViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null) {
-                Snackbar.make(view, "prova", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, getString(R.string.db_error), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -166,11 +166,13 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
 
 
         if (filter.isEmpty()) {
-            tutorViewModel.getTutorList();
+            tutorViewModel.restoreOriginalList();
         } else if(binding.skillsToggle.isChecked()) {
             tutorViewModel.getTutorSkillPage(filter);
         }else if(binding.corsoToggle.isChecked()){
             tutorViewModel.getTutorCorsoDiStudiPage(filter);
+        }else if(binding.dispoToggle.isChecked()){
+            tutorViewModel.getTutorDisponibilityPage(filter);
         }else{
             tutorViewModel.getTutorNamePage(filter);
         }

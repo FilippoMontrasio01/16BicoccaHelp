@@ -197,6 +197,34 @@ public class TutorViewModel extends ViewModel {
         });
     }
 
+    public void getTutorDisponibilityPage(String day){
+        tutorRepository.listTutorDisponibility(day, limit, new Callback<List<TutorModel>>() {
+            @Override
+            public void onSucces(List<TutorModel> data) {
+                currentPage += 1;
+                if (data.size() < limit) {
+                    hasMore = false;
+                }
+
+                if (data.size() == 0) {
+                    return;
+                }
+
+                Log.d("", data.toString());
+
+                int initialSize = tutorList.size();
+                int newItemsCount = data.size();
+                tutorList.addAll(data);
+                uiState.postValue(new UiState(initialSize, newItemsCount));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+            }
+        });
+    }
+
     public void restoreOriginalList() {
         tutorList.clear();
         tutorList.addAll(originalTutorList);

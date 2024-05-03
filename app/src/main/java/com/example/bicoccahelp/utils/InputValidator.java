@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,6 +65,9 @@ public class InputValidator {
     }
 
     public static String capitalizeFirstLetter(String str) {
+
+        str = str.toLowerCase();
+
         char[] chars = str.toCharArray();
         boolean found = false;
         for (int i = 0; i < chars.length; i++) {

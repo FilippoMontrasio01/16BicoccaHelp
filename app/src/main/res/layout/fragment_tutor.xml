@@ -101,6 +101,19 @@
 
         </RelativeLayout>
 
+        <TextView
+
+            android:id="@+id/search_field_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/search_field"
+            android:textColor="@color/dark_gray"
+            android:textSize="18sp"
+            />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,7 +139,7 @@
                 android:textSize="14sp"/>
 
             <ToggleButton
-                android:id="@+id/myToggleButton2"
+                android:id="@+id/dispoToggle"
                 android:layout_width="110dp"
                 android:layout_marginEnd="10dp"
                 android:layout_height="wrap_content"
@@ -156,12 +169,11 @@
         </LinearLayout>
 
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tutorRecyclerView"
             android:layout_width="match_parent"
-            android:paddingBottom="200dp"
             android:layout_height="600dp"
+            android:paddingBottom="205dp"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/book_class_background"

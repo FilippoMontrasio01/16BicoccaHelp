@@ -51,6 +51,10 @@ public class TutorRepository {
         tutorRemoteDataSource.listTutorsCorsodiStudi(idCorso, limit, callback);
     }
 
+    public void listTutorDisponibility(String day, Long limit, Callback<List<TutorModel>> callback){
+        tutorRemoteDataSource.listTutorDisponibility(day, limit, callback);
+    }
+
 
     public void getTutorId(String uid, Callback<String> callback){
         tutorRemoteDataSource.getTutorId(uid, callback);
@@ -60,5 +64,7 @@ public class TutorRepository {
 
         tutorRemoteDataSource.updateTutor(createTutorRequest, idTutor, callback);
     }
+
+
 
 }
