@@ -1,6 +1,10 @@
 package com.example.bicoccahelp.ui.welcome;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.airbnb.lottie.parser.ColorParser;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
@@ -19,6 +24,8 @@ import com.example.bicoccahelp.databinding.FragmentRegistrationBinding;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.Objects;
 
@@ -44,7 +51,6 @@ View.OnFocusChangeListener{
         super.onCreate(savedInstanceState);
         authRepository = ServiceLocator.getInstance().getAuthRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
-
 
     }
 
@@ -168,7 +174,6 @@ View.OnFocusChangeListener{
         });
     }
 
-
     private boolean checkPassword(){
 
         String password = Objects.requireNonNull(binding.createAccountPasswordEditText
@@ -183,47 +188,102 @@ View.OnFocusChangeListener{
             return false;
         }
 
+
+
+
+
         binding.createAccountRepswTextInputLayout.setError(null);
         return true;
     }
 
+    @SuppressLint("ResourceType")
     private boolean validateName(){
         String name = Objects.requireNonNull(binding.createAccountNameEditText.getText())
                 .toString();
+
+        if(name.length() >= 3){
+            binding.nameVerificationCard1.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+        }else{
+            binding.nameVerificationCard1.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+        }
+
+        if(!name.matches("(.*[0-9].*)")){
+            binding.nameVerificationCard2.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+        }else{
+            binding.nameVerificationCard2.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+        }
+
+        if(!name.matches("^(?=.*[@#$%^&+=!]).*$")){
+            binding.nameVerificationCard3.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+        }else{
+            binding.nameVerificationCard3.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+        }
 
         if(!InputValidator.isValidName(name)){
             binding.createAccountNameTextInputLayout.setError(getString(R.string.invalid_name));
             return false;
         }
 
+
+
         binding.createAccountNameTextInputLayout.setError(null);
         return true;
     }
 
 
+    @SuppressLint("ResourceType")
     private boolean validateEmail(){
         String email = Objects.requireNonNull(binding.createAccountEmailEditText.getText())
                 .toString();
 
         if(!InputValidator.isValidEmail(email) ){
             binding.createAccountEmailTextInputLayout.setError(getString(R.string.invalid_email));
+            binding.emailVerificationCard.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
             return false;
+        }else{
+            binding.emailVerificationCard.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
         }
+
+
 
         binding.createAccountEmailTextInputLayout.setError(null);
         return true;
     }
 
+    @SuppressLint("ResourceType")
     private boolean validatePassword(){
         String psw = Objects.requireNonNull(binding.createAccountPasswordEditText.getText())
                 .toString();
+
+
+        if(psw.length() >= 8){
+            binding.cardOne.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+        }else{
+            binding.cardOne.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+        }
+
+        if(psw.matches("(.*[A-Z].*)")){
+            binding.cardFour.setCardBackgroundColor(Color.parseColor((getString(R.color.dark_red))));
+        }else{
+            binding.cardFour.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+        }
+
+        if(psw.matches("(.*[0-9].*)")){
+            binding.cardTwo.setCardBackgroundColor(Color.parseColor((getString(R.color.dark_red))));
+        }else{
+            binding.cardTwo.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+        }
+
+        if(psw.matches("^(?=.*[@#$%^&+=!]).*$")){
+            binding.cardThree.setCardBackgroundColor(Color.parseColor((getString(R.color.dark_red))));
+        }else{
+            binding.cardThree.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+        }
 
         if(!InputValidator.isValidPassword(psw)){
             binding.createAccountPswTextInputLayout.setError(getString(R.string.invalid_password));
             return false;
         }
-
-
 
         binding.createAccountPswTextInputLayout.setError(null);
         return true;
@@ -235,4 +295,8 @@ View.OnFocusChangeListener{
         super.onDestroyView();
         binding = null;
     }
+
+
+
+
 }

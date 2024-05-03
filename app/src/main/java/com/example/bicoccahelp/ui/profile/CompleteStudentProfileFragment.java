@@ -55,6 +55,10 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
         corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
+
+        String uid = userRepository.getCurrentUser().uid;
+
+
     }
 
     @Override
@@ -129,14 +133,31 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
             @Override
             public void onSucces(String idCorso) {
 
-                if(binding.yesRadioButton.isChecked()) {
-                    yesRadioButtonAnswer(idCorso);
-                }else if(binding.noRadioButton.isChecked()){
-                    noRadioButtonAnswer(idCorso);
-                }else{
-                    Snackbar.make(requireView(), getString(R.string.tutor_radioButton),
-                            Snackbar.LENGTH_SHORT).show();
-                }
+                String studentUid = userRepository.getCurrentUser().uid;
+
+                studentRepository.studentExist(studentUid, new Callback<Boolean>() {
+                    @Override
+                    public void onSucces(Boolean exist) {
+                        if(!exist){
+                            if(binding.yesRadioButton.isChecked()) {
+                                yesRadioButtonAnswer(idCorso);
+                            }else if(binding.noRadioButton.isChecked()){
+                                noRadioButtonAnswer(idCorso);
+                            }else{
+                                Snackbar.make(requireView(), getString(R.string.tutor_radioButton),
+                                        Snackbar.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            noRadioButtonAnswer(idCorso);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+
             }
 
             @Override
