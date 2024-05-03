@@ -1,7 +1,6 @@
-package com.example.bicoccahelp.ui.classBooking;
+package com.example.bicoccahelp.ui.lessonBooking;
 import android.app.Application;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.utils.GlideLoadModel;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -89,7 +87,8 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             itemView.setOnClickListener(view -> listener.onServiceItemClick(tutorModel));
             getCorsoId(tutorModel.getUid());
 
-            if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel.getPhotoUri().toString()) ){
+            if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
+                    .getPhotoUri().toString()) ){
                 photo.setImageResource(R.drawable.profile_icon);
             }else{
                 Glide.with(application.getApplicationContext())

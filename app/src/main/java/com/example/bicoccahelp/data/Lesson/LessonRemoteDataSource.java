@@ -35,7 +35,8 @@ public class LessonRemoteDataSource {
 
                     LessonModel lessonModel = new LessonModel(
                             lesson.getId(), request.getUid_Student(), request.getUid_tutor(),
-                            request.getDuration(), request.getLessonDate(), request.getDescription());
+                            request.getDuration(), request.getLessonDate(),
+                            request.getDescription());
 
                     callback.onSucces(lessonModel);
 

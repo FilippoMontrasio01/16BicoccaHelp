@@ -202,21 +202,27 @@ View.OnFocusChangeListener{
                 .toString();
 
         if(name.length() >= 3){
-            binding.nameVerificationCard1.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+            binding.nameVerificationCard1.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.dark_red)));
         }else{
-            binding.nameVerificationCard1.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+            binding.nameVerificationCard1.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.cranberry_red)));
         }
 
         if(!name.matches("(.*[0-9].*)")){
-            binding.nameVerificationCard2.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+            binding.nameVerificationCard2.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.dark_red)));
         }else{
-            binding.nameVerificationCard2.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+            binding.nameVerificationCard2.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.cranberry_red)));
         }
 
         if(!name.matches("^(?=.*[@#$%^&+=!]).*$")){
-            binding.nameVerificationCard3.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+            binding.nameVerificationCard3.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.dark_red)));
         }else{
-            binding.nameVerificationCard3.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+            binding.nameVerificationCard3.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.cranberry_red)));
         }
 
         if(!InputValidator.isValidName(name)){
@@ -238,10 +244,12 @@ View.OnFocusChangeListener{
 
         if(!InputValidator.isValidEmail(email) ){
             binding.createAccountEmailTextInputLayout.setError(getString(R.string.invalid_email));
-            binding.emailVerificationCard.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+            binding.emailVerificationCard.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.cranberry_red)));
             return false;
         }else{
-            binding.emailVerificationCard.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+            binding.emailVerificationCard.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.dark_red)));
         }
 
 
@@ -259,25 +267,31 @@ View.OnFocusChangeListener{
         if(psw.length() >= 8){
             binding.cardOne.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
         }else{
-            binding.cardOne.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+            binding.cardOne.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.cranberry_red)));
         }
 
         if(psw.matches("(.*[A-Z].*)")){
-            binding.cardFour.setCardBackgroundColor(Color.parseColor((getString(R.color.dark_red))));
+            binding.cardFour.setCardBackgroundColor(Color
+                    .parseColor((getString(R.color.dark_red))));
         }else{
-            binding.cardFour.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+            binding.cardFour.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.cranberry_red)));
         }
 
         if(psw.matches("(.*[0-9].*)")){
             binding.cardTwo.setCardBackgroundColor(Color.parseColor((getString(R.color.dark_red))));
         }else{
-            binding.cardTwo.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+            binding.cardTwo.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.cranberry_red)));
         }
 
         if(psw.matches("^(?=.*[@#$%^&+=!]).*$")){
-            binding.cardThree.setCardBackgroundColor(Color.parseColor((getString(R.color.dark_red))));
+            binding.cardThree.setCardBackgroundColor(Color
+                    .parseColor((getString(R.color.dark_red))));
         }else{
-            binding.cardThree.setCardBackgroundColor(Color.parseColor(getString(R.color.cranberry_red)));
+            binding.cardThree.setCardBackgroundColor(Color
+                    .parseColor(getString(R.color.cranberry_red)));
         }
 
         if(!InputValidator.isValidPassword(psw)){

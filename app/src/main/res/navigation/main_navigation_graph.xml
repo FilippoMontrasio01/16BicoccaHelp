@@ -81,7 +81,7 @@
 
     <fragment
         android:id="@+id/fragment_tutor"
-        android:name="com.example.bicoccahelp.ui.classBooking.TutorFragment"
+        android:name="com.example.bicoccahelp.ui.lessonBooking.TutorFragment"
         android:label="@string/tutor_fragment"
         tools:layout="@layout/fragment_tutor">
 

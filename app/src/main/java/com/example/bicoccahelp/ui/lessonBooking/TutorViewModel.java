@@ -1,4 +1,4 @@
-package com.example.bicoccahelp.ui.classBooking;
+package com.example.bicoccahelp.ui.lessonBooking;
 
 import android.util.Log;
 
@@ -11,8 +11,6 @@ import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.utils.ServiceLocator;
-
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +133,8 @@ public class TutorViewModel extends ViewModel {
 
             @Override
             public void onSucces(String idCorso) {
-                tutorRepository.listTutorsCorsodiStudi(idCorso, limit, new Callback<List<TutorModel>>() {
+                tutorRepository.listTutorsCorsodiStudi(idCorso, limit,
+                        new Callback<List<TutorModel>>() {
                     @Override
                     public void onSucces(List<TutorModel> data) {
                         currentPage += 1;

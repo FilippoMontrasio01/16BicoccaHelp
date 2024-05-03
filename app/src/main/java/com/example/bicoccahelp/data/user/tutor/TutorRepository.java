@@ -47,7 +47,8 @@ public class TutorRepository {
         tutorRemoteDataSource.listTutorSkill(skill, limit, callback);
     }
 
-    public void listTutorsCorsodiStudi(String idCorso, Long limit, Callback<List<TutorModel>> callback){
+    public void listTutorsCorsodiStudi(String idCorso, Long limit,
+                                       Callback<List<TutorModel>> callback){
         tutorRemoteDataSource.listTutorsCorsodiStudi(idCorso, limit, callback);
     }
 

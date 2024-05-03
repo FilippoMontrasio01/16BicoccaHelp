@@ -1,9 +1,6 @@
-package com.example.bicoccahelp.ui.classBooking;
+package com.example.bicoccahelp.ui.lessonBooking;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +10,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bicoccahelp.R;
-import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
@@ -154,7 +149,9 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
-        tutorViewModel.getTutorList().observe(getViewLifecycleOwner(), (Observer<List<TutorModel>>) tutors -> tutorRecyclerViewAdapter.aggiornaDati(tutors));
+        tutorViewModel.getTutorList().observe(getViewLifecycleOwner(),
+                (Observer<List<TutorModel>>)
+                        tutors -> tutorRecyclerViewAdapter.aggiornaDati(tutors));
 
         if(v.getId() == binding.filterNameButton.getId()){
             filterNameOnClick();

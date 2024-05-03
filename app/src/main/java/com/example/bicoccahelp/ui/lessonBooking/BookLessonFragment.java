@@ -1,4 +1,4 @@
-package com.example.bicoccahelp.ui.classBooking;
+package com.example.bicoccahelp.ui.lessonBooking;
 
 import android.os.Bundle;
 

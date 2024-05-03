@@ -15,7 +15,8 @@ public class StudentViewModelFactory implements ViewModelProvider.Factory {
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
 
-    public StudentViewModelFactory(StudentRepository studentRepository, UserRepository userRepository) {
+    public StudentViewModelFactory(StudentRepository studentRepository,
+                                   UserRepository userRepository) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
     }

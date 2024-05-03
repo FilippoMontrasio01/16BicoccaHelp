@@ -13,7 +13,8 @@ public class CreateLessonRequest {
     private @NonNull String description;
 
     public CreateLessonRequest(@NonNull String uid_Student, @NonNull String uid_tutor,
-                               int duration, @NonNull Timestamp lessonDate, @NonNull String description) {
+                               int duration, @NonNull Timestamp lessonDate,
+                               @NonNull String description) {
         this.uid_Student = uid_Student;
         this.uid_tutor = uid_tutor;
         this.duration = duration;

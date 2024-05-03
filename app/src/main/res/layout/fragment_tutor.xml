@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/light_gray"
-    tools:context=".ui.classBooking.TutorFragment">
+    tools:context=".ui.lessonBooking.TutorFragment">
 
     <ImageView
         android:id="@+id/book_class_background"
@@ -131,8 +131,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/toggle_button_background"
-                android:textOn="Study Program"
-                android:textOff="Study Program"
+                android:textOn="@string/study_program_toggle"
+                android:textOff="@string/study_program_toggle"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:fontFamily="@font/lato_bold"
@@ -145,8 +145,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/toggle_button_background"
-                android:textOn="Disponibilty"
-                android:textOff="Disponibilty"
+                android:textOn="@string/disponibility"
+                android:textOff="@string/disponibility"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:fontFamily="@font/lato_bold"
@@ -162,8 +162,8 @@
                 android:fontFamily="@font/lato_bold"
                 android:textSize="14sp"
                 android:textAllCaps="false"
-                android:textOff="Skills"
-                android:textOn="Skills" />
+                android:textOff="@string/skill"
+                android:textOn="@string/skill" />
 
 
         </LinearLayout>

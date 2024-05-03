@@ -162,5 +162,19 @@
     <string name="filter">Filter</string>
     <string name="db_error">Firestore Database Error</string>
     <string name="search_field">Search field</string>
+    <string name="study_program_toggle">Study Program</string>
+    <string name="disponibility">Disponibilty</string>
+    <string name="skill">Skill</string>
+    <string name="email_check">Email should be</string>
+    <string name="email_domain">\@campus.unimib.it domain</string>
+    <string name="password_check">Password should be</string>
+    <string name="check_char">At least 8 characters</string>
+    <string name="check_number">Minimum one number</string>
+    <string name="check_special_char">Minimum one special characters</string>
+    <string name="check_uppercase">Minimum one uppercase</string>
+    <string name="name_check">Name should be</string>
+    <string name="check_char_name">At least 3 characters</string>
+    <string name="check_numb_name">No numbers</string>
+    <string name="check_name_special_char">No special characters</string>
 
 </resources>

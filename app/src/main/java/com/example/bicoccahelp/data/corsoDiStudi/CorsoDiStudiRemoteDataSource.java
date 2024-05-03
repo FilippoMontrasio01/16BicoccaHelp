@@ -118,7 +118,8 @@ public class CorsoDiStudiRemoteDataSource {
     }
 
 
-    public void getCorsoDiStudiIdByName(String nomeCorso, String livello, Callback<String> callback) {
+    public void getCorsoDiStudiIdByName(String nomeCorso, String livello,
+                                        Callback<String> callback) {
         String nomeCorsoFormatted = nomeCorso.toLowerCase();
         corsoDiStudi.whereEqualTo(NOME_CORSO, nomeCorsoFormatted)
                 .whereEqualTo(LIVELLO, livello)

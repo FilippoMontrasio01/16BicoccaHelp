@@ -191,7 +191,8 @@ public class TutorRemoteDataSource {
 
     }
 
-    public void listTutorsCorsodiStudi(String idCorso, Long limit, Callback<List<TutorModel>> callback){
+    public void listTutorsCorsodiStudi(String idCorso, Long limit,
+                                       Callback<List<TutorModel>> callback){
         Query query = tutors.whereEqualTo(CORSO_DI_STUDI, idCorso)
                 .orderBy(NAME, Query.Direction.ASCENDING)
                 .limit(limit);
@@ -216,7 +217,8 @@ public class TutorRemoteDataSource {
                             photoUriString = "";
                         }
                         Uri photoUri = Uri.parse(photoUriString);
-                        Map<String, Boolean> disponibilitaGiorni = (Map<String, Boolean>) document.get(DISPONIBILITA_GIORNI);
+                        Map<String, Boolean> disponibilitaGiorni =
+                                (Map<String, Boolean>) document.get(DISPONIBILITA_GIORNI);
                         if (disponibilitaGiorni == null) {
                             disponibilitaGiorni = new HashMap<>();
                         }
