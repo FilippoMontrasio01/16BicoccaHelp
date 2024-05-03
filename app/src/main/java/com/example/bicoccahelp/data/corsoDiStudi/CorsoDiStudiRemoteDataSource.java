@@ -27,15 +27,15 @@ public class CorsoDiStudiRemoteDataSource {
 
         Map<String, Object> data = new HashMap<>();
 
-        data.put(NOME_CORSO, request.nomeCorso);
-        data.put(AREA, request.area);
-        data.put(LIVELLO, request.livello);
+        data.put(NOME_CORSO, request.getNomeCorso());
+        data.put(AREA, request.getArea());
+        data.put(LIVELLO, request.getLivello());
 
         corsoDiStudi.add(data)
                 .addOnSuccessListener(documentReference -> {
                     CorsoDiStudiModel corsoDiStudiModel = new CorsoDiStudiModel(
-                            corsoDiStudi.getId(), request.nomeCorso,
-                            request.area, request.livello
+                            corsoDiStudi.getId(), request.getNomeCorso(),
+                            request.getArea(), request.getLivello()
                     );
                     callback.onSucces(corsoDiStudiModel);
                 })
