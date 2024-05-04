@@ -203,7 +203,7 @@ View.OnFocusChangeListener{
 
         if(name.length() >= 3){
             binding.nameVerificationCard1.setCardBackgroundColor(Color
-                    .parseColor(getString(R.color.dark_red)));
+                    .parseColor(getString(R.color.light_green)));
         }else{
             binding.nameVerificationCard1.setCardBackgroundColor(Color
                     .parseColor(getString(R.color.cranberry_red)));
@@ -211,7 +211,7 @@ View.OnFocusChangeListener{
 
         if(!name.matches("(.*[0-9].*)")){
             binding.nameVerificationCard2.setCardBackgroundColor(Color
-                    .parseColor(getString(R.color.dark_red)));
+                    .parseColor(getString(R.color.light_green)));
         }else{
             binding.nameVerificationCard2.setCardBackgroundColor(Color
                     .parseColor(getString(R.color.cranberry_red)));
@@ -219,7 +219,7 @@ View.OnFocusChangeListener{
 
         if(!name.matches("^(?=.*[@#$%^&+=!]).*$")){
             binding.nameVerificationCard3.setCardBackgroundColor(Color
-                    .parseColor(getString(R.color.dark_red)));
+                    .parseColor(getString(R.color.light_green)));
         }else{
             binding.nameVerificationCard3.setCardBackgroundColor(Color
                     .parseColor(getString(R.color.cranberry_red)));
@@ -249,7 +249,7 @@ View.OnFocusChangeListener{
             return false;
         }else{
             binding.emailVerificationCard.setCardBackgroundColor(Color
-                    .parseColor(getString(R.color.dark_red)));
+                    .parseColor(getString(R.color.light_green)));
         }
 
 
@@ -265,7 +265,7 @@ View.OnFocusChangeListener{
 
 
         if(psw.length() >= 8){
-            binding.cardOne.setCardBackgroundColor(Color.parseColor(getString(R.color.dark_red)));
+            binding.cardOne.setCardBackgroundColor(Color.parseColor(getString(R.color.light_green)));
         }else{
             binding.cardOne.setCardBackgroundColor(Color
                     .parseColor(getString(R.color.cranberry_red)));
@@ -273,14 +273,14 @@ View.OnFocusChangeListener{
 
         if(psw.matches("(.*[A-Z].*)")){
             binding.cardFour.setCardBackgroundColor(Color
-                    .parseColor((getString(R.color.dark_red))));
+                    .parseColor((getString(R.color.light_green))));
         }else{
             binding.cardFour.setCardBackgroundColor(Color
                     .parseColor(getString(R.color.cranberry_red)));
         }
 
         if(psw.matches("(.*[0-9].*)")){
-            binding.cardTwo.setCardBackgroundColor(Color.parseColor((getString(R.color.dark_red))));
+            binding.cardTwo.setCardBackgroundColor(Color.parseColor((getString(R.color.light_green))));
         }else{
             binding.cardTwo.setCardBackgroundColor(Color
                     .parseColor(getString(R.color.cranberry_red)));
@@ -288,7 +288,7 @@ View.OnFocusChangeListener{
 
         if(psw.matches("^(?=.*[@#$%^&+=!]).*$")){
             binding.cardThree.setCardBackgroundColor(Color
-                    .parseColor((getString(R.color.dark_red))));
+                    .parseColor((getString(R.color.light_green))));
         }else{
             binding.cardThree.setCardBackgroundColor(Color
                     .parseColor(getString(R.color.cranberry_red)));

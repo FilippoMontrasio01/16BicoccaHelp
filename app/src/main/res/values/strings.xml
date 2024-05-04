@@ -176,5 +176,6 @@
     <string name="check_char_name">At least 3 characters</string>
     <string name="check_numb_name">No numbers</string>
     <string name="check_name_special_char">No special characters</string>
+    <string name="BookLessonFragment">Book Lesson Fragment</string>
 
 </resources>

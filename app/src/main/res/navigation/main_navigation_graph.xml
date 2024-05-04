@@ -86,10 +86,33 @@
         tools:layout="@layout/fragment_tutor">
 
         <action
-            android:id="@+id/actionToSignOutDialog"
-            app:destination="@id/logout_dialog" />
+            android:id="@+id/actionToLessonCard"
+            app:destination="@id/lesson_card"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_in_left"
+            />
 
     </fragment>
+
+    <dialog
+        android:id="@+id/lesson_card"
+        android:name="com.example.bicoccahelp.ui.lessonBooking.BookLessonFragment"
+        android:label="@string/BookLessonFragment"
+        tools:layout="@layout/fragment_book_lesson">
+
+        <argument
+            android:name="tutorName"
+            app:argType="string" />
+        <argument
+            android:name="tutorEmail"
+            app:argType="string" />
+        <argument
+            android:name="tutorLogoUri"
+            app:argType="string" />
+
+    </dialog>
 
     <activity
         android:id="@+id/activity_welcome"

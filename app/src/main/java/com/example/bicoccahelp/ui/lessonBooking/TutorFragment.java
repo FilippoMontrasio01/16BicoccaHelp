@@ -82,9 +82,15 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
     private void configureRecyclerView() {
         RecyclerView tutorRecyclerView = binding.tutorRecyclerView;
 
+
         TutorRecyclerViewAdapter.OnItemClickListener listener = tutor -> {
-            navController.navigate(R.id.actionToSignOutDialog);
+            TutorFragmentDirections.ActionToLessonCard action = TutorFragmentDirections.actionToLessonCard(
+                    tutor.getName(),tutor.getEmail(), tutor.getPhotoUri().toString());
+            navController.navigate(action);
         };
+
+
+
 
         tutorRecyclerViewAdapter = new TutorRecyclerViewAdapter(
                 tutorViewModel.tutorList,

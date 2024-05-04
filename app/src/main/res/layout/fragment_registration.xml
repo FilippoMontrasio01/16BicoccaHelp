@@ -96,10 +96,9 @@
 
         <LinearLayout
             android:id="@+id/email_verification_linearLayout"
-            android:background="@drawable/round_back_background_profile"
+            android:background="@drawable/round_back_background_registration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:orientation="vertical">
 
             <TextView
@@ -198,10 +197,9 @@
 
         <LinearLayout
             android:id="@+id/profile_setting_linearLayout"
-            android:background="@drawable/round_back_background_profile"
+            android:background="@drawable/round_back_background_registration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:orientation="vertical">
 
 
@@ -448,10 +446,9 @@
 
             <LinearLayout
                 android:id="@+id/name_verification_linearLayout"
-                android:background="@drawable/round_back_background_profile"
+                android:background="@drawable/round_back_background_registration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
                 <TextView

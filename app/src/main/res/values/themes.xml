@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.BicoccaHelp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/dark_red</item>
+
     </style>
 
     <style name="Theme.BicoccaHelp" parent="Base.Theme.BicoccaHelp">
@@ -31,5 +31,21 @@
         <item name="colorAccent">@color/dark_red</item>
         <!-- DEFAULT/UNSELECTED CHECBOX COLOR-->
         <item name="android:textColorSecondary">@color/dark_gray</item>
+    </style>
+
+    <style name="Theme.BicoccaHelp.Light.FullscreenDialog" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/dark_red</item>
+    </style>
+
+    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Colore della barra in alto -->
+
+        <!-- Colore del calendario -->
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Colore di sfondo del DatePicker -->
+        <item name="android:background">@color/white</item>
     </style>
 </resources>
