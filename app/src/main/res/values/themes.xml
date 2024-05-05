@@ -37,15 +37,26 @@
         <item name="colorPrimary">@color/dark_red</item>
     </style>
 
-    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
-        <!-- Colore della barra in alto -->
 
-        <!-- Colore del calendario -->
-        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
-    </style>
 
     <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- Colore di sfondo del DatePicker -->
-        <item name="android:background">@color/white</item>
+        <item name="colorAccent">@color/dark_red</item>
+
+        <item name="colorPrimary">@color/dark_red</item>
+        <item name="android:textColorSecondary">@color/dark_red</item>
+        <item name="cornerSize">16dp</item>
+        <item name="android:calendarTextColor">@color/dark_red</item>
+
+        <item name="android:buttonBarPositiveButtonStyle">@style/AppTheme.Alert.Button.Positive</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/AppTheme.Alert.Button.Negative</item>
+    </style>
+
+    <style name="AppTheme.Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/dark_red</item>
+    </style>
+
+    <style name="AppTheme.Alert.Button.Negative" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/dark_red</item>
     </style>
 </resources>
