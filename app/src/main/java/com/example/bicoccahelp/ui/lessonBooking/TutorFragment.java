@@ -85,7 +85,8 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
 
         TutorRecyclerViewAdapter.OnItemClickListener listener = tutor -> {
             TutorFragmentDirections.ActionToLessonCard action = TutorFragmentDirections.actionToLessonCard(
-                    tutor.getName(),tutor.getEmail(), tutor.getPhotoUri().toString());
+                    tutor.getName(),tutor.getEmail(), tutor.getPhotoUri().toString(),
+                    tutor.getUid());
             navController.navigate(action);
         };
 

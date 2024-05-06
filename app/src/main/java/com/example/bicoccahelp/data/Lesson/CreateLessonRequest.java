@@ -9,16 +9,16 @@ public class CreateLessonRequest {
     private @NonNull String uid_tutor;
     private @NonNull int duration;
 
-    private  @NonNull Timestamp lessonDate;
+    private  @NonNull String idLesson;
     private @NonNull String description;
 
     public CreateLessonRequest(@NonNull String uid_Student, @NonNull String uid_tutor,
-                               int duration, @NonNull Timestamp lessonDate,
+                               int duration, @NonNull String idLesson,
                                @NonNull String description) {
         this.uid_Student = uid_Student;
         this.uid_tutor = uid_tutor;
         this.duration = duration;
-        this.lessonDate = lessonDate;
+        this.idLesson = idLesson;
         this.description = description;
     }
 
@@ -37,8 +37,8 @@ public class CreateLessonRequest {
     }
 
     @NonNull
-    public Timestamp getLessonDate() {
-        return lessonDate;
+    public String getIdLesson() {
+        return idLesson;
     }
 
     @NonNull
@@ -58,8 +58,8 @@ public class CreateLessonRequest {
         this.duration = duration;
     }
 
-    public void setLessonDate(@NonNull Timestamp date) {
-        lessonDate = date;
+    public void setLessonDate(@NonNull String idLesson) {
+        idLesson = idLesson;
     }
 
     public void setDescription(@NonNull String description) {

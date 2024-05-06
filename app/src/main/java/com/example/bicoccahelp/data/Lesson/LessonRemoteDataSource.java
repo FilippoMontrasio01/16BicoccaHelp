@@ -28,14 +28,14 @@ public class LessonRemoteDataSource {
         data.put(UID_TUTOR, request.getUid_tutor());
         data.put(DURATION , request.getDuration());
         data.put(DESCRIPTION , request.getDescription());
-        data.put(LESSON_DATE , request.getLessonDate());
+        data.put(LESSON_DATE , request.getIdLesson());
 
         lesson.add(data)
                 .addOnSuccessListener(documentReference -> {
 
                     LessonModel lessonModel = new LessonModel(
                             lesson.getId(), request.getUid_Student(), request.getUid_tutor(),
-                            request.getDuration(), request.getLessonDate(),
+                            request.getDuration(), request.getIdLesson(),
                             request.getDescription());
 
                     callback.onSucces(lessonModel);

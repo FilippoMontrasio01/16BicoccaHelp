@@ -23,7 +23,7 @@ import com.example.bicoccahelp.utils.ServiceLocator;
 import java.util.List;
 
 public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
-        TutorRecyclerViewAdapter.ServiceViewHolder> {
+        TutorRecyclerViewAdapter.TutorViewHolder> {
     public interface OnItemClickListener {
         void onServiceItemClick(TutorModel tutorModel);
     }
@@ -52,18 +52,18 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @NonNull
     @Override
-    public ServiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TutorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tutor_list_item,
                 parent, false);
-        return new ServiceViewHolder(view);
+        return new TutorViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TutorViewHolder holder, int position) {
         holder.bind(tutorList.get(position), onItemClickListener);
     }
 
-    public class ServiceViewHolder extends RecyclerView.ViewHolder {
+    public class TutorViewHolder extends RecyclerView.ViewHolder {
         private final ImageView photo;
         private final TextView tutorName;
         private final ImageView areaIcon;
@@ -71,7 +71,7 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         private StudentRepository studentRepository;
         private CorsoDiStudiRepository corsoDiStudiRepository;
 
-        public ServiceViewHolder(@NonNull View view) {
+        public TutorViewHolder(@NonNull View view) {
             super(view);
             photo = view.findViewById(R.id.tutorListItemLogo);
             tutorName = view.findViewById(R.id.tutorListItemName);

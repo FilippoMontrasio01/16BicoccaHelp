@@ -174,7 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="600dp"
             android:paddingBottom="205dp"
-            android:scrollbars="vertical"
+            android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/book_class_background"
             app:layout_constraintTop_toTopOf="@+id/book_class_background" />

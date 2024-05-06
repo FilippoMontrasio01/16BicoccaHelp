@@ -9,7 +9,7 @@ public class LessonModel {
     private @NonNull String uid_Student;
     private @NonNull String uid_tutor;
     private @NonNull int duration;
-    private  @NonNull Timestamp lessonDate;
+    private  @NonNull String idLesson;
 
     private @NonNull String description;
 
@@ -18,13 +18,13 @@ public class LessonModel {
     private @NonNull String id;
 
     public LessonModel(@NonNull String id, @NonNull String uid_Student, @NonNull String uid_tutor,
-                       int duration, @NonNull Timestamp lessonDate, @NonNull String description) {
+                       int duration, @NonNull String idLesson, @NonNull String description) {
 
         this.id = id;
         this.uid_Student = uid_Student;
         this.uid_tutor = uid_tutor;
         this.duration = duration;
-        this.lessonDate = lessonDate;
+        this.idLesson = idLesson;
         this.description = description;
 
     }
@@ -41,17 +41,15 @@ public class LessonModel {
         this.duration = duration;
     }
 
-    public void setlessonDate(@NonNull Timestamp date) {
-        lessonDate = date;
+    public void setIdLesson(@NonNull String idLesson) {
+        idLesson = idLesson;
     }
 
     public void setDescription(@NonNull String description) {
         this.description = description;
     }
 
-    public void setLessonDate(@NonNull Timestamp lessonDate) {
-        this.lessonDate = lessonDate;
-    }
+
 
     public void setId(@NonNull String id) {
         this.id = id;
@@ -72,8 +70,8 @@ public class LessonModel {
     }
 
     @NonNull
-    public Timestamp getLessonDate() {
-        return lessonDate;
+    public String getIdLesson() {
+        return idLesson;
     }
 
     @NonNull

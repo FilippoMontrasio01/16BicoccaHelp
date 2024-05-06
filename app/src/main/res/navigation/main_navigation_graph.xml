@@ -111,6 +111,9 @@
         <argument
             android:name="tutorLogoUri"
             app:argType="string" />
+        <argument
+            android:name="tutorUid"
+            app:argType="string" />
 
     </dialog>
 

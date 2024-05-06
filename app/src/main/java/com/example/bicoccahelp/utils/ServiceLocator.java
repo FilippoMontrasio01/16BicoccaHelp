@@ -13,6 +13,8 @@ import com.example.bicoccahelp.data.user.student.StudentRemoteDataSource;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRemoteDataSource;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
+import com.example.bicoccahelp.date.DateRemoteDataSource;
+import com.example.bicoccahelp.date.DateRepository;
 
 public class ServiceLocator {
     public static volatile ServiceLocator INSTANCE = null;
@@ -53,4 +55,9 @@ public class ServiceLocator {
     public LessonRepository getLessonRepository(){
         return new LessonRepository(new LessonRemoteDataSource());
     }
+
+    public DateRepository getDateRepository(){
+        return new DateRepository(new DateRemoteDataSource());
+    }
+
 }
