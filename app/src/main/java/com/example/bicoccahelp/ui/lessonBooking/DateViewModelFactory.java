@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bicoccahelp.date.DateRepository;
+import com.example.bicoccahelp.data.date.DateRepository;
 
 public class DateViewModelFactory implements ViewModelProvider.Factory {
 

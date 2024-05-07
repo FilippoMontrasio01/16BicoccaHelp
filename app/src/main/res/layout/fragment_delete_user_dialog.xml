@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:elevation="10dp"
+    android:background="@android:color/transparent"
     android:name="androidx.navigation.fragment.NavHostFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.profile.DeleteUserDialogFragment"
@@ -11,8 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/delete_user_dialog_constraintlayout"
-        android:background="@android:color/transparent"
         android:layout_width="match_parent"
+        android:background="@android:color/transparent"
         android:layout_height="match_parent">
 
         <TextView

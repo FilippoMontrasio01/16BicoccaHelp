@@ -1,11 +1,13 @@
 package com.example.bicoccahelp.utils;
 
-import com.example.bicoccahelp.data.Lesson.LessonRemoteDataSource;
-import com.example.bicoccahelp.data.Lesson.LessonRepository;
+import com.example.bicoccahelp.data.lesson.LessonRemoteDataSource;
+import com.example.bicoccahelp.data.lesson.LessonRepository;
 import com.example.bicoccahelp.data.auth.AuthRemoteDataSource;
 import com.example.bicoccahelp.data.auth.AuthRepository;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRemoteDataSource;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
+import com.example.bicoccahelp.data.review.ReviewRemoteDataSource;
+import com.example.bicoccahelp.data.review.ReviewRepository;
 import com.example.bicoccahelp.data.user.UserAssetsRemoteDataSource;
 import com.example.bicoccahelp.data.user.UserRemoteDataSource;
 import com.example.bicoccahelp.data.user.UserRepository;
@@ -13,8 +15,8 @@ import com.example.bicoccahelp.data.user.student.StudentRemoteDataSource;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRemoteDataSource;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
-import com.example.bicoccahelp.date.DateRemoteDataSource;
-import com.example.bicoccahelp.date.DateRepository;
+import com.example.bicoccahelp.data.date.DateRemoteDataSource;
+import com.example.bicoccahelp.data.date.DateRepository;
 
 public class ServiceLocator {
     public static volatile ServiceLocator INSTANCE = null;
@@ -58,6 +60,10 @@ public class ServiceLocator {
 
     public DateRepository getDateRepository(){
         return new DateRepository(new DateRemoteDataSource());
+    }
+
+    public ReviewRepository getReviewRepository(){
+        return new ReviewRepository(new ReviewRemoteDataSource());
     }
 
 }

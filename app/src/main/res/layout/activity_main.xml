@@ -19,21 +19,25 @@
         app:navGraph="@navigation/main_navigation_graph" />
 
     <FrameLayout
-        android:id="@+id/nav_bar_frame_layout"
+        android:id="@+id/framelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/light_gray"
+        android:layout_height="65dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigation"
+            android:id="@+id/bottom_nav_view"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:itemPaddingBottom="1dp"
-            app:itemPaddingTop="7dp"
+            android:layout_height="65dp"
+            android:pointerIcon="none"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/nav_bar_background"
             app:menu="@menu/bottom_nav_menu"
+            app:itemIconTint="@color/dark_red"
+            app:itemTextColor="@color/dark_red"
             />
 
     </FrameLayout>

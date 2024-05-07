@@ -177,5 +177,16 @@
     <string name="check_numb_name">No numbers</string>
     <string name="check_name_special_char">No special characters</string>
     <string name="BookLessonFragment">Book Lesson Fragment</string>
+    <string name="review_fragment">Fragment review</string>
+    <string name="tutor_to_review">Enter a valid tutor</string>
+    <string name="auto_review">You can\'t review yourself</string>
+    <string name="already_review">You have already submitted a review</string>
+    <string name="review_submit">Review successfully submitted!</string>
+    <string name="review_not_submit">Review submission failed</string>
+    <string name="review_title">Review your\nTutors</string>
+    <string name="insert_tutor_name">Insert tutor name</string>
+    <string name="rating">Add rating</string>
+    <string name="button_review_submit">Make a review</string>
+    <string name="your_review">Your Reviews</string>
 
 </resources>

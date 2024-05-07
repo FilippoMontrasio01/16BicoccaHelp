@@ -1,8 +1,6 @@
-package com.example.bicoccahelp.data.Lesson;
+package com.example.bicoccahelp.data.lesson;
 
 import androidx.annotation.NonNull;
-
-import java.sql.Timestamp;
 
 public class LessonModel {
 

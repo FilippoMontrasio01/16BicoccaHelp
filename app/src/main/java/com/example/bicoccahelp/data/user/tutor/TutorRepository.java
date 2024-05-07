@@ -56,9 +56,8 @@ public class TutorRepository {
         tutorRemoteDataSource.listTutorDisponibility(day, limit, callback);
     }
 
-
-    public void getTutorId(String uid, Callback<String> callback){
-        tutorRemoteDataSource.getTutorId(uid, callback);
+    public void getTutorUid(String name, Callback<String> callback) {
+        tutorRemoteDataSource.getTutorUid(name, callback);
     }
     public void updateTutor(CreateTutorRequest createTutorRequest,
                              String idTutor, Callback<TutorModel> callback){

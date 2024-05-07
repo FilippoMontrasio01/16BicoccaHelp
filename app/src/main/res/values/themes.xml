@@ -7,8 +7,11 @@
 
     <style name="Theme.BicoccaHelp" parent="Base.Theme.BicoccaHelp">
 
-        <item name="android:statusBarColor">@color/dark_red</item>
-        <item name="android:navigationBarColor">@color/light_gray</item>
+
+            <!-- Transparent system bars for edge-to-edge. -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
 
 
     </style>
@@ -18,12 +21,9 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="BottomNavigationThemeCustom">
-        <item name="enforceTextAppearance">true</item>
-        <item name="enforceMaterialTheme">true</item>
-        <item name="itemTextAppearanceInactive">?attr/textAppearanceCaption</item>
-        <item name="itemTextAppearanceActive">?attr/textAppearanceCaption</item>
-        <item name="itemTextColor">@color/white</item>
+
+    <style name="TransparentDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="colored_checkbox" parent="Theme.AppCompat.Light">
@@ -35,14 +35,7 @@
 
     <style name="Theme.BicoccaHelp.Light.FullscreenDialog" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/dark_red</item>
-
     </style>
-
-    <style name="TransparentDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-
 
     <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- Colore di sfondo del DatePicker -->

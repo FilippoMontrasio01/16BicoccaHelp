@@ -1,11 +1,9 @@
-package com.example.bicoccahelp.date;
+package com.example.bicoccahelp.data.date;
 
 import com.example.bicoccahelp.data.Callback;
 import com.google.firebase.Timestamp;
 
-import java.sql.Time;
 import java.util.List;
-import java.util.Map;
 
 public class DateRepository {
     private DateRemoteDataSource dateRemoteDataSource;

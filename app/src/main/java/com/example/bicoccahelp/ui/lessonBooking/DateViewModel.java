@@ -5,17 +5,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bicoccahelp.data.Callback;
-import com.example.bicoccahelp.date.DateModel;
-import com.example.bicoccahelp.date.DateRepository;
+import com.example.bicoccahelp.data.date.DateRepository;
 import com.google.firebase.Timestamp;
 
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class DateViewModel extends ViewModel {
 

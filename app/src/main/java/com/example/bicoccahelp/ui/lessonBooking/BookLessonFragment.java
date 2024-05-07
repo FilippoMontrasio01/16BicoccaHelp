@@ -1,14 +1,11 @@
 package com.example.bicoccahelp.ui.lessonBooking;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,14 +23,12 @@ import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentBookLessonBinding;
-import com.example.bicoccahelp.date.CreateDateRequest;
-import com.example.bicoccahelp.date.DateRepository;
+import com.example.bicoccahelp.data.date.DateRepository;
 import com.example.bicoccahelp.utils.GlideLoadModel;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Objects;
 

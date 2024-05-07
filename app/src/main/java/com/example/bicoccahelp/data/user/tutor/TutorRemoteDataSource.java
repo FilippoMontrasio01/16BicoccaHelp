@@ -416,19 +416,17 @@ public class TutorRemoteDataSource {
     }
 
 
-    public void getTutorId(String uid, Callback<String> callback) {
 
-        tutors.whereEqualTo(UID, uid)
+
+    public void getTutorUid(String name, Callback<String> callback){
+        tutors.whereEqualTo(NAME, name)
                 .get()
                 .addOnSuccessListener(task -> {
-                    if (!task.getDocuments().isEmpty()) {
-                        String id = task.getDocuments().get(0).getId();
-
-                        Log.d("","L'ID E': "+id);
-                        callback.onSucces(id);
-                    } else {
-                        Log.d("","L'ID NON ESISTE");
-                        callback.onSucces(null);
+                    if(!task.getDocuments().isEmpty()){
+                        String  tutorUid = task.getDocuments().get(0).getId();
+                        callback.onSucces(tutorUid);
+                    }else{
+                        callback.onFailure(new Exception("No tutor found with the given name"));
                     }
                 })
                 .addOnFailureListener(callback::onFailure);

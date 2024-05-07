@@ -1,4 +1,4 @@
-package com.example.bicoccahelp.date;
+package com.example.bicoccahelp.data.date;
 
 import androidx.annotation.NonNull;
 
@@ -9,16 +9,16 @@ import org.checkerframework.checker.units.qual.N;
 
 import java.util.Map;
 
-public class CreateDateRequest {
+public class DateModel {
+
+
     private final @NonNull Map<String, Boolean> disponibilitaOrari;
     private final @NonNull Timestamp data;
     private final @NonNull String uidTutor;
-    private @NonNull String uidStudent;
+    private final @NonNull String uidStudent;
 
-
-    public CreateDateRequest(@NonNull Map<String, Boolean> disponibilitaOrari,
-                             @NonNull Timestamp data, String uidTutor,
-                             @NonNull String uidStudent) {
+    public DateModel(@NonNull Map<String, Boolean> disponibilitaOrari, @NonNull Timestamp data,
+                     @NonNull String uidTutor, @NonNull String uidStudent) {
         this.disponibilitaOrari = disponibilitaOrari;
         this.data = data;
         this.uidTutor = uidTutor;
@@ -28,10 +28,6 @@ public class CreateDateRequest {
     @NonNull
     public String getUidStudent() {
         return uidStudent;
-    }
-
-    public void setUidStudent(@NonNull String uidStudent) {
-        this.uidStudent = uidStudent;
     }
 
     @NonNull

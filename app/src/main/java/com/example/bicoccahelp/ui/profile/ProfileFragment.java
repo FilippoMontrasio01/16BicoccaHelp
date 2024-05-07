@@ -99,6 +99,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
         binding.displayNameTextView.setText(user.getName());
         binding.completeStudentItem.setOnClickListener(this);
         binding.becomeATutorItem.setOnClickListener(this);
+        binding.reviewItem.setOnClickListener(this);
     }
 
     @Override
@@ -133,8 +134,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
 
         if(v.getId() == binding.becomeATutorItem.getId()){
             completeTutorOnclick();
+            return;
+        }
+
+        if(v.getId() == binding.reviewItem.getId()){
+            reviewOnclick();
         }
     }
+
+
 
     private void completeTutorOnclick() {
 
@@ -180,6 +188,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
 
     private void showUpdateNameDialog() {
         navController.navigate(R.id.action_from_profile_to_update_name_dialog);
+    }
+
+    private void reviewOnclick() {
+        navController.navigate(R.id.action_from_profile_to_review_fragment);
     }
 
 

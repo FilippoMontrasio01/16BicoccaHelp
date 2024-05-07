@@ -49,6 +49,10 @@
             android:id="@+id/action_from_profile_to_complete_tutor_fragment"
             app:destination="@id/fragment_complete_tutor"/>
 
+        <action
+            android:id="@+id/action_from_profile_to_review_fragment"
+            app:destination="@id/review_fragment"/>
+
     </fragment>
 
     <fragment
@@ -93,6 +97,18 @@
             app:popEnterAnim="@android:anim/slide_out_right"
             app:popExitAnim="@android:anim/slide_in_left"
             />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/review_fragment"
+        android:name="com.example.bicoccahelp.ui.review.ReviewFragment"
+        android:label="@string/review_fragment"
+        tools:layout="@layout/fragment_review">
+
+        <action
+            android:id="@+id/action_from_review_to_profile"
+            app:destination="@id/profile_fragment"/>
 
     </fragment>
 

@@ -1,14 +1,9 @@
-package com.example.bicoccahelp.date;
-
-import android.net.Uri;
+package com.example.bicoccahelp.data.date;
 
 import com.example.bicoccahelp.data.Callback;
-import com.example.bicoccahelp.data.user.tutor.CreateTutorRequest;
-import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,7 +12,6 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

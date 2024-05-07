@@ -1,4 +1,4 @@
-package com.example.bicoccahelp.data.Lesson;
+package com.example.bicoccahelp.data.lesson;
 
 import com.example.bicoccahelp.data.Callback;
 
