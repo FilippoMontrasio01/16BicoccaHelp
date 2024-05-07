@@ -15,7 +15,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import java.util.Map;
 public class DateRemoteDataSource {
     private static final String FIELD_DATA = "date";
     private static final String FIELD_ORARI = "disponibilità orario";
+    private static final String FIELD_UID_STUDENT = "uid Student";
     private static final String FIELD_UID_TUTOR = "uid Tutor";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -48,30 +51,58 @@ public class DateRemoteDataSource {
         data.put(FIELD_DATA, createDateRequest.getData());
         data.put(FIELD_ORARI, disponibilitaOrari);
         data.put(FIELD_UID_TUTOR, createDateRequest.getUidTutor());
+        data.put(FIELD_UID_STUDENT, createDateRequest.getUidStudent());
 
         orarioTutor.add(data)
                 .addOnSuccessListener(documentReference -> {
-                    String documentId = documentReference.getId();
                     DateModel date = new DateModel(createDateRequest.getDisponibilitaOrari(),
-                            createDateRequest.getData(), createDateRequest.getUidTutor());
+                            createDateRequest.getData(), createDateRequest.getUidTutor(),
+                            createDateRequest.getUidStudent());
                     callback.onSucces(date);
                 })
                 .addOnFailureListener(callback::onFailure);
     }
 
-    public void listOrari(String uidTutor, Timestamp data, Long limit, Callback<List<String>> callback) {
+
+    public void listOrari(String uidTutor, String uidStudent, Timestamp giorno, Long limit, Callback<List<String>> callback) {
+        if (giorno == null) {
+            // Se la data è nulla, impostiamo la data attuale
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            giorno = new Timestamp(calendar.getTime());
+        }
+
+        Timestamp finalGiorno = giorno;
+
         Query query = orarioTutor.whereEqualTo(FIELD_UID_TUTOR, uidTutor)
-                .whereEqualTo(FIELD_DATA, data)
+                .whereEqualTo(FIELD_DATA, finalGiorno)
                 .limit(limit);
+
         query.get()
                 .addOnSuccessListener(querySnapshot -> {
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                    if (documents.size() > 0) {
-                        DocumentSnapshot document = documents.get(0);  // Prendiamo il primo documento che corrisponde
-                        Map<String, Boolean> disponibilitaOrari = (Map<String, Boolean>) document.get(FIELD_ORARI);
-                        if (disponibilitaOrari == null) {
-                            disponibilitaOrari = new HashMap<>();
-                        }
+                    if (documents.isEmpty()) {
+                        // Se non ci sono documenti corrispondenti, creiamo un nuovo documento con il metodo createDate
+                        CreateDateRequest createDateRequest = new CreateDateRequest(new HashMap<>(), finalGiorno, uidTutor, uidStudent);
+
+
+                        createDate(createDateRequest, new Callback<DateModel>() {
+                            @Override
+                            public void onSucces(DateModel dateModel) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
+                    } else {
+                        DocumentSnapshot document = documents.get(0); // Prendiamo il primo documento che corrisponde
+                        Map<String, Boolean> disponibilitaOrari = document.get(FIELD_ORARI) != null ? (Map<String, Boolean>) document.get(FIELD_ORARI) : new HashMap<>();
 
                         // Creiamo una lista per contenere solo gli orari disponibili
                         List<String> orariDisponibili = new ArrayList<>();
@@ -82,44 +113,38 @@ public class DateRemoteDataSource {
                         }
 
                         Collections.sort(orariDisponibili);
-
                         callback.onSucces(orariDisponibili);
-                    } else {
-                        Map<String, Boolean> disponibilitaOrari = new HashMap<>();
-
-
-                        CreateDateRequest createDateRequest = new CreateDateRequest(disponibilitaOrari, data, uidTutor);
-                        createDate(createDateRequest, new Callback<DateModel>() {
-                            @Override
-                            public void onSucces(DateModel dateModel) {
-                                dateModel = new DateModel(disponibilitaOrari, data, uidTutor);
-                                onSucces(dateModel);
-                            }
-
-                            @Override
-                            public void onFailure(Exception e) {
-
-                            }
-                        });
                     }
                 })
                 .addOnFailureListener(callback::onFailure);
     }
 
 
-    public void updateDate(Timestamp date, String idDate, Callback<Void> callback) {
-        // Costruisci la mappa dei dati da aggiornare nel documento
-        Map<String, Object> data = new HashMap<>();
-        data.put(FIELD_DATA, date);
+    public void updateDate(String uidTutor, String uidStudent, Timestamp date, Timestamp nuovaData, Callback<Void> callback) {
+        orarioTutor
+                .whereEqualTo(FIELD_UID_TUTOR, uidTutor)
+                .whereEqualTo(FIELD_UID_STUDENT, uidStudent)
+                .whereEqualTo(FIELD_DATA, date)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String documentId = documentSnapshot.getId();
+                        documentSnapshot.getReference().update(FIELD_DATA, nuovaData)
+                                .addOnSuccessListener(aVoid -> {
 
-        // Esegui l'aggiornamento nel database
-        orarioTutor.document(idDate)
-                .set(data)
-                .addOnSuccessListener(aVoid -> {
-                    // Operazione di aggiornamento completata con successo
-                   callback.onSucces(null);
+                                })
+                                .addOnFailureListener(e -> {
+
+                                });
+                    }
+
+
+                    callback.onSucces(null);
                 })
-                .addOnFailureListener(callback::onFailure);
+                .addOnFailureListener(e -> {
+
+                });
+
     }
 
 

@@ -53,24 +53,22 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<
             super(view);
             toggleButton = view.findViewById(R.id.hourRadio);
 
-            toggleButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int adapterPosition = getAdapterPosition();
-                    if (!itemStateArray.get(adapterPosition, false)) {
-                        // Abilita il ToggleButton cliccato
-                        toggleButton.setChecked(true);
-                        itemStateArray.put(adapterPosition, true);
+            toggleButton.setOnClickListener(v -> {
+                int adapterPosition = getAdapterPosition();
+                if (!itemStateArray.get(adapterPosition, false)) {
+                    // Abilita il ToggleButton cliccato
+                    toggleButton.setChecked(true);
+                    itemStateArray.put(adapterPosition, true);
 
-                        // Disabilita gli altri ToggleButton
-                        for (int i = 0; i < itemStateArray.size(); i++) {
-                            if (i != adapterPosition) {
-                                itemStateArray.put(i, false);
-                            }
+                    // Disabilita gli altri ToggleButton
+                    for (int i = 0; i < itemStateArray.size(); i++) {
+                        if (i != adapterPosition) {
+                            itemStateArray.put(i, false);
                         }
-                        // Notifica l'adattatore dei cambiamenti
-                        notifyDataSetChanged();
                     }
+                    // Notifica l'adattatore dei cambiamenti
+                    notifyDataSetChanged();
+
                 }
             });
         }

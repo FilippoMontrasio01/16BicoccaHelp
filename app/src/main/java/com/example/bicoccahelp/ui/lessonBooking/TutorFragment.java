@@ -73,9 +73,6 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
         this.loadFirstPage();
         this.addOnScrollListener();
         binding.filterNameButton.setOnClickListener(this);
-
-
-
     }
 
 

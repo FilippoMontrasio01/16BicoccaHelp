@@ -15,13 +15,19 @@ public class DateModel {
     private final @NonNull Map<String, Boolean> disponibilitaOrari;
     private final @NonNull Timestamp data;
     private final @NonNull String uidTutor;
+    private final @NonNull String uidStudent;
 
     public DateModel(@NonNull Map<String, Boolean> disponibilitaOrari, @NonNull Timestamp data,
-                     @NonNull String uidTutor) {
+                     @NonNull String uidTutor, @NonNull String uidStudent) {
         this.disponibilitaOrari = disponibilitaOrari;
         this.data = data;
         this.uidTutor = uidTutor;
+        this.uidStudent = uidStudent;
+    }
 
+    @NonNull
+    public String getUidStudent() {
+        return uidStudent;
     }
 
     @NonNull

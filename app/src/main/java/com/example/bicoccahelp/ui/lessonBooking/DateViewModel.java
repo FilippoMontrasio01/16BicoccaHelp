@@ -12,6 +12,8 @@ import com.google.firebase.Timestamp;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +36,7 @@ public class DateViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage;
     public final ArrayList<String> dateList;
     public final DateRepository dateRepository;
+
 
     private final Long limit = 80L;
     private boolean hasMore = true;
@@ -60,8 +63,14 @@ public class DateViewModel extends ViewModel {
         return currentPage;
     }
 
-    public void getNextHourPage(String uidTutor, Timestamp data) {
-        dateRepository.listOrari(uidTutor, data, limit, new Callback<List<String>>() {
+    public void resetCurrentPage() {
+        currentPage = 0;
+    }
+
+    public void getNextHourPage(String uidTutor, String uidStudent, Timestamp data) {
+
+
+        dateRepository.listOrari(uidTutor, uidStudent, data, limit, new Callback<List<String>>() {
             @Override
             public void onSucces(List<String> strings) {
                 currentPage += 1;
