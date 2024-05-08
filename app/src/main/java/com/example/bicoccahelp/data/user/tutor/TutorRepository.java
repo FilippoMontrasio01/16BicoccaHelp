@@ -74,6 +74,10 @@ public class TutorRepository {
         tutorRemoteDataSource.getTutorPhotoUri(uid, callback);
     }
 
+    public void getTutorEmail(String uidTutor, Callback<String> callback){
+        tutorRemoteDataSource.getTutorEmail(uidTutor, callback);
+    }
+
 
 
 }

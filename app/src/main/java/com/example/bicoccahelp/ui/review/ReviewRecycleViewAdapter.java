@@ -76,12 +76,14 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
         private final ImageView photo;
         private final TextView tutorName;
         private final TextView stars;
+        private final TextView email;
 
 
         public ReviewViewHolder(@NonNull View view) {
             super(view);
             photo = view.findViewById(R.id.tutorListItemLogo);
             tutorName = view.findViewById(R.id.tutorListItemName);
+            email = view.findViewById(R.id.tutorListItemCorsoDiStudi);
             stars = view.findViewById(R.id.tutorListReview);
         }
 
@@ -91,7 +93,7 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
             setName(reviewModel.getUidTutor());
             setPhotoUri(reviewModel.getUidTutor());
             checkStar(reviewModel);
-
+            setEmail(reviewModel.getUidTutor());
 
         }
 
@@ -129,6 +131,26 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
                 }
             });
         }
+
+        public void setEmail(String uidTutor){
+            tutorRepository.getTutorEmail(uidTutor, new Callback<String>() {
+                @Override
+                public void onSucces(String tutorEmail) {
+                    if(tutorEmail.isEmpty() || (tutorEmail == null)){
+                        email.setText("Email");
+                    }else{
+                        email.setText(tutorEmail);
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+        }
+
+
 
         public void checkStar(ReviewModel reviewModel){
             float starsValue = reviewModel.getStars();

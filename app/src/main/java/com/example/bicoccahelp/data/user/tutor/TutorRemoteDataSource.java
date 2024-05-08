@@ -469,6 +469,21 @@ public class TutorRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
+    public void getTutorEmail(String uidTutor, Callback<String> callback){
+        tutors.whereEqualTo(FieldPath.documentId(), uidTutor)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if(!task.getDocuments().isEmpty()){
+                        DocumentSnapshot documentSnapshot = task.getDocuments().get(0);
+                        String email = documentSnapshot.getString(FIELD_EMAIL);
+                        callback.onSucces(email);
+                    }else{
+                        callback.onFailure(new Exception("No email found with the given uid"));
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
 
     public void updateTutorName(String uid, String name){
         tutors.document(uid)
