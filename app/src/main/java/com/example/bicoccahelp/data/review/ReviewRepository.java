@@ -2,6 +2,8 @@ package com.example.bicoccahelp.data.review;
 
 import com.example.bicoccahelp.data.Callback;
 
+import java.util.List;
+
 public class ReviewRepository {
 
     private ReviewRemoteDataSource reviewRemoteDataSource;
@@ -16,5 +18,13 @@ public class ReviewRepository {
 
     public void checkReview(String uidStudent, String uidTutor, Callback<Boolean> callback){
         reviewRemoteDataSource.checkReview(uidStudent, uidTutor, callback);
+    }
+
+    public void listReviewedTutors(String uidStudent, Long limit, Callback<List<ReviewModel>> callback){
+        reviewRemoteDataSource.listReviewsByStudent(uidStudent, limit, callback);
+    }
+
+    public void getReview(String studentUid, String tutorUid, Callback<Float> callback){
+        reviewRemoteDataSource.getReview(studentUid, tutorUid, callback);
     }
 }

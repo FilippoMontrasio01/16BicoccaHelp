@@ -179,11 +179,11 @@
             android:textSize="23sp"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tutorRecyclerView"
+            android:id="@+id/reviewRecyclerView"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="600dp"
-            android:paddingBottom="205dp"
+            android:paddingBottom="400dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/book_class_background"

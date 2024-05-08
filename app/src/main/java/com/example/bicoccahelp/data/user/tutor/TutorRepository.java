@@ -1,6 +1,7 @@
 package com.example.bicoccahelp.data.user.tutor;
 
 import android.net.Uri;
+import android.telecom.Call;
 
 import com.example.bicoccahelp.data.Callback;
 
@@ -63,6 +64,14 @@ public class TutorRepository {
                              String idTutor, Callback<TutorModel> callback){
 
         tutorRemoteDataSource.updateTutor(createTutorRequest, idTutor, callback);
+    }
+
+    public void getTutorName(String uid, Callback<String> callback){
+        tutorRemoteDataSource.getTutorName(uid, callback);
+    }
+
+    public void getTutorPhotoUri(String uid, Callback<Uri> callback){
+        tutorRemoteDataSource.getTutorPhotoUri(uid, callback);
     }
 
 

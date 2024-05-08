@@ -25,7 +25,7 @@ import java.util.List;
 public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         TutorRecyclerViewAdapter.TutorViewHolder> {
     public interface OnItemClickListener {
-        void onServiceItemClick(TutorModel tutorModel);
+        void onTutorItemClick(TutorModel tutorModel);
     }
 
     private final List<TutorModel> tutorList;
@@ -84,7 +84,7 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
 
         public void bind(TutorModel tutorModel, OnItemClickListener listener) {
             tutorName.setText(tutorModel.getName());
-            itemView.setOnClickListener(view -> listener.onServiceItemClick(tutorModel));
+            itemView.setOnClickListener(view -> listener.onTutorItemClick(tutorModel));
             getCorsoId(tutorModel.getUid());
 
             if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel

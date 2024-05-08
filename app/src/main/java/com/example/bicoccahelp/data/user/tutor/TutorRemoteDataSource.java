@@ -391,6 +391,8 @@ public class TutorRemoteDataSource {
         tutors.document(idTutor)
                 .update(data)
                 .addOnSuccessListener(documentReference -> {
+
+
                     TutorModel tutor = new TutorModel(user.getUid(),
                             user.getEmail(),user.isEmailVerified(),
                             user.getDisplayName(),
@@ -432,6 +434,41 @@ public class TutorRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
+    public void getTutorName(String uidTutor, Callback<String> callback){
+        tutors.whereEqualTo(FieldPath.documentId(), uidTutor)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if(!task.getDocuments().isEmpty()){
+                        DocumentSnapshot documentSnapshot = task.getDocuments().get(0);
+                        String tutorName = documentSnapshot.getString(NAME);
+                        callback.onSucces(tutorName);
+                    }else{
+                        callback.onFailure(new Exception("No tutor name found with the given uid"));
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    public void getTutorPhotoUri(String uidTutor, Callback<Uri> callback){
+        tutors.whereEqualTo(FieldPath.documentId(), uidTutor)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if(!task.getDocuments().isEmpty()){
+                        DocumentSnapshot documentSnapshot = task.getDocuments().get(0);
+                        String photoUriString = documentSnapshot.getString(PHOTO_URI);
+                        if (photoUriString == null) {
+                            photoUriString = "";
+                        }
+
+                        Uri photoUri = Uri.parse(photoUriString);
+                        callback.onSucces(photoUri);
+                    }else{
+                        callback.onFailure(new Exception("No photoUri found with the given uid"));
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
 
     public void updateTutorName(String uid, String name){
         tutors.document(uid)
@@ -459,5 +496,8 @@ public class TutorRemoteDataSource {
                 .addOnFailureListener(e -> Log.w("",
                         "Error deleting document", e));
     }
+
+
+
 
 }

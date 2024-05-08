@@ -90,8 +90,7 @@ public class StudentRemoteDataSource {
 
                         callback.onSucces(corsoDiStudi);
                     } else {
-
-                        callback.onSucces(null);
+                        callback.onFailure(new Exception("No studyProgram found with the given uid"));
                     }
                 })
                 .addOnFailureListener(callback::onFailure);
