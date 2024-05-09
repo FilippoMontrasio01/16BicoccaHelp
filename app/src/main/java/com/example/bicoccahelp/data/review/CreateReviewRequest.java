@@ -5,12 +5,12 @@ import androidx.annotation.NonNull;
 public class CreateReviewRequest {
     private final @NonNull String uidTutor;
     private final @NonNull String uidStudent;
-    private final @NonNull float stars;
+    private final @NonNull double stars;
 
 
 
     public CreateReviewRequest(@NonNull String uidTutor, @NonNull String uidStudent,
-                               float stars) {
+                               double stars) {
         this.uidTutor = uidTutor;
         this.uidStudent = uidStudent;
         this.stars = stars;
@@ -27,7 +27,7 @@ public class CreateReviewRequest {
         return uidStudent;
     }
 
-    public float getStars() {
+    public double getStars() {
         return stars;
     }
 

@@ -104,11 +104,18 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
 
     private void observeUiState() {
         tutorViewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
-            if (uiState.fetched == 0) {
+            stopLoading();
+
+            if(uiState == null){
                 return;
             }
-            tutorRecyclerViewAdapter.notifyItemRangeInserted(uiState.sizeBeforeFetch,
-                    uiState.fetched);
+
+
+            if(uiState.fetched > 0){
+                tutorRecyclerViewAdapter.notifyItemRangeInserted(uiState.sizeBeforeFetch,
+                        uiState.fetched);
+            }
+
         });
     }
 
@@ -137,6 +144,14 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
         });
     }
 
+    private void startLoading() {
+        isLoading = true;
+    }
+
+    private void stopLoading() {
+        isLoading = false;
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -154,8 +169,7 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
 
         tutorViewModel.getTutorList().observe(getViewLifecycleOwner(),
-                (Observer<List<TutorModel>>)
-                        tutors -> tutorRecyclerViewAdapter.aggiornaDati(tutors));
+                tutors -> tutorRecyclerViewAdapter.aggiornaDati(tutors));
 
         if(v.getId() == binding.filterNameButton.getId()){
             filterNameOnClick();

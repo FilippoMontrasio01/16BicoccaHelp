@@ -73,16 +73,16 @@
 
 
 
-            <TextView
-                android:id="@+id/tutorListReview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/star_image_review"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:text=""
-                android:fontFamily="@font/lato_bold"
-                android:textColor="@color/philippine_gray"/>
+        <TextView
+            android:id="@+id/tutorListReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/star_image_review"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:text=""
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/philippine_gray"/>
 
         <ImageView
             android:id="@+id/star_image_review"
@@ -91,7 +91,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/star_review" />
+            />
 
     </RelativeLayout>
 

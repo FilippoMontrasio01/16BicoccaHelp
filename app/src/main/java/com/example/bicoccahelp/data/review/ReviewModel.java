@@ -6,11 +6,11 @@ public class ReviewModel {
 
     private final @NonNull String uidTutor;
     private final @NonNull String uidStudent;
-    private final @NonNull float stars;
+    private final @NonNull double stars;
 
 
     public ReviewModel(@NonNull String uidTutor,
-                       @NonNull String uidStudent, float stars) {
+                       @NonNull String uidStudent, double stars) {
         this.uidTutor = uidTutor;
         this.uidStudent = uidStudent;
         this.stars = stars;
@@ -26,7 +26,7 @@ public class ReviewModel {
         return uidStudent;
     }
 
-    public float getStars() {
+    public double getStars() {
         return stars;
     }
 

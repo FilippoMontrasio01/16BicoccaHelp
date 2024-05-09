@@ -1,6 +1,7 @@
 package com.example.bicoccahelp.ui.lessonBooking;
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,13 @@ import com.bumptech.glide.Glide;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
+import com.example.bicoccahelp.data.review.ReviewRepository;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.utils.GlideLoadModel;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -68,8 +71,12 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         private final TextView tutorName;
         private final ImageView areaIcon;
         private final TextView corso;
+        private final TextView reviw;
+
+        private final ImageView star_icon;
         private StudentRepository studentRepository;
         private CorsoDiStudiRepository corsoDiStudiRepository;
+        private ReviewRepository reviewRepository;
 
         public TutorViewHolder(@NonNull View view) {
             super(view);
@@ -77,8 +84,13 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             tutorName = view.findViewById(R.id.tutorListItemName);
             areaIcon = view.findViewById(R.id.areaIcon);
             corso = view.findViewById(R.id.tutorListItemCorsoDiStudi);
+            reviw = view.findViewById(R.id.tutorListReview);
+            star_icon = view.findViewById(R.id.star_image_review);
+
+
             studentRepository = ServiceLocator.getInstance().getStudentRepository();
             corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
+            reviewRepository = ServiceLocator.getInstance().getReviewRepository();
 
         }
 
@@ -86,6 +98,8 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             tutorName.setText(tutorModel.getName());
             itemView.setOnClickListener(view -> listener.onTutorItemClick(tutorModel));
             getCorsoId(tutorModel.getUid());
+            getAverageReview(tutorModel.getUid());
+
 
             if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
                     .getPhotoUri().toString()) ){
@@ -96,11 +110,7 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
                         .into(photo);
             }
 
-
-
-
         }
-
 
         private void getCorsoId(String uid){
 
@@ -177,8 +187,30 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             }
         }
 
+        private void getAverageReview(String uidTutor){
+            reviewRepository.getAverageReview(uidTutor, new Callback<Double>() {
+                @Override
+                public void onSucces(Double average) {
+                    if(average != null){
+                        reviw.setText(String.valueOf(average));
+                        star_icon.setImageResource(R.drawable.star_review);
+                    }else{
+                        reviw.setText("No Reviews");
+                        star_icon.setImageDrawable(null);
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+        }
 
     }
+
+
 
 
 }

@@ -18,17 +18,19 @@ import java.util.List;
 public class TutorViewModel extends ViewModel {
 
     public static class UiState {
+
         public final int sizeBeforeFetch;
         public final int fetched;
 
 
         public UiState(int sizeBeforeFetch, int fetched) {
+
             this.sizeBeforeFetch = sizeBeforeFetch;
             this.fetched = fetched;
         }
     }
 
-    private final MutableLiveData<UiState> uiState;
+    private final MutableLiveData<UiState> uiStateMutableLiveData;
     private final MutableLiveData<List<TutorModel>> updateTutorList;
     private List<TutorModel> originalTutorList;
     private final MutableLiveData<String> errorMessage;
@@ -41,7 +43,7 @@ public class TutorViewModel extends ViewModel {
     private int currentPage = 0;
 
     public TutorViewModel(TutorRepository tutorRepository) {
-        this.uiState = new MutableLiveData<>(new UiState(0, 0));
+        this.uiStateMutableLiveData = new MutableLiveData<>(new UiState(0,0));
         this.errorMessage = new MutableLiveData<>(null);
         this.tutorList = new ArrayList<>();
         this.originalTutorList = new ArrayList<>();
@@ -51,7 +53,7 @@ public class TutorViewModel extends ViewModel {
     }
 
     public LiveData<UiState> getUiState() {
-        return uiState;
+        return uiStateMutableLiveData;
     }
     public LiveData<String> getErrorMessage() { return errorMessage; }
 
@@ -84,11 +86,14 @@ public class TutorViewModel extends ViewModel {
                     return;
                 }
 
-                int initialSize = tutorList.size();
-                int newItemsCount = data.size();
+
+
+                int sizeBeforeFetch = tutorList.size();
+                int fetch = data.size();
+                UiState newUiState = new UiState(sizeBeforeFetch, fetch);
                 tutorList.addAll(data);
                 originalTutorList.addAll(data);
-                uiState.postValue(new UiState(initialSize, newItemsCount));
+                uiStateMutableLiveData.postValue(newUiState);
 
             }
 
@@ -115,10 +120,13 @@ public class TutorViewModel extends ViewModel {
                     return;
                 }
 
-                int initialSize = tutorList.size();
-                int newItemsCount = data.size();
+
+                int sizeBeforeFetch = tutorList.size();
+                int fetch = data.size();
+                UiState newUiState = new UiState(sizeBeforeFetch, fetch);
                 tutorList.addAll(data);
-                uiState.postValue(new UiState(initialSize, newItemsCount));
+                originalTutorList.addAll(data);
+                uiStateMutableLiveData.postValue(newUiState);
             }
 
             @Override
@@ -148,10 +156,13 @@ public class TutorViewModel extends ViewModel {
 
                         Log.d("", data.toString());
 
-                        int initialSize = tutorList.size();
-                        int newItemsCount = data.size();
+
+                        int sizeBeforeFetch = tutorList.size();
+                        int fetch = data.size();
+                        UiState newUiState = new UiState(sizeBeforeFetch, fetch);
                         tutorList.addAll(data);
-                        uiState.postValue(new UiState(initialSize, newItemsCount));
+                        originalTutorList.addAll(data);
+                        uiStateMutableLiveData.postValue(newUiState);
                     }
 
                     @Override
@@ -183,10 +194,13 @@ public class TutorViewModel extends ViewModel {
 
                 Log.d("", data.toString());
 
-                int initialSize = tutorList.size();
-                int newItemsCount = data.size();
+
+                int sizeBeforeFetch = tutorList.size();
+                int fetch = data.size();
+                UiState newUiState = new UiState(sizeBeforeFetch, fetch);
                 tutorList.addAll(data);
-                uiState.postValue(new UiState(initialSize, newItemsCount));
+                originalTutorList.addAll(data);
+                uiStateMutableLiveData.postValue(newUiState);
             }
 
             @Override
@@ -211,10 +225,13 @@ public class TutorViewModel extends ViewModel {
 
                 Log.d("", data.toString());
 
-                int initialSize = tutorList.size();
-                int newItemsCount = data.size();
+
+                int sizeBeforeFetch = tutorList.size();
+                int fetch = data.size();
+                UiState newUiState = new UiState(sizeBeforeFetch, fetch);
                 tutorList.addAll(data);
-                uiState.postValue(new UiState(initialSize, newItemsCount));
+                originalTutorList.addAll(data);
+                uiStateMutableLiveData.postValue(newUiState);
             }
 
             @Override

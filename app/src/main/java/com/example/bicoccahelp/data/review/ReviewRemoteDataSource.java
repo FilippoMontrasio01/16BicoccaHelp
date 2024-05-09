@@ -1,12 +1,27 @@
 package com.example.bicoccahelp.data.review;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.AggregateField;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,13 +29,13 @@ import java.util.Map;
 
 public class ReviewRemoteDataSource {
 
-    private static final String FIELD_UID_STUDENT = "uid Student";
-    private static final String FIELD_UID_TUTOR = "uid Tutor";
-    private static final String FIELD_STARS = "stars";
+        private static final String FIELD_UID_STUDENT = "uid_Student";
+        private static final String FIELD_UID_TUTOR = "uid_Tutor";
+        private static final String FIELD_STARS = "stars";
 
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference review = db.collection("review");
-    private DocumentSnapshot lastDocument;
+        private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        private final CollectionReference review = db.collection("review");
+        private DocumentSnapshot lastDocument;
 
     public void createReview(CreateReviewRequest request, Callback<ReviewModel> callback){
 
@@ -98,6 +113,36 @@ public class ReviewRemoteDataSource {
                     callback.onSucces(reviewList);
                 })
                 .addOnFailureListener(callback::onFailure);
+    }
+
+    public void getAverageReview(String uidTutor, Callback<Double> callback) {
+
+
+        review.whereEqualTo(FIELD_UID_TUTOR, uidTutor).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        double totalStars = 0.0;
+                        int count = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            double stars = document.getDouble(FIELD_STARS);
+                            totalStars += stars;
+                            count++;
+                        }
+
+                        if(count != 0){
+                            double averageStars = totalStars / count;
+                            double roundedAverageStars = Math.round(averageStars * 10.0) / 10.0;
+                            callback.onSucces(roundedAverageStars);
+                        }else{
+                            callback.onSucces(null);
+                        }
+
+
+
+                    } else {
+                        Log.d("Firestore Error", "Error getting documents: ", task.getException());
+                    }
+                });
     }
 
 

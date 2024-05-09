@@ -32,10 +32,6 @@ import java.util.List;
 public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
         ReviewRecycleViewAdapter.ReviewViewHolder> {
 
-    public interface OnItemClickListener {
-        void onReviewItemClick(ReviewViewModel reviewViewModel);
-    }
-
     private final List<ReviewModel> reviewList;
     private final Application application;
     private final TutorRepository tutorRepository;
@@ -153,9 +149,8 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
 
 
         public void checkStar(ReviewModel reviewModel){
-            float starsValue = reviewModel.getStars();
+            double starsValue = reviewModel.getStars();
             if (starsValue == Math.floor(starsValue)) {
-                // Se starsValue è un intero, convertilo in un intero prima di convertirlo in una stringa
                 stars.setText(String.valueOf((int) starsValue));
             } else {
                 // Altrimenti, convertilo direttamente in una stringa
