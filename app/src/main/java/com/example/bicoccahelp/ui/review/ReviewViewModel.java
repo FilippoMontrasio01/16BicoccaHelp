@@ -133,14 +133,12 @@ public class ReviewViewModel extends ViewModel {
     }
 
     public void refreshData() {
-        // Reset the current page to 0
-        currentPage = 0;
 
-        // Clear the existing review list
+        currentPage = 0;
         reviewList.clear();
         originalReviewList.clear();
 
-        // Load the first page of reviews
+
         getNextReviewPage();
     }
 

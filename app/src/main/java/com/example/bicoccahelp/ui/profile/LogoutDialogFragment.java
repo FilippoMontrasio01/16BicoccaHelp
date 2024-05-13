@@ -78,4 +78,10 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
         navController.navigate(R.id.action_from_SignOut_to_welcome_activity);
         requireActivity().finish();
     }
+
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
 }

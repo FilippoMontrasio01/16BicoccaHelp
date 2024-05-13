@@ -28,8 +28,6 @@ public class UserRemoteDataSource {
                 user.getDisplayName(), user.getPhotoUrl());
     }
 
-
-
     public void sendEmailVerification(Callback<Void> callback){
         FirebaseUser user = auth.getCurrentUser();
         if(user == null){

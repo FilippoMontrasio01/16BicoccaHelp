@@ -188,5 +188,8 @@
     <string name="rating">Add rating</string>
     <string name="button_review_submit">Make a review</string>
     <string name="your_review">Your Reviews</string>
+    <string name="student_already_exist">Student already exist</string>
+    <string name="tutor_not_exist">Tutor not exist</string>
+    <string name="create_student_error">Error: The student could not be created</string>
 
 </resources>

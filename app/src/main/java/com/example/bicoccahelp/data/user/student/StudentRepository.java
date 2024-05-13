@@ -46,4 +46,8 @@ public class StudentRepository {
         studentRemoteDataSource.updateStudentPhoto(uid, photoUri);
     }
 
+    public void updateStudyProgram(String uid, String studyProgram){
+        studentRemoteDataSource.updateStudyProgram(uid, studyProgram);
+    }
+
 }

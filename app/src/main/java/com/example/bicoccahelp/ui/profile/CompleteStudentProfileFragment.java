@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
@@ -28,46 +30,23 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-public class CompleteStudentProfileFragment extends Fragment implements View.OnClickListener{
+public class CompleteStudentProfileFragment extends Fragment {
 
-
-
-    private StudentRepository studentRepository;
+    private CompleteStudentProfileViewModel viewModel;
     private FragmentCompleteStudentProfileBinding binding;
     private NavController navController;
-    private UserRepository userRepository;
-    private TutorRepository tutorRepository;
-    private String livello = "Triennale";
-    private CorsoDiStudiRepository corsoDiStudiRepository;
-
-
-    public CompleteStudentProfileFragment() {
-        // Required empty public constructor
-    }
-
-
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        studentRepository = ServiceLocator.getInstance().getStudentRepository();
-        corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
-        userRepository = ServiceLocator.getInstance().getUserRepository();
-        tutorRepository = ServiceLocator.getInstance().getTutorRepository();
-
-        String uid = userRepository.getCurrentUser().getUid();
-
-
+        viewModel = new ViewModelProvider(this).get(CompleteStudentProfileViewModel.class);
+        viewModel.initRepositories();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        binding = FragmentCompleteStudentProfileBinding.inflate(inflater,
-                container, false);
-        // Inflate the layout for this fragment
+        binding = FragmentCompleteStudentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -75,157 +54,43 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-        binding.createStudentButton.setOnClickListener(this);
-        binding.studentBackButton.setOnClickListener(this);
+
+        binding.createStudentButton.setOnClickListener(v -> createStudent());
+        binding.studentBackButton.setOnClickListener(v -> navController.navigate(R.id.action_from_complete_profile_to_profile_fragment));
+
+        observeViewModel();
     }
 
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == binding.createStudentButton.getId()){
-            createStudentOnClick();
-            return;
-        }
+    private void createStudent() {
+        String studyProgram = Objects.requireNonNull(binding.createStudentEditText.getText()).toString();
+        boolean isMagistrale = binding.createStudentCheckBox.isChecked();
+        boolean isTutor = binding.yesRadioButton.isChecked();
 
-        if(v.getId() == binding.studentBackButton.getId()){
-            backOnClick();
-        }
+        viewModel.getStudyProgramLevel(studyProgram, isMagistrale, isTutor);
     }
 
-    private void backOnClick() {
-        navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
-    }
-
-    private void createStudentOnClick() {
-        String studyProgram = Objects.requireNonNull(binding.createStudentEditText
-                .getText()).toString();
-
-
-
-        if(binding.createStudentCheckBox.isChecked()) {
-            livello = getString(R.string.magistrale);
-        }
-        InputValidator.isValidStudyProgram(studyProgram, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean exist) {
-                if(exist){
-                    getCorsoId(studyProgram, livello);
-                }else{
-                    binding.createStudentTextInputLayout
-                            .setError(getString(R.string.insert_a_valid_studyProgram));
-                }
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-
-    public void getCorsoId(String studyProgram, String livello){
-
-
-        corsoDiStudiRepository.getCorsoDiStudiIdByName(
-                studyProgram, livello, new Callback<String>() {
-            @Override
-            public void onSucces(String idCorso) {
-
-                String studentUid = userRepository.getCurrentUser().getUid();
-
-                studentRepository.studentExist(studentUid, new Callback<Boolean>() {
-                    @Override
-                    public void onSucces(Boolean exist) {
-                        if(!exist){
-                            if(binding.yesRadioButton.isChecked()) {
-                                yesRadioButtonAnswer(idCorso);
-                            }else if(binding.noRadioButton.isChecked()){
-                                noRadioButtonAnswer(idCorso);
-                            }else{
-                                Snackbar.make(requireView(), getString(R.string.tutor_radioButton),
-                                        Snackbar.LENGTH_SHORT).show();
-                            }
-                        }else{
-                            noRadioButtonAnswer(idCorso);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-    public void noRadioButtonAnswer(String idCorso){
-        CreateStudentRequest srequest = new CreateStudentRequest(idCorso, false);
-
-        studentRepository.createStudent(srequest, new Callback<StudentModel>() {
-            @Override
-            public void onSucces(StudentModel studentModel) {
-                navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void yesRadioButtonAnswer(String idCorso){
-        CreateStudentRequest srequest = new CreateStudentRequest(idCorso, true);
-
-        studentRepository.createStudent(srequest, new Callback<StudentModel>() {
-            @Override
-            public void onSucces(StudentModel studentModel) {
-                tutorExist();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void tutorExist(){
-        String uid = userRepository.getCurrentUser().getUid();
-
-        tutorRepository.tutorExist(uid, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean exist) {
-                if(!exist){
+    private void observeViewModel() {
+        viewModel.getCreateStudentSuccess().observe(getViewLifecycleOwner(), success -> {
+            if (success) {
+                if (binding.createStudentCheckBox.isChecked()) {
                     navController.navigate(R.id.action_from_complete_student_to_complete_tutor);
-
-                }else{
+                } else {
                     navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
                 }
+            } else {
+                Snackbar.make(requireView(), getString(R.string.create_student_error), Snackbar.LENGTH_SHORT).show();
             }
+        });
 
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
         });
     }
 
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
-
 }

@@ -131,4 +131,10 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
             }
         });
     }
+
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
 }
