@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -30,6 +31,7 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
     private AuthRepository authRepository;
     private FragmentLogoutDialogBinding binding;
     private NavController navController;
+    private ProfileViewModel profileViewModel;
 
     public LogoutDialogFragment() {
         // Required empty public constructor
@@ -39,6 +41,16 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
         super.onCreate(savedInstanceState);
         authRepository = ServiceLocator.getInstance().getAuthRepository();
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
+
+        ProfileViewModelFactory factory = new ProfileViewModelFactory(authRepository);
+        profileViewModel = new ViewModelProvider(this, factory).get(ProfileViewModel.class);
+
+        profileViewModel.getLogOut().observe(this, isLogOut -> {
+            if(isLogOut){
+                navController.navigate(R.id.action_from_SignOut_to_welcome_activity);
+                requireActivity().finish();
+            }
+        });
     }
 
     @Override
@@ -60,23 +72,13 @@ public class LogoutDialogFragment extends DialogFragment implements  View.OnClic
     @Override
     public void onClick(View v) {
         if(v.getId() == binding.signOutButtonConfirm.getId()){
-            this.onClickConfirm();
+            profileViewModel.logOut();
             return;
         }
 
         if(v.getId() == binding.signOutButtonCancel.getId()){
-            this.onClickCancel();
+            Objects.requireNonNull(getDialog()).cancel();
         }
-    }
-
-    private void onClickCancel() {
-        Objects.requireNonNull(getDialog()).cancel();
-    }
-
-    private void onClickConfirm() {
-        authRepository.logout();
-        navController.navigate(R.id.action_from_SignOut_to_welcome_activity);
-        requireActivity().finish();
     }
 
     public void onDestroyView() {

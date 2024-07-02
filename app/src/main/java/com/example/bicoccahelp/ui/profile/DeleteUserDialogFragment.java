@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
     private NavController navController;
     private TutorRepository tutorRepository;
     private StudentRepository studentRepository;
+    private ProfileViewModel profileViewModel;
     public DeleteUserDialogFragment() {
         // Required empty public constructor
     }
@@ -38,6 +40,26 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
         studentRepository = ServiceLocator.getInstance().getStudentRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
+
+        ProfileViewModelFactory factory = new ProfileViewModelFactory(userRepository, studentRepository, tutorRepository);
+
+        profileViewModel = new ViewModelProvider(this, factory).get(ProfileViewModel.class);
+
+        profileViewModel.getDeleted().observe(this, isDeleted -> {
+            if(isDeleted){
+                navController.navigate(R.id.action_from_delete_dialog_to_welcome_activity);
+                requireActivity().finish();
+            }else{
+                Snackbar.make(requireView(),getString(R.string.delete_account_error),
+                        Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        profileViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -73,63 +95,7 @@ public class DeleteUserDialogFragment extends DialogFragment implements View.OnC
             return;
         }
 
-        reAuthAndDelete(password);
-    }
-
-
-    public void reAuthAndDelete(String password){
-        userRepository.reauthenticate(password, new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                deleteUser();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(),getString(R.string.reauth_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void deleteUser(){
-
-        String uidUser = userRepository.getCurrentUser().getUid();
-
-
-
-        userRepository.deleteUser(new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                isTutorAndDelete(uidUser);
-                navController.navigate(R.id.action_from_delete_dialog_to_welcome_activity);
-                requireActivity().finish();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(),getString(R.string.delete_account_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void isTutorAndDelete(String uidUser){
-        studentRepository.isTutor(uidUser, true, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean isTutor) {
-                if(isTutor){
-                    tutorRepository.deleteTutor(uidUser);
-                }
-
-                studentRepository.deleteStudent(uidUser);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error),Snackbar.LENGTH_SHORT).show();
-            }
-        });
+        profileViewModel.deleteUser(password);
     }
 
     @Override

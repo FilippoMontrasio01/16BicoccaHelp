@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -30,10 +31,11 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
     private AuthRepository authRepository;
     private NavController navController;
     private FragmentUpdatePasswordDialogBinding binding;
+    private ProfileViewModel profileViewModel;
 
 
     public UpdatePasswordDialogFragment() {
-        // Required empty public constructor
+
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,26 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
         userRepository = ServiceLocator.getInstance().getUserRepository();
         authRepository = ServiceLocator.getInstance().getAuthRepository();
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
+
+        ProfileViewModelFactory factory = new ProfileViewModelFactory(authRepository, userRepository);
+
+        profileViewModel = new ViewModelProvider(this, factory).get(ProfileViewModel.class);
+
+        profileViewModel.getPasswordUpdated().observe(this, passwordUpdated -> {
+            if(passwordUpdated){
+                navController.navigate(R.id.action_from_update_password_dialog_to_welcome_Activity);
+                requireActivity().finish();
+            }else{
+                Snackbar.make(requireView(), getString(R.string.password_update_error),
+                        Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        profileViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -94,44 +116,11 @@ public class UpdatePasswordDialogFragment extends DialogFragment implements  Vie
             return;
         }
 
-        reAuthAndUpdatePsw(oldPassword, newPassword);
+        profileViewModel.updatePassword(oldPassword, newPassword);
     }
 
     private void onClickCancel() {
         Objects.requireNonNull(getDialog()).cancel();
-    }
-
-
-    public void reAuthAndUpdatePsw(String oldPassword, String newPassword){
-        userRepository.reauthenticate(oldPassword, new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                updatePsw(newPassword);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(),getString(R.string.reauth_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void updatePsw(String newPassword){
-        userRepository.updatePassword(newPassword, new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                authRepository.logout();
-                navController.navigate(R.id.action_from_update_password_dialog_to_welcome_Activity);
-                requireActivity().finish();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.password_update_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
     }
 
     public void onDestroyView() {

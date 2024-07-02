@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
     private StudentRepository studentRepository;
     private TutorRepository tutorRepository;
 
+    private ProfileViewModel profileViewModel;
+
 
 
     public UpdateNameDialogFragment() {
@@ -43,6 +46,28 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
         userRepository = ServiceLocator.getInstance().getUserRepository();
         studentRepository = ServiceLocator.getInstance().getStudentRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
+
+        ProfileViewModelFactory factory = new ProfileViewModelFactory(userRepository, studentRepository, tutorRepository);
+
+        profileViewModel = new ViewModelProvider(this, factory).get(ProfileViewModel.class);
+
+        profileViewModel.getNameUpdated().observe(this, nameUpdated -> {
+            if(nameUpdated){
+                navController.navigate(R.id.action_from_update_name_dialog_to_profile_fragment);
+            }else{
+                Snackbar.make(requireView(), getString(R.string.name_update_error),
+                        Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        profileViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
+
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
@@ -91,46 +116,9 @@ public class UpdateNameDialogFragment extends DialogFragment implements View.OnC
 
         binding.updateNameTextInputLayout.setError(null);
 
-        updateName(newName);
+        profileViewModel.updateName(newName);
     }
 
-    private void updateName(String newName) {
-
-        String uidUser = userRepository.getCurrentUser().getUid();
-
-        userRepository.updateUsername(newName, new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                isTutorAndUpdateName(uidUser, newName);
-                navController.navigate(R.id.action_from_update_name_dialog_to_profile_fragment);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.name_update_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void isTutorAndUpdateName(String uidUser, String newName){
-        studentRepository.isTutor(uidUser, true, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean isTutor) {
-                if(isTutor){
-                    tutorRepository.updateTutorName(uidUser, newName);
-                }
-
-                studentRepository.updateStudentName(uidUser, newName);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     public void onDestroyView() {
         super.onDestroyView();
