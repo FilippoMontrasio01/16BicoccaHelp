@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -16,10 +17,12 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
+import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.databinding.FragmentForgotPasswordBinding;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.Objects;
 
@@ -29,8 +32,10 @@ View.OnFocusChangeListener{
 
 
     private AuthRepository authRepository;
+    private UserRepository userRepository;
     private FragmentForgotPasswordBinding binding;
     private NavController navController;
+    private WelcomeViewModel welcomeViewModel;
 
 
     public ForgotPasswordFragment() {
@@ -43,6 +48,24 @@ View.OnFocusChangeListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authRepository = ServiceLocator.getInstance().getAuthRepository();
+        userRepository = ServiceLocator.getInstance().getUserRepository();
+
+        WelcomeViewModelFactory factory = new WelcomeViewModelFactory(authRepository,
+                userRepository);
+
+        welcomeViewModel = new ViewModelProvider(this, factory).get(WelcomeViewModel.class);
+
+        welcomeViewModel.getEmailSent().observe(this, sent -> {
+            if(sent){
+                navController.navigate(R.id.action_from_forgot_password_to_login);
+            }else{
+                Snackbar.make(requireView(), getString(R.string.email_not_send),
+                        Snackbar.LENGTH_SHORT).show();
+            }
+
+
+        });
+
     }
 
     @Override
@@ -58,6 +81,16 @@ View.OnFocusChangeListener{
         navController = Navigation.findNavController(view);
         binding.sendEmailButton.setOnClickListener(this);
         binding.forgotPasswordEditText.setOnFocusChangeListener(this);
+
+        welcomeViewModel.getIsLoading().observe(getViewLifecycleOwner(), isloading -> {
+            if(isloading){
+                createAndStartProgressBar().setVisibility(View.VISIBLE);
+                createAndStartProgressBar().playAnimation();
+            }else{
+                createAndStartProgressBar().cancelAnimation();
+                createAndStartProgressBar().setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -74,22 +107,7 @@ View.OnFocusChangeListener{
             return;
         }
 
-
-        createAndStartProgressBar().setVisibility(View.VISIBLE);
-        createAndStartProgressBar().playAnimation();
-        authRepository.forgotPassword(email, new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                createAndStartProgressBar().cancelAnimation();
-                navController.navigate(R.id.action_from_forgot_password_to_login);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.email_not_send),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
+        welcomeViewModel.forgotPassword(email);
     }
 
     @Override

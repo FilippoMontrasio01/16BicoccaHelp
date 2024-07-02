@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
+import com.example.bicoccahelp.data.auth.AuthRepository;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.databinding.FragmentVerifyEmailBinding;
@@ -28,7 +30,9 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
 
     private NavController navController;
     private UserRepository userRepository;
+    private AuthRepository authRepository;
     private FragmentVerifyEmailBinding binding;
+    private WelcomeViewModel welcomeViewModel;
 
     public VerifyEmailFragment() {
         // Required empty public constructor
@@ -38,6 +42,30 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userRepository = ServiceLocator.getInstance().getUserRepository();
+        authRepository = ServiceLocator.getInstance().getAuthRepository();
+
+        WelcomeViewModelFactory factory = new WelcomeViewModelFactory(authRepository,
+                userRepository);
+
+        welcomeViewModel = new ViewModelProvider(this, factory).get(WelcomeViewModel.class);
+
+        welcomeViewModel.getEmailVerified().observe(this, verified -> {
+            if(verified){
+                requireActivity().finish();
+                navController.navigate(R.id.action_from_verify_email_to_main);
+            }else{
+                Snackbar.make(requireView(), getString(R.string.email_not_verified),
+                        Snackbar.LENGTH_SHORT).show();
+            }
+
+        });
+
+        welcomeViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
@@ -54,87 +82,28 @@ public class VerifyEmailFragment extends Fragment implements View.OnClickListene
         navController = NavHostFragment.findNavController(this.getParentFragment());
         binding.continueButton.setOnClickListener(this);
         binding.resendButton.setOnClickListener(this);
+
+        welcomeViewModel.getIsLoading().observe(getViewLifecycleOwner(), isloading -> {
+            if(isloading){
+                createAndStartProgressBar().setVisibility(View.VISIBLE);
+                createAndStartProgressBar().playAnimation();
+            }else{
+                createAndStartProgressBar().cancelAnimation();
+                createAndStartProgressBar().setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == binding.continueButton.getId()){
-            this.continueOnclick();
+            welcomeViewModel.verifyEmail();
             return;
         }
 
         if(v.getId() == binding.resendButton.getId()){
-            this.resendOnClick();
+            welcomeViewModel.resendEmail();
         }
-    }
-
-    private void resendOnClick() {
-
-
-        userRepository.reload(new Callback<UserModel>() {
-
-
-            @Override
-            public void onSucces(UserModel userModel) {
-                if(userModel.isEmailVerified()){
-
-                   Snackbar.make(requireView(), getString(R.string.email_verified),
-                           Snackbar.LENGTH_SHORT).show();
-                   navController.navigate(R.id.action_from_verify_email_to_main);
-                   requireActivity().finish();
-
-                }else{
-                    userRepository.sendEmailVerification(new Callback<Void>() {
-                        @Override
-                        public void onSucces(Void unused) {
-                            Snackbar.make(requireView(), getString(R.string.verify_email_sent),
-                                    Snackbar.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            Snackbar.make(requireView(), getString(R.string.email_not_send),
-                                    Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.email_not_send),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void continueOnclick() {
-
-        createAndStartProgressBar().setVisibility(View.VISIBLE);
-        createAndStartProgressBar().playAnimation();
-        userRepository.reload(new Callback<UserModel>() {
-            @Override
-            public void onSucces(UserModel userModel) {
-
-                if(!userModel.isEmailVerified()){
-                    Snackbar.make(requireView(),getString(R.string.email_not_verified),
-                            Snackbar.LENGTH_SHORT).show();
-                    createAndStartProgressBar().cancelAnimation();
-                    createAndStartProgressBar().setVisibility(View.GONE);
-                    return;
-                }
-
-                navController.navigate(R.id.action_from_verify_email_to_main);
-                requireActivity().finish();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.email_not_verified),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
     }
 
     public LottieAnimationView createAndStartProgressBar(){

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -31,8 +32,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private NavController navController;
     private FragmentLoginBinding binding;
+
+    private WelcomeViewModel welcomeViewModel;
     private AuthRepository authRepository;
     private UserRepository userRepository;
+
 
     public LoginFragment() {
         // Required empty public constructor
@@ -41,8 +45,34 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         authRepository = ServiceLocator.getInstance().getAuthRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
+
+        WelcomeViewModelFactory factory = new WelcomeViewModelFactory(
+                authRepository,
+                userRepository
+        );
+
+        welcomeViewModel = new ViewModelProvider(this, factory).get(WelcomeViewModel.class);
+
+        welcomeViewModel.getLoginSuccess().observe(this, success -> {
+            if(success){
+                handleAuthUser(userRepository.getCurrentUser());
+            }else {
+                Snackbar.make(requireView(), getString(R.string.login_fail),
+                        Snackbar.LENGTH_SHORT).show();
+            }
+
+
+        });
+
+
+        welcomeViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -65,6 +95,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             this.handleAuthUser(user);
             return;
         }
+
+        welcomeViewModel.getIsLoading().observe(getViewLifecycleOwner(), isloading -> {
+            if(isloading){
+                createAndStartProgressBar().setVisibility(View.VISIBLE);
+                createAndStartProgressBar().playAnimation();
+            }else{
+                createAndStartProgressBar().cancelAnimation();
+                createAndStartProgressBar().setVisibility(View.GONE);
+            }
+        });
 
 
        binding.loginButtonRegister.setOnClickListener(this);
@@ -105,36 +145,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             return;
         }
 
-        createAndStartProgressBar().setVisibility(View.VISIBLE);
-        createAndStartProgressBar().playAnimation();
-        authRepository.login(email, password, new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                createAndStartProgressBar().cancelAnimation();
-                userRepository.reload(new Callback<UserModel>() {
-                    @Override
-                    public void onSucces(UserModel userModel) {
-                        handleAuthUser(userRepository.getCurrentUser());
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        createAndStartProgressBar().cancelAnimation();
-                        Snackbar.make(requireView(), getString(R.string.login_fail),
-                                Snackbar.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                createAndStartProgressBar().setVisibility(View.GONE);
-                createAndStartProgressBar().cancelAnimation();
-                Snackbar.make(requireView(),getString(R.string.invalid_email_and_password),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
+        welcomeViewModel.login(email, password);
     }
+
+
 
     private void handleAuthUser(@NonNull UserModel user){
         if (!user.isEmailVerified()) {

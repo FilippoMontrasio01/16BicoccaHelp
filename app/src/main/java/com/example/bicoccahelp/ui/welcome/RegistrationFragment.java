@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -37,6 +38,7 @@ View.OnFocusChangeListener{
     private FragmentRegistrationBinding binding;
     private AuthRepository authRepository;
     private UserRepository userRepository;
+    private WelcomeViewModel welcomeViewModel;
 
 
 
@@ -49,8 +51,31 @@ View.OnFocusChangeListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         authRepository = ServiceLocator.getInstance().getAuthRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
+
+        WelcomeViewModelFactory factory = new WelcomeViewModelFactory(authRepository,
+                userRepository);
+
+
+        welcomeViewModel = new ViewModelProvider(this, factory).get(WelcomeViewModel.class);
+
+        welcomeViewModel.getEmailSent().observe(this, sent -> {
+            if(sent){
+                navController.navigate(R.id.action_from_registration_to_verify_email);
+            }else{
+                Snackbar.make(requireView(), getString(R.string.email_not_send),
+                        Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        welcomeViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
@@ -72,6 +97,8 @@ View.OnFocusChangeListener{
         binding.createAccountNameEditText.setOnFocusChangeListener(this);
         binding.createAccountButton.setOnClickListener(this);
         binding.createAccountRepeatPasswordEditText.setOnFocusChangeListener(this);
+
+
     }
 
     public void onFocusChange(@NonNull View view, boolean hasFocus){
@@ -126,52 +153,8 @@ View.OnFocusChangeListener{
         String name = Objects.requireNonNull(binding.createAccountNameEditText
                 .getText()).toString();
 
-        authRepository.register(email, psw, new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                updateUsername(name);
-            }
+        welcomeViewModel.register(email, psw, name);
 
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(view, getString(R.string.create_account_fail),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-    }
-
-    private void updateUsername(String name){
-        userRepository.updateUsername(name, new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                sendEmailVerification();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.set_name),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void sendEmailVerification(){
-        userRepository.sendEmailVerification(new Callback<Void>() {
-            @Override
-            public void onSucces(Void unused) {
-                navController.navigate(R.id.action_from_registration_to_verify_email);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                navController.navigate(R.id.action_from_registration_to_verify_email);
-                Snackbar.make(requireView(), getString(R.string.email_not_send),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private boolean checkPassword(){
