@@ -45,7 +45,6 @@ public class ReviewRemoteDataSource {
         data.put(FIELD_UID_STUDENT, request.getUidStudent());
         data.put(FIELD_STARS, request.getStars());
 
-
         review.add(data)
                 .addOnSuccessListener(documentReference -> {
                     ReviewModel reviewModel = new ReviewModel(

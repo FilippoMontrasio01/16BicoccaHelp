@@ -9,6 +9,7 @@ import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.ui.welcome.WelcomeViewModel;
+import com.google.firebase.firestore.auth.User;
 
 public class ProfileViewModelFactory implements ViewModelProvider.Factory {
     private final AuthRepository authRepository;
@@ -37,6 +38,10 @@ public class ProfileViewModelFactory implements ViewModelProvider.Factory {
 
     public ProfileViewModelFactory(AuthRepository authRepository){
         this(authRepository, null, null, null);
+    }
+
+    public ProfileViewModelFactory(UserRepository userRepository, StudentRepository studentRepository){
+        this(null, userRepository, studentRepository, null);
     }
 
     @NonNull

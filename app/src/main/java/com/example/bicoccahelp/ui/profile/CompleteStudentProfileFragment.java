@@ -1,15 +1,25 @@
 package com.example.bicoccahelp.ui.profile;
+import static android.content.ContentValues.TAG;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
@@ -27,9 +37,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Objects;
 
 public class CompleteStudentProfileFragment extends Fragment implements View.OnClickListener{
-
-
-
     private StudentRepository studentRepository;
     private FragmentCompleteStudentProfileBinding binding;
     private NavController navController;
@@ -37,6 +44,7 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     private TutorRepository tutorRepository;
     private String livello = "Triennale";
     private CorsoDiStudiRepository corsoDiStudiRepository;
+    private CompleteProfileViewModel completeProfileViewModel;
 
 
     public CompleteStudentProfileFragment() {
@@ -54,7 +62,20 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
         userRepository = ServiceLocator.getInstance().getUserRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
 
-        String uid = userRepository.getCurrentUser().getUid();
+        CompleteProfileVIewModelFactory factory = new CompleteProfileVIewModelFactory(corsoDiStudiRepository,
+                userRepository, studentRepository, tutorRepository);
+
+        completeProfileViewModel = new ViewModelProvider(this, factory).get(CompleteProfileViewModel.class);
+
+
+        completeProfileViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null) {
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        completeProfileViewModel.extractStudyProgram();
+        completeProfileViewModel.extractLevel();
 
 
     }
@@ -75,6 +96,60 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
         navController = Navigation.findNavController(view);
         binding.createStudentButton.setOnClickListener(this);
         binding.studentBackButton.setOnClickListener(this);
+
+
+        completeProfileViewModel.getCorsoId().observe(getViewLifecycleOwner(), idCorso -> {
+            Log.d(TAG, "CorsoId aggiornato: " + idCorso);
+            if (idCorso != null) {
+                if (binding.yesRadioButton.isChecked()) {
+                    Log.d(TAG, "yesRadioButton è selezionato");
+                    yesRadioButtonAnswer(idCorso);
+                } else if (binding.noRadioButton.isChecked()) {
+                    Log.d(TAG, "noRadioButton è selezionato");
+                    noRadioButtonAnswer(idCorso);
+                } else {
+                    Log.d(TAG, "Nessun radio button selezionato");
+                    Snackbar.make(requireView(), getString(R.string.tutor_radioButton), Snackbar.LENGTH_SHORT).show();
+                }
+            } else {
+                Log.d(TAG, "CorsoId è null");
+                Snackbar.make(requireView(), "QUALCOSA NON FUNZIONA", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        completeProfileViewModel.getIsStudentCreated().observe(getViewLifecycleOwner(), isStudentCreated -> {
+            if (isStudentCreated) {
+                navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
+            } else {
+                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
+        completeProfileViewModel.getCorsoName().observe(getViewLifecycleOwner(), corsoName -> {
+            binding.createStudentEditText.setText(corsoName);
+        });
+
+        completeProfileViewModel.getCorsoLivello().observe(getViewLifecycleOwner(), level -> {
+            binding.createStudentCheckBox.setChecked(level.equals(getString(R.string.magistrale)));
+        });
+
+        completeProfileViewModel.isTutor(new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean isTutor) {
+                if(isTutor){
+                    binding.yesRadioButton.setChecked(true);
+                    binding.yesRadioButton.setEnabled(false);
+                    binding.noRadioButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
     }
 
     @Override
@@ -94,128 +169,37 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
     }
 
     private void createStudentOnClick() {
-        String studyProgram = Objects.requireNonNull(binding.createStudentEditText
-                .getText()).toString();
+        String studyProgram = Objects.requireNonNull(binding.createStudentEditText.getText()).toString();
 
-
-
-        if(binding.createStudentCheckBox.isChecked()) {
+        if (binding.createStudentCheckBox.isChecked()) {
             livello = getString(R.string.magistrale);
         }
-        InputValidator.isValidStudyProgram(studyProgram, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean exist) {
-                if(exist){
-                    getCorsoId(studyProgram, livello);
-                }else{
-                    binding.createStudentTextInputLayout
-                            .setError(getString(R.string.insert_a_valid_studyProgram));
-                }
-            }
 
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-
-    public void getCorsoId(String studyProgram, String livello){
-
-
-        corsoDiStudiRepository.getCorsoDiStudiIdByName(
-                studyProgram, livello, new Callback<String>() {
-                    @Override
-                    public void onSucces(String idCorso) {
-
-                        String studentUid = userRepository.getCurrentUser().getUid();
-
-                        studentRepository.studentExist(studentUid, new Callback<Boolean>() {
-                            @Override
-                            public void onSucces(Boolean exist) {
-                                if(!exist){
-                                    if(binding.yesRadioButton.isChecked()) {
-                                        yesRadioButtonAnswer(idCorso);
-                                    }else if(binding.noRadioButton.isChecked()){
-                                        noRadioButtonAnswer(idCorso);
-                                    }else{
-                                        Snackbar.make(requireView(), getString(R.string.tutor_radioButton),
-                                                Snackbar.LENGTH_SHORT).show();
-                                    }
-                                }else{
-                                    noRadioButtonAnswer(idCorso);
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Exception e) {
-                                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-                    }
-                });
+        completeProfileViewModel.validateStudyProgram(studyProgram, livello);
     }
 
 
     public void noRadioButtonAnswer(String idCorso){
         CreateStudentRequest srequest = new CreateStudentRequest(idCorso, false);
-
-        studentRepository.createStudent(srequest, new Callback<StudentModel>() {
-            @Override
-            public void onSucces(StudentModel studentModel) {
-                navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
+        completeProfileViewModel.createStudent(srequest);
     }
 
     public void yesRadioButtonAnswer(String idCorso){
         CreateStudentRequest srequest = new CreateStudentRequest(idCorso, true);
-
-        studentRepository.createStudent(srequest, new Callback<StudentModel>() {
+        completeProfileViewModel.createStudentTutor(srequest);
+        completeProfileViewModel.isTutor(new Callback<Boolean>() {
             @Override
-            public void onSucces(StudentModel studentModel) {
-                tutorExist();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void tutorExist(){
-        String uid = userRepository.getCurrentUser().getUid();
-
-        tutorRepository.tutorExist(uid, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean exist) {
-                if(!exist){
-                    navController.navigate(R.id.action_from_complete_student_to_complete_tutor);
-
-                }else{
+            public void onSucces(Boolean tutorExist) {
+                if (tutorExist) {
                     navController.navigate(R.id.action_from_complete_profile_to_profile_fragment);
+                } else {
+                    navController.navigate(R.id.action_from_complete_student_to_complete_tutor);
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error),
-                        Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(requireView(), "Errore nel controllo del tutor", Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -227,3 +211,5 @@ public class CompleteStudentProfileFragment extends Fragment implements View.OnC
 
 
 }
+
+

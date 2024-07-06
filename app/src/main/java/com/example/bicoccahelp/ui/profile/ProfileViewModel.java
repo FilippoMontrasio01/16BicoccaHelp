@@ -21,6 +21,7 @@ public class ProfileViewModel extends ViewModel {
 
         private final MutableLiveData<Boolean> nameUpdated;
         private final MutableLiveData<Boolean> passwordUpdated;
+        private MutableLiveData<Boolean> studentExists;
         private final MutableLiveData<Boolean> isLogOut;
         private final MutableLiveData<Boolean> isDeleted;
         private final MutableLiveData<String> errorMessage;
@@ -39,11 +40,15 @@ public class ProfileViewModel extends ViewModel {
             this.passwordUpdated = new MutableLiveData<>();
             this.nameUpdated = new MutableLiveData<>();
             this.errorMessage = new MutableLiveData<>();
+            this.studentExists = new MutableLiveData<>();
         }
 
 
+        public LiveData<Boolean> getStudentExists() {
+            return studentExists;
+        }
 
-        public LiveData<Boolean> getNameUpdated() {
+    public LiveData<Boolean> getNameUpdated() {
             return nameUpdated;
         }
 
@@ -184,5 +189,23 @@ public class ProfileViewModel extends ViewModel {
                 }
             });
         }
+
+    public void checkStudentExists() {
+        String uid = userRepository.getCurrentUser().getUid();
+
+        studentRepository.studentExist(uid, new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean exist) {
+                studentExists.setValue(exist);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue(e.getMessage());
+            }
+        });
+    }
+
+
 
 }

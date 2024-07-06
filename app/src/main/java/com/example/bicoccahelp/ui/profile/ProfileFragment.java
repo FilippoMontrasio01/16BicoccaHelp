@@ -35,7 +35,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     private NavController navController;
     private UserRepository userRepository;
     private StudentRepository studentRepository;
-    private StudentViewModel studentViewModel;
+    private ProfileViewModel profileViewModel;
 
 
     public ProfileFragment() {
@@ -48,9 +48,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         userRepository = ServiceLocator.getInstance().getUserRepository();
         studentRepository = ServiceLocator.getInstance().getStudentRepository();
-        studentViewModel = new ViewModelProvider(requireActivity(),
-                new StudentViewModelFactory(studentRepository, userRepository))
-                .get(StudentViewModel.class);
+
+
+        ProfileViewModelFactory factory = new ProfileViewModelFactory(userRepository, studentRepository);
+
+        profileViewModel = new ViewModelProvider(this, factory).get(ProfileViewModel.class);
+
+        profileViewModel.getErrorMessage().observe(this, message -> {
+            Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+        });
+
+        profileViewModel.checkStudentExists();
 
     }
 
@@ -59,21 +67,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
-
-
-        studentViewModel.getStudentExists().observe(getViewLifecycleOwner(), exist -> {
-            if (exist) {
-                binding.completeStudentTextView.setText(getString(R.string.update_student));
-            } else {
-                binding.completeStudentTextView.setText(getString(R.string.complete_student));
-            }
-        });
-
-        studentViewModel.getErrorMessage().observe(getViewLifecycleOwner(), message -> {
-            Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
-        });
-
-        studentViewModel.checkStudentExists();
 
 
         return binding.getRoot();
@@ -100,6 +93,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
         binding.completeStudentItem.setOnClickListener(this);
         binding.becomeATutorItem.setOnClickListener(this);
         binding.reviewItem.setOnClickListener(this);
+
+        profileViewModel.getStudentExists().observe(getViewLifecycleOwner(), exist -> {
+            if (exist) {
+                binding.completeStudentTextView.setText(getString(R.string.update_student));
+            } else {
+                binding.completeStudentTextView.setText(getString(R.string.complete_student));
+            }
+        });
+
+
     }
 
     @Override
@@ -145,29 +148,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
 
 
     private void completeTutorOnclick() {
-
-        String uid = userRepository.getCurrentUser().getUid();
-
-        studentRepository.studentExist(uid, new Callback<Boolean>()  {
-            @Override
-            public void onSucces(Boolean exist) {
-                if(exist){
-                    navController.navigate(R.id.action_from_profile_to_complete_tutor_fragment);
-                }else{
-                    Snackbar.make(requireView(), getString(R.string.add_at_least_a_skill),
-                            Snackbar.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error),
+        profileViewModel.getStudentExists().observe(getViewLifecycleOwner(), studentExist ->{
+            if(studentExist){
+                navController.navigate(R.id.action_from_profile_to_complete_tutor_fragment);
+            }else{
+                Snackbar.make(requireView(), getString(R.string.add_at_least_a_skill),
                         Snackbar.LENGTH_SHORT).show();
             }
         });
-
-
-
     }
 
     private void completeStudentOnClick() {

@@ -32,7 +32,7 @@ import org.checkerframework.checker.units.qual.C;
 import io.grpc.Server;
 
 
-public class ReviewFragment extends Fragment implements View.OnClickListener{
+public class ReviewFragment extends Fragment implements View.OnClickListener {
 
     private ReviewRepository reviewRepository;
     private TutorRepository tutorRepository;
@@ -55,14 +55,12 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
         userRepository = ServiceLocator.getInstance().getUserRepository();
 
         reviewViewModel = new ViewModelProvider(requireActivity(),
-                new ReviewViewModelFactory(reviewRepository)).get(ReviewViewModel.class);
-
+                new ReviewViewModelFactory(reviewRepository, tutorRepository, userRepository)).get(ReviewViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentReviewBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -73,13 +71,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
 
         navController = Navigation.findNavController(view);
 
-
         this.configureRecyclerView();
         this.observeUiState();
         this.observeErrorMessage(view);
         this.loadFirstPage();
         this.addOnScrollListener();
-
 
         binding.reviewButton.setOnClickListener(this);
         binding.backButton.setOnClickListener(this);
@@ -88,14 +84,12 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
     private void configureRecyclerView() {
         RecyclerView reviewRecyclerView = binding.reviewRecyclerView;
 
-        // Non c'è bisogno di un listener se non devi gestire i clic sugli elementi
         reviewRecycleViewAdapter = new ReviewRecycleViewAdapter(
                 reviewViewModel.reviewList,
                 requireActivity().getApplication());
         reviewRecyclerView.setAdapter(reviewRecycleViewAdapter);
 
-        LinearLayoutManager layoutManager = (LinearLayoutManager) reviewRecyclerView
-                .getLayoutManager();
+        LinearLayoutManager layoutManager = (LinearLayoutManager) reviewRecyclerView.getLayoutManager();
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
                 reviewRecyclerView.getContext(), layoutManager.getOrientation());
         reviewRecyclerView.addItemDecoration(dividerItemDecoration);
@@ -105,20 +99,17 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
         reviewViewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
             stopLoading();
 
-            if(uiState == null){
+            if (uiState == null) {
                 return;
             }
 
             if (uiState.fetched > 0) {
-                reviewRecycleViewAdapter.notifyItemRangeInserted(uiState.sizeBeforeFetch,
-                        uiState.fetched);
+                reviewRecycleViewAdapter.notifyItemRangeInserted(uiState.sizeBeforeFetch, uiState.fetched);
             }
 
-            if(uiState.inserted > -1){
+            if (uiState.inserted > -1) {
                 reviewRecycleViewAdapter.notifyItemInserted(uiState.inserted);
             }
-
-
         });
     }
 
@@ -126,7 +117,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
         reviewViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             stopLoading();
             if (errorMessage != null) {
-                Snackbar.make(view, getString(R.string.db_error), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -137,6 +128,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
             reviewViewModel.getNextReviewPage();
         }
     }
+
     private void addOnScrollListener() {
         binding.reviewRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -152,14 +144,13 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == binding.reviewButton.getId()){
+        if (v.getId() == binding.reviewButton.getId()) {
             reviewOnClick();
             return;
         }
 
-        if(v.getId() == binding.backButton.getId()){
+        if (v.getId() == binding.backButton.getId()) {
             backOnClick();
-
         }
     }
 
@@ -170,83 +161,47 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
     private void reviewOnClick() {
         String tutor = binding.reviewStudentEditText.getText().toString();
 
-        if(tutor.isEmpty()){
+        if (tutor.isEmpty()) {
             binding.reviewStudentTextInputLayout.setError(getText(R.string.tutor_to_review));
             return;
         }
 
         binding.reviewStudentTextInputLayout.setError(null);
+        reviewViewModel.findTutor(tutor);
 
+        reviewViewModel.getTutor().observe(getViewLifecycleOwner(), tutorId -> {
+            if (tutorId != null) {
+                reviewViewModel.verifyMultipleReview(tutorId);
 
-        findTutor(tutor);
+                reviewViewModel.getReviewExist().observe(getViewLifecycleOwner(), reviewExist -> {
+                    if (reviewExist != null) {
+                        if (reviewExist) {
+                            String userUid = reviewViewModel.getCurrentUserUid();
+                            float stars = binding.ratingBar.getRating();
+                            CreateReviewRequest createReviewRequest = new CreateReviewRequest(tutorId, userUid, stars);
+                            reviewViewModel.createReview(createReviewRequest, new Callback<ReviewModel>() {
+                                @Override
+                                public void onSucces(ReviewModel reviewModel) {
+                                    Snackbar.make(requireView(), getString(R.string.review_submit), Snackbar.LENGTH_SHORT).show();
+                                }
 
-    }
-
-    private void findTutor(String tutorName){
-
-        tutorRepository.getTutorUid(tutorName, new Callback<String>() {
-            @Override
-            public void onSucces(String uidTutor) {
-
-                if(!uidTutor.equals(userRepository.getCurrentUser().getUid())){
-                    verifyMultipleReview(uidTutor);
-                }else{
-                    Snackbar.make(requireView(), getString(R.string.auto_review),
-                            Snackbar.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.tutor_to_review),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void verifyMultipleReview(String uidTutor) {
-        String uidStudent = userRepository.getCurrentUser().getUid();
-
-        reviewRepository.checkReview(uidStudent, uidTutor, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean notExist) {
-                if(!notExist){
-                    makeReview(uidTutor, uidStudent);
-                }else{
-                    Snackbar.make(requireView(), getString(R.string.already_review),
-                            Snackbar.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.db_error),
-                        Snackbar.LENGTH_SHORT).show();
+                                @Override
+                                public void onFailure(Exception e) {
+                                    Snackbar.make(requireView(), getString(R.string.review_not_submit), Snackbar.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Snackbar.make(requireView(), getString(R.string.already_review), Snackbar.LENGTH_SHORT).show();
+                        }
+                        reviewViewModel.getReviewExist().removeObservers(getViewLifecycleOwner());
+                    }
+                });
+            } else {
+                Snackbar.make(requireView(), getString(R.string.tutor_not_exist), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void makeReview(String tutorUid, String uidStudent){
-
-        float stars = binding.ratingBar.getRating();
-        CreateReviewRequest createReviewRequest = new CreateReviewRequest(tutorUid,
-                uidStudent, stars);
-
-        reviewViewModel.createReview(createReviewRequest, new Callback<ReviewModel>() {
-            @Override
-            public void onSucces(ReviewModel reviewModel) {
-                Snackbar.make(requireView(), getString(R.string.review_submit),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.review_not_submit),
-                        Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     private void startLoading() {
         isLoading = true;
@@ -255,8 +210,6 @@ public class ReviewFragment extends Fragment implements View.OnClickListener{
     private void stopLoading() {
         isLoading = false;
     }
-
-
 
     @Override
     public void onDestroyView() {

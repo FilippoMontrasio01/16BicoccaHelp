@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -45,7 +46,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     private UserRepository userRepository;
     private StudentRepository studentRepository;
     private String livello = "Triennale";
-    private ArrayList<String> subject = new ArrayList<>();
+    private CompleteProfileViewModel completeProfileViewModel;
 
 
     public CompleteTutorProfileFragment() {
@@ -59,6 +60,16 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         studentRepository = ServiceLocator.getInstance().getStudentRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
         corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
+
+        CompleteProfileVIewModelFactory factory = new CompleteProfileVIewModelFactory(corsoDiStudiRepository,
+                userRepository, studentRepository, tutorRepository);
+
+        completeProfileViewModel = new ViewModelProvider(this, factory).get(CompleteProfileViewModel.class);
+
+        completeProfileViewModel.extractStudyProgram();
+        completeProfileViewModel.extractLevel();
+
+
     }
 
     @Override
@@ -78,21 +89,9 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         binding.tutorBackButton.setOnClickListener(this);
         binding.addSubjectButton.setOnClickListener(this);
 
-        String uid = userRepository.getCurrentUser().getUid();
 
-        studentRepository.isTutor(uid, true, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean exist) {
-                if(exist){
-                    getCorsoDiStudiId(uid);
-                }
-            }
+        observeViewModel();
 
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
 
 
     }
@@ -101,7 +100,15 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
     public void onClick(View v) {
 
         if(v.getId() == binding.createTutorButton.getId()){
-            createTutorOnClick();
+
+            String studyProgram = Objects.requireNonNull(binding.createTutorEditText
+                    .getText()).toString();
+
+            if(binding.livelloCheckbox.isChecked()) {
+                livello = getString(R.string.magistrale);
+            }
+
+            completeProfileViewModel.validateStudyProgram(studyProgram, livello);
             return;
         }
 
@@ -124,8 +131,7 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
             return;
         }
 
-        subject.add(skill);
-        Snackbar.make(requireView(), getString(R.string.add_subject), Snackbar.LENGTH_SHORT).show();
+        completeProfileViewModel.addSkill(skill);
         binding.bestSubjectEditText.getText().clear();
 
 
@@ -135,35 +141,55 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         navController.navigate(R.id.action_from_complete_tutor_to_profile_fragment);
     }
 
-    private void createTutorOnClick() {
-        String studyProgram = Objects.requireNonNull(
-                binding.createTutorEditText.getText()).toString();
+    private void observeViewModel(){
 
-        if(binding.livelloCheckbox.isChecked()){
-            livello = getString(R.string.magistrale);
-        }
-
-        InputValidator.isValidStudyProgram(studyProgram, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean exist) {
-
-                if(exist){
-                    getCorsoAndCreateStudent(studyProgram, livello);
-                }else{
-                    binding.createTutorTextInputLayout.setError(getString(R.string.insert_a_valid_studyProgram));
-                }
-
+        completeProfileViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null) {
+                Snackbar.make(requireView(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
+        });
 
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error),Snackbar.LENGTH_SHORT).show();
+        completeProfileViewModel.getSnackbarMessage().observe(getViewLifecycleOwner(), snackbarMessage -> {
+            if (snackbarMessage != null) {
+                Snackbar.make(requireView(), snackbarMessage, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        completeProfileViewModel.getIsTutorCreated().observe(getViewLifecycleOwner(), isCreated -> {
+            if (isCreated) {
+                // Naviga a qualche altra parte se necessario
+                navController.navigate(R.id.action_from_complete_tutor_to_profile_fragment);
+            }
+        });
+
+        completeProfileViewModel.getCorsoName().observe(getViewLifecycleOwner(), corsoName -> {
+            binding.createTutorEditText.setText(corsoName);
+        });
+
+        completeProfileViewModel.getCorsoLivello().observe(getViewLifecycleOwner(), level -> {
+
+            binding.livelloCheckbox.setChecked(level.equals(getString(R.string.magistrale)));
+
+
+
+        });
+
+        completeProfileViewModel.getDisponibilitaGiorni().observe(getViewLifecycleOwner(), disponibilitaGiorni -> {
+            if (disponibilitaGiorni != null) {
+                // Aggiorna i CheckBox con le nuove disponibilità
+                updateCheckBoxes(disponibilitaGiorni);
+            }
+        });
+
+        completeProfileViewModel.getCorsoId().observe(getViewLifecycleOwner(), idCorso ->{
+
+            if (idCorso != null) {
+                completeProfileViewModel.createTutor(idCorso);
             }
         });
     }
 
-
-    private void setDisponibilities(Map<String, Boolean> map){
+    private void updateCheckBoxes(Map<String, Boolean> disponibilitaGiorni) {
         CheckBox[] checkBoxes = new CheckBox[]{
                 binding.mondayCheckbox,
                 binding.tuesdayCheckbox,
@@ -175,141 +201,20 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
         };
 
         for (CheckBox checkBox : checkBoxes) {
-            addListenerAndUpdateMap(checkBox, map);
+            Boolean isChecked = disponibilitaGiorni.get(checkBox.getText().toString());
+            if (isChecked != null) {
+                checkBox.setChecked(isChecked);
+            } else {
+                // Se non ci sono informazioni nel Map, setta il CheckBox a false
+                checkBox.setChecked(false);
+                // Aggiorna il Map con false per il giorno corrente
+                disponibilitaGiorni.put(checkBox.getText().toString(), false);
+            }
+
+            checkBox.setOnCheckedChangeListener((buttonView, check) -> {
+                completeProfileViewModel.updateDisponibilitaGiorni(checkBox.getText().toString(), check);
+            });
         }
-    }
-
-
-    private void addListenerAndUpdateMap(CheckBox checkBox, Map<String, Boolean> map) {
-
-        map.put(checkBox.getText().toString(), checkBox.isChecked());
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                map.put(buttonView.getText().toString(), isChecked));
-    }
-
-    private void createTutor(CreateTutorRequest request){
-
-        String uid = userRepository.getCurrentUser().getUid();
-        tutorRepository.createTutor(request, new Callback<TutorModel>() {
-
-            @Override
-            public void onSucces(TutorModel tutorModel) {
-
-                studentRepository.studentExist(uid, new Callback<Boolean>() {
-                    @Override
-                    public void onSucces(Boolean exist) {
-                        if(exist){
-                            studentRepository.updateiSTutor(uid, true);
-                        }
-
-                        navController.navigate(R.id.action_from_complete_tutor_to_profile_fragment);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void getCorsoAndCreateStudent(String studyProgram, String livello){
-
-
-        Map<String, Boolean> disponibilitaGiorni = new HashMap<>();
-        setDisponibilities(disponibilitaGiorni);
-
-
-        String uid = userRepository.getCurrentUser().getUid();
-        tutorRepository.tutorExist(uid, new Callback<Boolean>() {
-            @Override
-            public void onSucces(Boolean exist) {
-                if(!exist){
-                    if(disponibilitaGiorni.size() == 0){
-                        Snackbar.make(requireView(), getString(R.string.disponibility_error),
-                                Snackbar.LENGTH_SHORT).show();
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-
-
-        corsoDiStudiRepository.getCorsoDiStudiIdByName(
-                studyProgram, livello, new Callback<String>() {
-                    @Override
-                    public void onSucces(String idCorso) {
-                        CreateTutorRequest request = new CreateTutorRequest(idCorso,
-                                disponibilitaGiorni, subject);
-                        createTutor(request);
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    public void getCorsoDiStudiId(String uid){
-        studentRepository.getCorsoDiStudi(uid, new Callback<String>() {
-            @Override
-            public void onSucces(String idCorso) {
-                getCorsoDiStudiName(idCorso);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void  getCorsoDiStudiName(String idCorso){
-        corsoDiStudiRepository.getCorsodiStudiName(idCorso, new Callback<String>() {
-            @Override
-            public void onSucces(String name) {
-                getCorsoDiStudiLivello(idCorso, name);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void getCorsoDiStudiLivello(String idCorso, String name){
-        corsoDiStudiRepository.getCorsoDiStudiLivello(idCorso, new Callback<String>() {
-            @Override
-            public void onSucces(String livello) {
-                if(livello.equals(getString(R.string.magistrale))){
-                    binding.livelloCheckbox.setChecked(true);
-                }
-
-                binding.createTutorEditText.setText(name);
-
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Snackbar.make(requireView(), getString(R.string.generic_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
     }
 
 
