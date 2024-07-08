@@ -23,7 +23,7 @@
 
 
     <style name="TransparentDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundTint">@color/dark_red</item>
     </style>
 
     <style name="colored_checkbox" parent="Theme.AppCompat.Light">

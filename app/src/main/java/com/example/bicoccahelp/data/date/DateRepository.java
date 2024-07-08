@@ -16,11 +16,11 @@ public class DateRepository {
         dateRemoteDataSource.createDate(createDateRequest, callback);
     }
 
-    public void listOrari(String uidTutor, String uidStudent, Timestamp data, Long limit, Callback<List<String>> callback){
-        dateRemoteDataSource.listOrari(uidTutor, uidStudent, data,limit, callback);
+    public void listOrari(String uidTutor,Timestamp data, Long limit, Callback<List<String>> callback){
+        dateRemoteDataSource.listOrari(uidTutor,data,limit, callback);
     }
 
-    public void updateDate(String uidTutor, String uidStudent, Timestamp date, Timestamp nuovaData, Callback<Void> callback){
-        dateRemoteDataSource.updateDate(uidTutor, uidStudent, date, nuovaData, callback);
+    public void updateDate(String uidTutor, Timestamp date, Timestamp nuovaData, Callback<Void> callback){
+        dateRemoteDataSource.updateDate(uidTutor,date, nuovaData, callback);
     }
 }

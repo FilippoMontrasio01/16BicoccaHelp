@@ -19,7 +19,6 @@ import java.util.Map;
 public class DateRemoteDataSource {
     private static final String FIELD_DATA = "date";
     private static final String FIELD_ORARI = "disponibilità orario";
-    private static final String FIELD_UID_STUDENT = "uid Student";
     private static final String FIELD_UID_TUTOR = "uid Tutor";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -45,20 +44,18 @@ public class DateRemoteDataSource {
         data.put(FIELD_DATA, createDateRequest.getData());
         data.put(FIELD_ORARI, disponibilitaOrari);
         data.put(FIELD_UID_TUTOR, createDateRequest.getUidTutor());
-        data.put(FIELD_UID_STUDENT, createDateRequest.getUidStudent());
 
         orarioTutor.add(data)
                 .addOnSuccessListener(documentReference -> {
                     DateModel date = new DateModel(createDateRequest.getDisponibilitaOrari(),
-                            createDateRequest.getData(), createDateRequest.getUidTutor(),
-                            createDateRequest.getUidStudent());
+                            createDateRequest.getData(), createDateRequest.getUidTutor());
                     callback.onSucces(date);
                 })
                 .addOnFailureListener(callback::onFailure);
     }
 
 
-    public void listOrari(String uidTutor, String uidStudent, Timestamp giorno, Long limit, Callback<List<String>> callback) {
+    public void listOrari(String uidTutor, Timestamp giorno, Long limit, Callback<List<String>> callback) {
         if (giorno == null) {
             // Se la data è nulla, impostiamo la data attuale
             Calendar calendar = Calendar.getInstance();
@@ -80,7 +77,7 @@ public class DateRemoteDataSource {
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                     if (documents.isEmpty()) {
                         // Se non ci sono documenti corrispondenti, creiamo un nuovo documento con il metodo createDate
-                        CreateDateRequest createDateRequest = new CreateDateRequest(new HashMap<>(), finalGiorno, uidTutor, uidStudent);
+                        CreateDateRequest createDateRequest = new CreateDateRequest(new HashMap<>(), finalGiorno, uidTutor);
 
 
                         createDate(createDateRequest, new Callback<DateModel>() {
@@ -114,10 +111,9 @@ public class DateRemoteDataSource {
     }
 
 
-    public void updateDate(String uidTutor, String uidStudent, Timestamp date, Timestamp nuovaData, Callback<Void> callback) {
+    public void updateDate(String uidTutor, Timestamp date, Timestamp nuovaData, Callback<Void> callback) {
         orarioTutor
                 .whereEqualTo(FIELD_UID_TUTOR, uidTutor)
-                .whereEqualTo(FIELD_UID_STUDENT, uidStudent)
                 .whereEqualTo(FIELD_DATA, date)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {

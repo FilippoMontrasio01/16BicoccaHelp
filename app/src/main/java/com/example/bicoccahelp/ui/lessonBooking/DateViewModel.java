@@ -18,37 +18,35 @@ public class DateViewModel extends ViewModel {
         public final int sizeBeforeFetch;
         public final int fetched;
 
-
         public UiState(int sizeBeforeFetch, int fetched) {
             this.sizeBeforeFetch = sizeBeforeFetch;
             this.fetched = fetched;
         }
     }
 
-    private final MutableLiveData<TutorViewModel.UiState> uiState;
-    //private final MutableLiveData<List<TutorModel>> updateTutorList;
-    //private List<TutorModel> originalTutorList;
+    private final MutableLiveData<UiState> uiState;
     private final MutableLiveData<String> errorMessage;
     public final ArrayList<String> dateList;
     public final DateRepository dateRepository;
-
 
     private final Long limit = 80L;
     private boolean hasMore = true;
     private int currentPage = 0;
 
-
     public DateViewModel(DateRepository dateRepository) {
-        this.uiState = new MutableLiveData<>(new TutorViewModel.UiState(0, 0));;
+        this.uiState = new MutableLiveData<>(new UiState(0, 0));;
         this.errorMessage = new MutableLiveData<>(null);;
         this.dateRepository = dateRepository;
         this.dateList = new ArrayList<>();
     }
 
-    public LiveData<TutorViewModel.UiState> getUiState() {
+    public LiveData<UiState> getUiState() {
         return uiState;
     }
-    public LiveData<String> getErrorMessage() { return errorMessage; }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
 
     public boolean hasMore() {
         return hasMore;
@@ -62,12 +60,17 @@ public class DateViewModel extends ViewModel {
         currentPage = 0;
     }
 
-    public void getNextHourPage(String uidTutor, String uidStudent, Timestamp data) {
+    public void getNextHourPage(String uidTutor,Timestamp data) {
+        if (currentPage == 0) {
+            hasMore = true;
+        }
 
-
-        dateRepository.listOrari(uidTutor, uidStudent, data, limit, new Callback<List<String>>() {
+        dateRepository.listOrari(uidTutor,data, limit, new Callback<List<String>>() {
             @Override
             public void onSucces(List<String> strings) {
+                if (currentPage == 0) {
+                    dateList.clear();  // Clear the list when loading the first page
+                }
                 currentPage += 1;
                 if (strings.size() < limit) {
                     hasMore = false;
@@ -80,7 +83,7 @@ public class DateViewModel extends ViewModel {
                 int initialSize = dateList.size();
                 int newItemsCount = strings.size();
                 dateList.addAll(strings);
-                uiState.postValue(new TutorViewModel.UiState(initialSize, newItemsCount));
+                uiState.postValue(new UiState(initialSize, newItemsCount));
             }
 
             @Override
@@ -88,11 +91,6 @@ public class DateViewModel extends ViewModel {
                 errorMessage.postValue(e.getMessage());
             }
         });
-
-
-
-
-
     }
-
 }
+

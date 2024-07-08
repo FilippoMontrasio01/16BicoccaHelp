@@ -6,8 +6,7 @@
     android:background="@android:color/transparent"
     android:name="androidx.navigation.fragment.NavHostFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.profile.DeleteUserDialogFragment"
-    app:cardCornerRadius="30dp">
+    tools:context=".ui.profile.DeleteUserDialogFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/delete_user_dialog_constraintlayout"

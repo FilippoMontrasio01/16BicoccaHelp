@@ -20,6 +20,8 @@ import android.widget.DatePicker;
 import com.bumptech.glide.Glide;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
+import com.example.bicoccahelp.data.date.CreateDateRequest;
+import com.example.bicoccahelp.data.date.DateModel;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentBookLessonBinding;
@@ -30,16 +32,17 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
-public class BookLessonFragment extends DialogFragment implements View.OnClickListener  {
+public class BookLessonFragment extends DialogFragment implements View.OnClickListener {
 
     private FragmentBookLessonBinding binding;
     private TutorRepository tutorRepository;
     private DateRepository dateRepository;
     private UserRepository userRepository;
     private TutorViewModel tutorViewModel;
-
     private DateRecycleViewAdapter dateRecycleViewAdapter;
     private DateViewModel dateViewModel;
     private boolean isLoading = false;
@@ -48,26 +51,21 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     private static final String ARG_TUTOR_EMAIL = "tutorEmail";
     private static final String ARG_TUTOR_LOGO_URI = "tutorLogoUri";
     private static final String ARG_TUTOR_UID = "tutorUid";
-    private Timestamp newDate;
-    private Timestamp today;
+
     private String tutorName;
     private String tutorEmail;
     private String tutorLogoUri;
+    private String tutorUid;
+
+    private Timestamp selectedDate;
+    private boolean isDateSelected = false;
 
     private String lastLoadedTutorUid = null;
     private String lastLoadedTutorUidForScrollListener = null;
 
-    private String tutorUid;
-    private boolean isFirstLoad = true;
-
-
-    String oggi = "oggi";
-
-
     public BookLessonFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,13 +84,13 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
 
         dateViewModel = new ViewModelProvider(requireActivity(),
                 new DateViewModelFactory(dateRepository)).get(DateViewModel.class);
+
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         binding = FragmentBookLessonBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -100,12 +98,6 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.configureRecyclerView();
-        this.observeUiState();
-        //this.loadFirstPage();
-        this.observeErrorMessage(view);
-
-        this.addOnScrollListener();
         binding.lessonCard.selectDayButton.setOnClickListener(this);
         binding.lessonCard.tutorListItemName.setText(tutorName);
         binding.lessonCard.tutorListItemEmail.setText(tutorEmail);
@@ -117,18 +109,11 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == binding.lessonCard.selectDayButton.getId()){
-            selectDayOnClik();
-            return;
+        if (v.getId() == binding.lessonCard.selectDayButton.getId()) {
+            openCalendar();
+        } else if (v.getId() == binding.lessonCard.bookLessonButton.getId()) {
+            bookLesson();
         }
-
-        /*if(v.getId() == binding.lessonCard.selectDayButton.getId()){
-            backOnClick();
-        }*/
-    }
-
-    private void selectDayOnClik() {
-        openCalendar();
     }
 
     private void openCalendar() {
@@ -137,50 +122,98 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        c.set(year, month, day, 0, 0, 0);
-        c.set(Calendar.MILLISECOND, 0);
-        today = new Timestamp(c.getTime());
 
         // Crea un nuovo DatePickerDialog
-
         DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year1, int month1, int dayOfMonth1) {
-                Log.d("", "DAY: "+dayOfMonth1 + "MONTH: "+month1);
-
-
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year1, month1, dayOfMonth1, 0, 0, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
 
                 // Creare un oggetto Timestamp da un oggetto Date
-                newDate = new Timestamp(calendar.getTime());
+                selectedDate = new Timestamp(calendar.getTime());
 
-                int finalMonth = month + 1;
-                dateRepository.updateDate(tutorUid, userRepository.getCurrentUser().getUid(), today, newDate, new Callback<Void>() {
-                    @Override
-                    public void onSucces(Void unused) {
-                        binding.lessonCard.selectDayButton.setText(dayOfMonth1 + "/" + finalMonth + "/" + year);
-                        updateRecyclerView();
-                        Log.d("", "LA DATA È STATA AGGIORANTA CON SUCCESSO: "+ dayOfMonth1 + "/" + finalMonth + "/" + year);
 
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        Log.d("", "LA DATA NON È STATA AGGIORANTA CON SUCCESSO: "+ dayOfMonth1 + "/" + finalMonth + "/" + year);
-                    }
-                });
-
+                // Verifica se è stata già selezionata una data
+                if (!isDateSelected || !Objects.equals(binding.lessonCard.selectDayButton.getText().toString(), formatDate(selectedDate))) {
+                    binding.lessonCard.selectDayButton.setText(formatDate(selectedDate));
+                    // Aggiorna subito gli orari disponibili dopo aver selezionato una nuova data
+                    insertOrUpdateDate(selectedDate);
+                }
             }
         }, year, month, day);
-
-        today = newDate;
 
         // Mostra il dialog
         dialog.show();
     }
 
+    private void insertOrUpdateDate(Timestamp selectedDate) {
+        // Verifica se è già presente un'istanza nel database per questa data e tutorUid
+        dateRepository.listOrari(tutorUid, selectedDate, 1L, new Callback<List<String>>() {
+            @Override
+            public void onSucces(List<String> strings) {
+                if (strings.isEmpty()) {
+                    // Non c'è ancora un'istanza nel database, creala
+                    createDateInstance(selectedDate);
+                } else {
+                    // Già presente nel database, aggiorna solo se la data è cambiata
+                    updateDateInstance(selectedDate);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Gestione dell'errore
+                Log.e("BookLessonFragment", "Errore nel recuperare i dati dal repository: " + e.getMessage());
+            }
+        });
+    }
+
+    private void createDateInstance(Timestamp selectedDate) {
+        dateRepository.createDate(new CreateDateRequest(new HashMap<>(), selectedDate, tutorUid), new Callback<DateModel>() {
+            @Override
+            public void onSucces(DateModel dateModel) {
+                isDateSelected = true;
+                binding.lessonCard.selectDayButton.setText(formatDate(selectedDate));
+                // Aggiorna subito gli orari disponibili dopo aver creato la data nel database
+                loadAvailableTimes(selectedDate);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Gestione dell'errore nella creazione dell'istanza nel database
+                Log.e("BookLessonFragment", "Errore nella creazione dell'istanza nel database: " + e.getMessage());
+            }
+        });
+    }
+
+    private void updateDateInstance(Timestamp selectedDate) {
+        dateRepository.updateDate(tutorUid, selectedDate, selectedDate, new Callback<Void>() {
+            @Override
+            public void onSucces(Void unused) {
+                isDateSelected = true;
+                binding.lessonCard.selectDayButton.setText(formatDate(selectedDate));
+                // Aggiorna subito gli orari disponibili dopo aver aggiornato la data nel database
+                loadAvailableTimes(selectedDate);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Gestione dell'errore nell'aggiornamento dell'istanza nel database
+                Log.e("BookLessonFragment", "Errore nell'aggiornamento dell'istanza nel database: " + e.getMessage());
+            }
+        });
+    }
+
+
+    private void loadAvailableTimes(Timestamp selectedDate) {
+        isLoading = true; // Imposta lo stato di caricamento
+        configureRecyclerView();
+        observeUiState();
+        loadFirstPage(selectedDate);
+        addOnScrollListener();
+    }
 
     private void configureRecyclerView() {
         RecyclerView dateRecycleView = binding.lessonCard.HoourRecyclerView;
@@ -188,8 +221,9 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         dateRecycleViewAdapter = new DateRecycleViewAdapter(dateViewModel.dateList);
         dateRecycleView.setAdapter(dateRecycleViewAdapter);
 
-        LinearLayoutManager layoutManager = (LinearLayoutManager) dateRecycleView
-                .getLayoutManager();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        dateRecycleView.setLayoutManager(layoutManager);  // LinearLayoutManager ORIZZONTALE
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
                 dateRecycleView.getContext(), layoutManager.getOrientation());
         dateRecycleView.addItemDecoration(dividerItemDecoration);
@@ -205,99 +239,56 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         });
     }
 
-    private void observeErrorMessage(View view) {
-        dateViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
-            if (errorMessage != null) {
-                Snackbar.make(view, getString(R.string.db_error), Snackbar.LENGTH_SHORT).show();
-            }
-        });
+    private void loadFirstPage(Timestamp selectedDate) {
+        clearRecyclerView();
+        dateViewModel.resetCurrentPage();
+        dateViewModel.getNextHourPage(tutorUid, selectedDate);
+        lastLoadedTutorUidForScrollListener = tutorUid;
     }
 
-    private void loadFirstPage() {
-
-        if (newDate == null) {
-            // Se la data è nulla, impostiamo la data attuale
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            newDate = new Timestamp(calendar.getTime());
-        }
-
-        if (!Objects.equals(lastLoadedTutorUidForScrollListener, tutorUid)) {
-            // Il tutor è cambiato
-            Log.d("", "IL TUTOR E: " + tutorUid);
-
-            // Svuota il RecyclerView
-            clearRecyclerView();
-
-            // Resetta la pagina corrente
-            dateViewModel.resetCurrentPage();
-
-            // Carica la prima pagina di dati per il nuovo tutor
-            dateViewModel.getNextHourPage(tutorUid, userRepository.getCurrentUser().getUid(), newDate);
-
-            // Aggiorna lastLoadedTutorUidForScrollListener
-            lastLoadedTutorUidForScrollListener = tutorUid;
-        } else if (dateViewModel.getCurrentPage() == 0 && dateViewModel.hasMore()) {
-            // Il tutor non è cambiato, quindi carica la prima pagina come al solito
-            dateViewModel.getNextHourPage(tutorUid, userRepository.getCurrentUser().getUid(), newDate);
-        }
-    }
     private void addOnScrollListener() {
-
-        if (newDate == null) {
-            // Se la data è nulla, impostiamo la data attuale
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            newDate = new Timestamp(calendar.getTime());
-        }
-
         binding.lessonCard.HoourRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (Objects.equals(lastLoadedTutorUidForScrollListener, tutorUid) && !isLoading && dateViewModel.hasMore() && dy > 0) {
-                    dateViewModel.getNextHourPage(tutorUid, userRepository.getCurrentUser().getUid(), newDate);
+                    dateViewModel.getNextHourPage(tutorUid, selectedDate);
                     lastLoadedTutorUidForScrollListener = tutorUid;
                 }
             }
         });
     }
 
-    private void updateRecyclerView() {
-        this.configureRecyclerView();
-        this.observeUiState();
-        this.loadFirstPage();
-        this.addOnScrollListener();
-    }
-
     private void clearRecyclerView() {
-        // Svuota l'elenco di dati
         dateViewModel.dateList.clear();
-
-        // Notifica all'adapter che i dati sono cambiati
         dateRecycleViewAdapter.notifyDataSetChanged();
     }
 
     private void changeTutor(String newTutorUid) {
+        if (!Objects.equals(this.tutorUid, newTutorUid)) {
+            this.tutorUid = newTutorUid;
+            clearRecyclerView();
+            isDateSelected = false; // Resetta lo stato della data selezionata
+        }
+    }
 
-        tutorUid = newTutorUid;
-        // Resetta il RecyclerView e carica i dati relativi al nuovo tutor
-        dateRecycleViewAdapter.clearData();
+    private String formatDate(Timestamp timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp.getSeconds() * 1000);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1; // Mese è 0-based, quindi aggiungi 1
+        int year = calendar.get(Calendar.YEAR);
+        return day + "/" + month + "/" + year;
     }
 
     public void onStart() {
         super.onStart();
-        loadFirstPage();
+        if (isDateSelected) {
+            loadFirstPage(selectedDate);
+        }
     }
 
-
-
-
-
+    public void bookLesson() {
+        // Implementa la logica per prenotare la lezione
+    }
 }

@@ -18,11 +18,10 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-public class DateRecycleViewAdapter extends RecyclerView.Adapter<
-        DateRecycleViewAdapter.DateViewHolder>{
+public class DateRecycleViewAdapter extends RecyclerView.Adapter<DateRecycleViewAdapter.DateViewHolder> {
 
     private final List<String> disponibilitaOrari;
-    private SparseBooleanArray itemStateArray= new SparseBooleanArray();
+    private SparseBooleanArray itemStateArray = new SparseBooleanArray();
 
     public DateRecycleViewAdapter(List<String> disponibilitaOrari) {
         this.disponibilitaOrari = disponibilitaOrari;
@@ -56,19 +55,15 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<
             toggleButton.setOnClickListener(v -> {
                 int adapterPosition = getAdapterPosition();
                 if (!itemStateArray.get(adapterPosition, false)) {
-                    // Abilita il ToggleButton cliccato
                     toggleButton.setChecked(true);
                     itemStateArray.put(adapterPosition, true);
 
-                    // Disabilita gli altri ToggleButton
                     for (int i = 0; i < itemStateArray.size(); i++) {
                         if (i != adapterPosition) {
                             itemStateArray.put(i, false);
                         }
                     }
-                    // Notifica l'adattatore dei cambiamenti
                     notifyDataSetChanged();
-
                 }
             });
         }
@@ -77,17 +72,12 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<
             toggleButton.setText(orario);
             toggleButton.setTextOn(orario);
             toggleButton.setTextOff(orario);
-            // Utilizza lo stato salvato se presente
             toggleButton.setChecked(itemStateArray.get(position, false));
         }
     }
 
     public void clearData() {
-        // Rimuovi tutti gli elementi dalla lista
         disponibilitaOrari.clear();
-
-        // Notifica all'adapter che i dati sono cambiati
         notifyDataSetChanged();
     }
-
 }
