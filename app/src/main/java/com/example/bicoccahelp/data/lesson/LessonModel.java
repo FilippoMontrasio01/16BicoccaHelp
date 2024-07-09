@@ -2,12 +2,13 @@ package com.example.bicoccahelp.data.lesson;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.Timestamp;
+
 public class LessonModel {
 
     private @NonNull String uid_Student;
     private @NonNull String uid_tutor;
-    private @NonNull int duration;
-    private  @NonNull String idLesson;
+    private final @NonNull Timestamp data;
 
     private @NonNull String description;
 
@@ -16,13 +17,12 @@ public class LessonModel {
     private @NonNull String id;
 
     public LessonModel(@NonNull String id, @NonNull String uid_Student, @NonNull String uid_tutor,
-                       int duration, @NonNull String idLesson, @NonNull String description) {
+                       @NonNull Timestamp data, @NonNull String description) {
 
         this.id = id;
         this.uid_Student = uid_Student;
         this.uid_tutor = uid_tutor;
-        this.duration = duration;
-        this.idLesson = idLesson;
+        this.data = data;
         this.description = description;
 
     }
@@ -33,14 +33,6 @@ public class LessonModel {
 
     public void setUid_tutor(@NonNull String uid_tutor) {
         this.uid_tutor = uid_tutor;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public void setIdLesson(@NonNull String idLesson) {
-        idLesson = idLesson;
     }
 
     public void setDescription(@NonNull String description) {
@@ -63,13 +55,9 @@ public class LessonModel {
         return uid_tutor;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
     @NonNull
-    public String getIdLesson() {
-        return idLesson;
+    public Timestamp getData() {
+        return data;
     }
 
     @NonNull

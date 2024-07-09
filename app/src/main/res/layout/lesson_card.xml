@@ -11,7 +11,6 @@
 
     <LinearLayout
         android:layout_width="370dp"
-
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="20dp">
@@ -141,7 +140,7 @@
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/HoourRecyclerView"
+                android:id="@+id/HourRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -166,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="category"
+                android:text="Description"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -182,32 +181,47 @@
                 app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextCategory"
+                    android:id="@+id/textInputEditTextDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:gravity="end|center_vertical"
-                    android:hint="category hint"
-                    android:inputType="text" />
+                    android:hint="Insert a note"
+                    android:inputType="text"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
         </RelativeLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bookLessonButton"
-            style="@android:style/Widget.Button"
-            android:layout_width="110dp"
-            android:layout_height="30dp"
+        <LinearLayout
+            android:id="@+id/update_name_linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="40dp"
-            android:layout_toEndOf="@+id/date"
-            android:background="@drawable/button_background"
-            android:fontFamily="@font/lato_bold"
-            android:gravity="center"
-            android:text="Select your day"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/update_name_TextInputLayout">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bookLessonButton"
+                style="@android:style/Widget.Button"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_toEndOf="@+id/date"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center"
+                android:text="Book your lesson"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                />
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

@@ -11,12 +11,11 @@ public class LessonRemoteDataSource {
 
     private static final String UID_STUDENT = "uid Student";
     private static final String UID_TUTOR = "uid Tutor";
-    private static final String DURATION = "duration";
     private static final String DESCRIPTION = "description";
     private static final String LESSON_DATE = "lesson Date";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference lesson = db.collection("Class");
+    private final CollectionReference lesson = db.collection("lesson");
 
 
     public void createLesson(CreateLessonRequest request,
@@ -26,16 +25,15 @@ public class LessonRemoteDataSource {
 
         data.put(UID_STUDENT , request.getUid_Student());
         data.put(UID_TUTOR, request.getUid_tutor());
-        data.put(DURATION , request.getDuration());
         data.put(DESCRIPTION , request.getDescription());
-        data.put(LESSON_DATE , request.getIdLesson());
+        data.put(LESSON_DATE , request.getData());
 
         lesson.add(data)
                 .addOnSuccessListener(documentReference -> {
 
                     LessonModel lessonModel = new LessonModel(
                             lesson.getId(), request.getUid_Student(), request.getUid_tutor(),
-                            request.getDuration(), request.getIdLesson(),
+                            request.getData(),
                             request.getDescription());
 
                     callback.onSucces(lessonModel);
@@ -43,6 +41,4 @@ public class LessonRemoteDataSource {
                 })
                 .addOnFailureListener(callback::onFailure);
     }
-
-
 }

@@ -2,21 +2,21 @@ package com.example.bicoccahelp.data.lesson;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.Timestamp;
+
 public class CreateLessonRequest {
     private @NonNull String uid_Student;
     private @NonNull String uid_tutor;
-    private @NonNull int duration;
 
-    private  @NonNull String idLesson;
+    private final @NonNull Timestamp data;
     private @NonNull String description;
 
     public CreateLessonRequest(@NonNull String uid_Student, @NonNull String uid_tutor,
-                               int duration, @NonNull String idLesson,
+                               @NonNull Timestamp data,
                                @NonNull String description) {
         this.uid_Student = uid_Student;
         this.uid_tutor = uid_tutor;
-        this.duration = duration;
-        this.idLesson = idLesson;
+        this.data = data;
         this.description = description;
     }
 
@@ -29,14 +29,9 @@ public class CreateLessonRequest {
     public String getUid_tutor() {
         return uid_tutor;
     }
-
-    public int getDuration() {
-        return duration;
-    }
-
     @NonNull
-    public String getIdLesson() {
-        return idLesson;
+    public Timestamp getData() {
+        return data;
     }
 
     @NonNull
@@ -50,10 +45,6 @@ public class CreateLessonRequest {
 
     public void setUid_tutor(@NonNull String uid_tutor) {
         this.uid_tutor = uid_tutor;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
     public void setLessonDate(@NonNull String idLesson) {

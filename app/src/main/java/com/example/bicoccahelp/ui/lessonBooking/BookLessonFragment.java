@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,8 @@ import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.date.CreateDateRequest;
 import com.example.bicoccahelp.data.date.DateModel;
+import com.example.bicoccahelp.data.lesson.CreateLessonRequest;
+import com.example.bicoccahelp.data.lesson.LessonRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentBookLessonBinding;
@@ -42,6 +46,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     private TutorRepository tutorRepository;
     private DateRepository dateRepository;
     private UserRepository userRepository;
+    private LessonRepository lessonRepository;
     private TutorViewModel tutorViewModel;
     private DateRecycleViewAdapter dateRecycleViewAdapter;
     private DateViewModel dateViewModel;
@@ -73,7 +78,11 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
         userRepository = ServiceLocator.INSTANCE.getUserRepository();
         dateRepository = ServiceLocator.getInstance().getDateRepository();
+        userRepository = ServiceLocator.getInstance().getUserRepository();
+        tutorRepository = ServiceLocator.getInstance().getTutorRepository();
         tutorViewModel = new ViewModelProvider(requireActivity()).get(TutorViewModel.class);
+        lessonRepository = ServiceLocator.getInstance().getLessonRepository();
+
 
         if (getArguments() != null) {
             tutorName = getArguments().getString(ARG_TUTOR_NAME);
@@ -83,8 +92,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         }
 
         dateViewModel = new ViewModelProvider(requireActivity(),
-                new DateViewModelFactory(dateRepository)).get(DateViewModel.class);
-
+                new DateViewModelFactory(dateRepository, lessonRepository, userRepository, tutorRepository)).get(DateViewModel.class);
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
@@ -99,12 +107,19 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.lessonCard.selectDayButton.setOnClickListener(this);
+        binding.lessonCard.bookLessonButton.setOnClickListener(this);
         binding.lessonCard.tutorListItemName.setText(tutorName);
         binding.lessonCard.tutorListItemEmail.setText(tutorEmail);
         Glide.with(requireActivity().getApplicationContext())
                 .load(GlideLoadModel.get(tutorLogoUri))
                 .into(binding.lessonCard.tutorListItemLogo);
         changeTutor(tutorUid);
+
+        dateViewModel.getLessonCreate().observe(getViewLifecycleOwner(), lessonCreated -> {
+            if(lessonCreated){
+                Objects.requireNonNull(getDialog()).cancel();
+            }
+        });
     }
 
     @Override
@@ -216,7 +231,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void configureRecyclerView() {
-        RecyclerView dateRecycleView = binding.lessonCard.HoourRecyclerView;
+        RecyclerView dateRecycleView = binding.lessonCard.HourRecyclerView;
 
         dateRecycleViewAdapter = new DateRecycleViewAdapter(dateViewModel.dateList);
         dateRecycleView.setAdapter(dateRecycleViewAdapter);
@@ -247,7 +262,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void addOnScrollListener() {
-        binding.lessonCard.HoourRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.lessonCard.HourRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -288,7 +303,16 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         }
     }
 
-    public void bookLesson() {
-        // Implementa la logica per prenotare la lezione
+    public void bookLesson(){
+        dateViewModel.tutorId(tutorName);
+        String uidStudent = dateViewModel.getStudentId();
+        String description = binding.lessonCard.textInputEditTextDescription.getText().toString();
+        dateViewModel.getTutorId().observe(getViewLifecycleOwner(), uidTutor -> {
+
+            Log.d("", "CREATA LEZIONE");
+
+            CreateLessonRequest request = new CreateLessonRequest(uidStudent, uidTutor,selectedDate, description);
+            dateViewModel.createLesson(request);
+        });
     }
 }

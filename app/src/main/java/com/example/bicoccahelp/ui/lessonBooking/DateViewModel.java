@@ -6,7 +6,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.date.DateRepository;
+import com.example.bicoccahelp.data.lesson.CreateLessonRequest;
+import com.example.bicoccahelp.data.lesson.LessonModel;
+import com.example.bicoccahelp.data.lesson.LessonRepository;
+import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.auth.User;
 
 
 import java.util.ArrayList;
@@ -26,20 +32,38 @@ public class DateViewModel extends ViewModel {
 
     private final MutableLiveData<UiState> uiState;
     private final MutableLiveData<String> errorMessage;
+    private MutableLiveData<String> tutorId;
     public final ArrayList<String> dateList;
     public final DateRepository dateRepository;
+    public final LessonRepository lessonRepository;
+    public final TutorRepository tutorRepository;
+    public final UserRepository userRepository;
+    private MutableLiveData<Boolean> lessonCreate;
 
     private final Long limit = 80L;
     private boolean hasMore = true;
     private int currentPage = 0;
 
-    public DateViewModel(DateRepository dateRepository) {
+    public DateViewModel(DateRepository dateRepository, LessonRepository lessonRepository,
+                         UserRepository userRepository, TutorRepository tutorRepository) {
         this.uiState = new MutableLiveData<>(new UiState(0, 0));;
         this.errorMessage = new MutableLiveData<>(null);;
         this.dateRepository = dateRepository;
+        this.lessonRepository = lessonRepository;
+        this.userRepository = userRepository;
+        this.tutorRepository = tutorRepository;
         this.dateList = new ArrayList<>();
+        this.lessonCreate = new MutableLiveData<>();
+        this.tutorId = new MutableLiveData<>();
     }
 
+    public LiveData<Boolean> getLessonCreate(){
+        return lessonCreate;
+    }
+
+    public LiveData<String> getTutorId(){
+        return tutorId;
+    }
     public LiveData<UiState> getUiState() {
         return uiState;
     }
@@ -91,6 +115,38 @@ public class DateViewModel extends ViewModel {
                 errorMessage.postValue(e.getMessage());
             }
         });
+    }
+
+    public void createLesson(CreateLessonRequest request){
+        lessonRepository.createLesson(request, new Callback<LessonModel>() {
+            @Override
+            public void onSucces(LessonModel lessonModel) {
+                lessonCreate.setValue(true);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("La lezione non è stata confermata");
+            }
+        });
+    }
+
+    public void tutorId(String tutorName){
+        tutorRepository.getTutorUid(tutorName, new Callback<String>() {
+            @Override
+            public void onSucces(String idTutor) {
+                tutorId.setValue(idTutor);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Tutor not exist");
+            }
+        });
+    }
+
+    public String getStudentId(){
+        return userRepository.getCurrentUser().getUid();
     }
 }
 

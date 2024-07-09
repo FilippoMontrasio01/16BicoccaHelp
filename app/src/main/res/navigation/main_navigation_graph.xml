@@ -130,7 +130,6 @@
         <argument
             android:name="tutorUid"
             app:argType="string" />
-
     </dialog>
 
     <activity
