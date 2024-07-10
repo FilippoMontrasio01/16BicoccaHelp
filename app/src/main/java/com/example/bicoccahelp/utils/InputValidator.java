@@ -4,7 +4,9 @@ import android.text.TextUtils;
 
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
+import com.google.firebase.Timestamp;
 
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,6 +86,15 @@ public class InputValidator {
             }
         }
         return String.valueOf(chars);
+    }
+
+    public static String formatDate(Timestamp timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp.getSeconds() * 1000);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1; // Mese è 0-based, quindi aggiungi 1
+        int year = calendar.get(Calendar.YEAR);
+        return day + "/" + month + "/" + year;
     }
 
 

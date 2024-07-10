@@ -130,6 +130,10 @@
         <argument
             android:name="tutorUid"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_from_book_dialog_to_home"
+            app:destination="@id/home_fragment"/>
     </dialog>
 
     <activity

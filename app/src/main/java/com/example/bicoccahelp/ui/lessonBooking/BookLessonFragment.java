@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +49,9 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     private UserRepository userRepository;
     private LessonRepository lessonRepository;
     private TutorViewModel tutorViewModel;
+
+    private NavController navController;
+
     private DateRecycleViewAdapter dateRecycleViewAdapter;
     private DateViewModel dateViewModel;
     private boolean isLoading = false;
@@ -83,7 +87,6 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         tutorViewModel = new ViewModelProvider(requireActivity()).get(TutorViewModel.class);
         lessonRepository = ServiceLocator.getInstance().getLessonRepository();
 
-
         if (getArguments() != null) {
             tutorName = getArguments().getString(ARG_TUTOR_NAME);
             tutorEmail = getArguments().getString(ARG_TUTOR_EMAIL);
@@ -106,6 +109,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         binding.lessonCard.selectDayButton.setOnClickListener(this);
         binding.lessonCard.bookLessonButton.setOnClickListener(this);
         binding.lessonCard.tutorListItemName.setText(tutorName);
@@ -114,10 +118,10 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
                 .load(GlideLoadModel.get(tutorLogoUri))
                 .into(binding.lessonCard.tutorListItemLogo);
         changeTutor(tutorUid);
-
         dateViewModel.getLessonCreate().observe(getViewLifecycleOwner(), lessonCreated -> {
-            if(lessonCreated){
-                Objects.requireNonNull(getDialog()).cancel();
+            if (lessonCreated) {
+                clearRecyclerView();
+                navController.navigate(R.id.action_from_book_dialog_to_home);
             }
         });
     }
@@ -130,6 +134,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
             bookLesson();
         }
     }
+
+
 
     private void openCalendar() {
         // Ottieni la data corrente
@@ -233,7 +239,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     private void configureRecyclerView() {
         RecyclerView dateRecycleView = binding.lessonCard.HourRecyclerView;
 
-        dateRecycleViewAdapter = new DateRecycleViewAdapter(dateViewModel.dateList);
+        dateRecycleViewAdapter = new DateRecycleViewAdapter(dateViewModel.dateList, dateRecycleView);
         dateRecycleView.setAdapter(dateRecycleViewAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -283,7 +289,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         if (!Objects.equals(this.tutorUid, newTutorUid)) {
             this.tutorUid = newTutorUid;
             clearRecyclerView();
-            isDateSelected = false; // Resetta lo stato della data selezionata
+            isDateSelected = false;
         }
     }
 
@@ -304,15 +310,22 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     public void bookLesson(){
-        dateViewModel.tutorId(tutorName);
         String uidStudent = dateViewModel.getStudentId();
         String description = binding.lessonCard.textInputEditTextDescription.getText().toString();
+        String selectedOrario = dateRecycleViewAdapter.getSelectedToggleButtonText();
+
+        dateViewModel.createLessonWithTutorName(tutorName, uidStudent, selectedDate,
+                selectedOrario, description);
+
+
+        /*dateViewModel.getTutorId().removeObservers(getViewLifecycleOwner());
         dateViewModel.getTutorId().observe(getViewLifecycleOwner(), uidTutor -> {
 
             Log.d("", "CREATA LEZIONE");
 
-            CreateLessonRequest request = new CreateLessonRequest(uidStudent, uidTutor,selectedDate, description);
+            CreateLessonRequest request = new CreateLessonRequest(uidStudent, uidTutor,selectedDate,selectedOrario, description);
             dateViewModel.createLesson(request);
-        });
+
+        });*/
     }
 }

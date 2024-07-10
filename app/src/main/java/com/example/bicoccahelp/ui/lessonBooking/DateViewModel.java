@@ -2,6 +2,7 @@ package com.example.bicoccahelp.ui.lessonBooking;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bicoccahelp.data.Callback;
@@ -57,8 +58,13 @@ public class DateViewModel extends ViewModel {
         this.tutorId = new MutableLiveData<>();
     }
 
-    public LiveData<Boolean> getLessonCreate(){
-        return lessonCreate;
+    public LiveData<Boolean> getLessonCreate() {
+        return Transformations.map(lessonCreate, input -> {
+            if (input) {
+                lessonCreate.setValue(false); // Reset lessonCreate to false after observing true
+            }
+            return input;
+        });
     }
 
     public LiveData<String> getTutorId(){
@@ -116,6 +122,22 @@ public class DateViewModel extends ViewModel {
             }
         });
     }
+
+    public void createLessonWithTutorName(String tutorName, String uidStudent, Timestamp selectedDate, String selectedOrario, String description) {
+        tutorRepository.getTutorUid(tutorName, new Callback<String>() {
+            @Override
+            public void onSucces(String uidTutor) {
+                CreateLessonRequest request = new CreateLessonRequest(uidStudent, uidTutor, selectedDate, selectedOrario, description);
+                createLesson(request);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Gestisci l'errore qui
+            }
+        });
+    }
+
 
     public void createLesson(CreateLessonRequest request){
         lessonRepository.createLesson(request, new Callback<LessonModel>() {

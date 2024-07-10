@@ -22,9 +22,12 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<DateRecycleView
 
     private final List<String> disponibilitaOrari;
     private SparseBooleanArray itemStateArray = new SparseBooleanArray();
+    private int selectedPosition = -1;
+    private RecyclerView recyclerView;
 
-    public DateRecycleViewAdapter(List<String> disponibilitaOrari) {
+    public DateRecycleViewAdapter(List<String> disponibilitaOrari, RecyclerView recyclerView) {
         this.disponibilitaOrari = disponibilitaOrari;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -45,6 +48,13 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<DateRecycleView
         holder.bind(orario, position);
     }
 
+    public String getSelectedOrario() {
+        if (selectedPosition >= 0 && selectedPosition < disponibilitaOrari.size()) {
+            return disponibilitaOrari.get(selectedPosition);
+        }
+        return null;
+    }
+
     public class DateViewHolder extends RecyclerView.ViewHolder {
         private final ToggleButton toggleButton;
 
@@ -57,6 +67,7 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<DateRecycleView
                 if (!itemStateArray.get(adapterPosition, false)) {
                     toggleButton.setChecked(true);
                     itemStateArray.put(adapterPosition, true);
+                    selectedPosition = adapterPosition;
 
                     for (int i = 0; i < itemStateArray.size(); i++) {
                         if (i != adapterPosition) {
@@ -74,10 +85,19 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<DateRecycleView
             toggleButton.setTextOff(orario);
             toggleButton.setChecked(itemStateArray.get(position, false));
         }
+
+        public String getToggleButtonText() {
+            return toggleButton.getText().toString();
+        }
     }
 
-    public void clearData() {
-        disponibilitaOrari.clear();
-        notifyDataSetChanged();
+    public String getSelectedToggleButtonText() {
+        if (selectedPosition >= 0 && selectedPosition < disponibilitaOrari.size()) {
+            DateViewHolder holder = (DateViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedPosition);
+            if (holder != null) {
+                return holder.getToggleButtonText();
+            }
+        }
+        return null;
     }
 }
