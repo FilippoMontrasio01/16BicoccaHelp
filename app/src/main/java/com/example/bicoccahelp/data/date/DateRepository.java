@@ -23,4 +23,8 @@ public class DateRepository {
     public void updateDate(String uidTutor, Timestamp date, Timestamp nuovaData, Callback<Void> callback){
         dateRemoteDataSource.updateDate(uidTutor,date, nuovaData, callback);
     }
+
+    public void updateOrario(String uidTutor, Timestamp date, String orario, Callback<Void> callback){
+        dateRemoteDataSource.updateOrario(uidTutor, date, orario, callback);
+    }
 }

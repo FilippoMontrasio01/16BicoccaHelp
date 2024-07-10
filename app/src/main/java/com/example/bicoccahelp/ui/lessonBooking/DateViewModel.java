@@ -44,6 +44,7 @@ public class DateViewModel extends ViewModel {
     private final Long limit = 80L;
     private boolean hasMore = true;
     private int currentPage = 0;
+    private MutableLiveData<Boolean> oraUpdated;
 
     public DateViewModel(DateRepository dateRepository, LessonRepository lessonRepository,
                          UserRepository userRepository, TutorRepository tutorRepository) {
@@ -56,6 +57,16 @@ public class DateViewModel extends ViewModel {
         this.dateList = new ArrayList<>();
         this.lessonCreate = new MutableLiveData<>();
         this.tutorId = new MutableLiveData<>();
+        this.oraUpdated = new MutableLiveData<>();
+    }
+
+
+    public MutableLiveData<Boolean> getOraUpdated() {
+        return oraUpdated;
+    }
+
+    public void setOraUpdated(MutableLiveData<Boolean> oraUpdated) {
+        this.oraUpdated = oraUpdated;
     }
 
     public LiveData<Boolean> getLessonCreate() {
@@ -128,7 +139,7 @@ public class DateViewModel extends ViewModel {
             @Override
             public void onSucces(String uidTutor) {
                 CreateLessonRequest request = new CreateLessonRequest(uidStudent, uidTutor, selectedDate, selectedOrario, description);
-                createLesson(request);
+                createLessonAndUpdateOrario(request);
             }
 
             @Override
@@ -137,38 +148,36 @@ public class DateViewModel extends ViewModel {
             }
         });
     }
-
-
-    public void createLesson(CreateLessonRequest request){
+    public String getStudentId(){
+        return userRepository.getCurrentUser().getUid();
+    }
+    public void createLessonAndUpdateOrario(CreateLessonRequest request){
         lessonRepository.createLesson(request, new Callback<LessonModel>() {
             @Override
             public void onSucces(LessonModel lessonModel) {
                 lessonCreate.setValue(true);
+                updateOrario(lessonModel.getUid_tutor(), lessonModel.getData(), lessonModel.getOra());
             }
 
             @Override
             public void onFailure(Exception e) {
-                errorMessage.setValue("La lezione non è stata confermata");
+                errorMessage.setValue("La lezione non è stata confermata: " + e.getMessage());
             }
         });
     }
 
-    public void tutorId(String tutorName){
-        tutorRepository.getTutorUid(tutorName, new Callback<String>() {
+    public void updateOrario(String uidTutor, Timestamp date, String orario) {
+        dateRepository.updateOrario(uidTutor, date, orario, new Callback<Void>() {
             @Override
-            public void onSucces(String idTutor) {
-                tutorId.setValue(idTutor);
+            public void onSucces(Void result) {
+                oraUpdated.setValue(true);  // Imposta oraUpdated su true dopo il successo
             }
 
             @Override
             public void onFailure(Exception e) {
-                errorMessage.setValue("Tutor not exist");
+                errorMessage.postValue("Impossibile aggiornare l'orario: " + e.getMessage());
             }
         });
-    }
-
-    public String getStudentId(){
-        return userRepository.getCurrentUser().getUid();
     }
 }
 

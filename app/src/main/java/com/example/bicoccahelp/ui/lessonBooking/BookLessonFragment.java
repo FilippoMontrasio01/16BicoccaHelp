@@ -118,12 +118,23 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
                 .load(GlideLoadModel.get(tutorLogoUri))
                 .into(binding.lessonCard.tutorListItemLogo);
         changeTutor(tutorUid);
+
         dateViewModel.getLessonCreate().observe(getViewLifecycleOwner(), lessonCreated -> {
             if (lessonCreated) {
+                // La lezione è stata creata, ora aggiorna l'orario
+                String selectedOrario = dateRecycleViewAdapter.getSelectedToggleButtonText();
+                dateViewModel.updateOrario(tutorUid, selectedDate, selectedOrario);
+            }
+        });
+
+        dateViewModel.getOraUpdated().observe(getViewLifecycleOwner(), oraUpdated -> {
+            if (oraUpdated) {
+                // L'orario è stato aggiornato, ora naviga indietro alla home
                 clearRecyclerView();
                 navController.navigate(R.id.action_from_book_dialog_to_home);
             }
         });
+
     }
 
     @Override
@@ -309,23 +320,11 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         }
     }
 
-    public void bookLesson(){
+    public void bookLesson() {
         String uidStudent = dateViewModel.getStudentId();
         String description = binding.lessonCard.textInputEditTextDescription.getText().toString();
         String selectedOrario = dateRecycleViewAdapter.getSelectedToggleButtonText();
 
-        dateViewModel.createLessonWithTutorName(tutorName, uidStudent, selectedDate,
-                selectedOrario, description);
-
-
-        /*dateViewModel.getTutorId().removeObservers(getViewLifecycleOwner());
-        dateViewModel.getTutorId().observe(getViewLifecycleOwner(), uidTutor -> {
-
-            Log.d("", "CREATA LEZIONE");
-
-            CreateLessonRequest request = new CreateLessonRequest(uidStudent, uidTutor,selectedDate,selectedOrario, description);
-            dateViewModel.createLesson(request);
-
-        });*/
+        dateViewModel.createLessonWithTutorName(tutorName, uidStudent, selectedDate, selectedOrario, description);
     }
 }
