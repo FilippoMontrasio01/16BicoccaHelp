@@ -78,6 +78,10 @@ public class TutorRepository {
         tutorRemoteDataSource.getTutorEmail(uidTutor, callback);
     }
 
+    public void getTutorModelById(String tutorId, Callback<TutorModel> callback){
+        tutorRemoteDataSource.getTutorModelById(tutorId, callback);
+    }
+
 
 
 }

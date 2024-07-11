@@ -11,13 +11,17 @@ import com.example.bicoccahelp.data.lesson.CreateLessonRequest;
 import com.example.bicoccahelp.data.lesson.LessonModel;
 import com.example.bicoccahelp.data.lesson.LessonRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.auth.User;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DateViewModel extends ViewModel {
 
@@ -139,11 +143,14 @@ public class DateViewModel extends ViewModel {
         });
     }
 
-    public void createLessonWithTutorName(String tutorName, String uidStudent, Timestamp selectedDate, String selectedOrario, String description) {
+    public void createLessonWithTutorName(String tutorName, String uidStudent,
+                                          Timestamp selectedDate, String selectedOrario,
+                                          String description) {
         tutorRepository.getTutorUid(tutorName, new Callback<String>() {
             @Override
             public void onSucces(String uidTutor) {
-                CreateLessonRequest request = new CreateLessonRequest(uidStudent, uidTutor, selectedDate, selectedOrario, description);
+                CreateLessonRequest request = new CreateLessonRequest(uidStudent, uidTutor,
+                        selectedDate, selectedOrario, description);
                 createLessonAndUpdateOrario(request);
             }
 
@@ -161,12 +168,11 @@ public class DateViewModel extends ViewModel {
             @Override
             public void onSucces(LessonModel lessonModel) {
                 lessonCreate.setValue(true);
-                //updateOrario(lessonModel.getUid_tutor(), lessonModel.getData(), lessonModel.getOra());
             }
 
             @Override
             public void onFailure(Exception e) {
-                errorMessage.setValue("La lezione non è stata confermata: " + e.getMessage());
+                errorMessage.setValue("The lesson has not been confirmed " + e.getMessage());
             }
         });
     }
@@ -189,7 +195,7 @@ public class DateViewModel extends ViewModel {
 
             @Override
             public void onFailure(Exception e) {
-                errorMessage.postValue("Impossibile aggiornare l'orario: " + e.getMessage());
+                errorMessage.postValue("Unable to update the schedule: " + e.getMessage());
             }
         });
     }
@@ -222,41 +228,114 @@ public class DateViewModel extends ViewModel {
         });
     }
 
-    public void bookLesson(String uidStudent, Timestamp selectedDate, String selectedOrario, String tutorName, String description) {
-        countDay(uidStudent, selectedDate, new Callback<Integer>() {
-            @Override
-            public void onSucces(Integer count) {
-                if (count >= 3) {
-                    errorMessage.setValue("You have reached the daily lesson limit.");
-                    lessonBookingAllowed.setValue(false);
-                } else {
-                    checkHour(uidStudent, selectedDate, selectedOrario, new Callback<Boolean>() {
-                        @Override
-                        public void onSucces(Boolean lessonExists) {
-                            if (lessonExists) {
-                                errorMessage.setValue("You already have a booking for the selected day and time.");
-                                lessonBookingAllowed.setValue(false);
-                            } else {
-                                createLessonWithTutorName(tutorName, uidStudent, selectedDate, selectedOrario, description);
-                                lessonBookingAllowed.setValue(true);
-                            }
-                        }
+    public void bookLesson(String uidStudent, Timestamp selectedDate, String selectedOrario,
+                           String tutorName, String description) {
 
-                        @Override
-                        public void onFailure(Exception e) {
-                            errorMessage.setValue(e.getMessage());
-                            lessonBookingAllowed.setValue(false);
-                        }
-                    });
-                }
+        String selectedDayOfWeek = getDayOfWeekString(selectedDate);
+
+        tutorRepository.getTutorUid(tutorName, new Callback<String>() {
+            @Override
+            public void onSucces(String tutorId) {
+                handleTutorIdRetrieved(tutorId, uidStudent, selectedDate, selectedDayOfWeek, selectedOrario, description);
             }
 
             @Override
             public void onFailure(Exception e) {
-                errorMessage.setValue(e.getMessage());
-                lessonBookingAllowed.setValue(false);
+                handleError(e.getMessage());
             }
         });
+    }
+
+    private void handleTutorIdRetrieved(String tutorId, String uidStudent, Timestamp selectedDate,
+                                        String selectedDayOfWeek, String selectedOrario, String description) {
+        tutorRepository.getTutorModelById(tutorId, new Callback<TutorModel>() {
+            @Override
+            public void onSucces(TutorModel tutorModel) {
+                handleTutorModelRetrieved(tutorModel, uidStudent, selectedDate, selectedDayOfWeek, selectedOrario, description);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                handleError(e.getMessage());
+            }
+        });
+    }
+
+    private void handleTutorModelRetrieved(TutorModel tutorModel, String uidStudent, Timestamp selectedDate,
+                                           String selectedDayOfWeek, String selectedOrario, String description) {
+        if (tutorModel != null) {
+            Boolean tutorAvailable = tutorModel.getDisponibilitaGiorni().get(selectedDayOfWeek);
+            if (tutorAvailable != null && tutorAvailable) {
+                countDay(uidStudent, selectedDate, new Callback<Integer>() {
+                    @Override
+                    public void onSucces(Integer count) {
+                        handleCountDayResult(count, uidStudent, selectedDate, selectedOrario, description, tutorModel);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        handleError(e.getMessage());
+                    }
+                });
+            } else {
+                handleError("The tutor is not available on the selected day.");
+            }
+        } else {
+            handleError("Unable to verify the tutor's availability.");
+        }
+    }
+
+    private void handleCountDayResult(Integer count, String uidStudent, Timestamp selectedDate,
+                                      String selectedOrario, String description, TutorModel tutorModel) {
+        if (count >= 3) {
+            handleError("You have reached the daily lesson limit.");
+        } else {
+            checkHour(uidStudent, selectedDate, selectedOrario, new Callback<Boolean>() {
+                @Override
+                public void onSucces(Boolean lessonExists) {
+                    handleCheckHourResult(lessonExists, uidStudent, selectedDate, selectedOrario, description, tutorModel);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    handleError(e.getMessage());
+                }
+            });
+        }
+    }
+
+    private void handleCheckHourResult(Boolean lessonExists, String uidStudent, Timestamp selectedDate,
+                                       String selectedOrario, String description, TutorModel tutorModel) {
+        if (lessonExists) {
+            handleError("You already have a booking for the selected day and time.");
+        } else {
+            createLessonWithTutorName(tutorModel.getName(), uidStudent, selectedDate, selectedOrario, description);
+            lessonBookingAllowed.setValue(true);
+        }
+    }
+
+    private void handleError(String message) {
+        errorMessage.setValue(message);
+        lessonBookingAllowed.setValue(false);
+    }
+
+    public String getDayOfWeekString(Timestamp selectedDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(selectedDate.getSeconds() * 1000);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+
+        Map<Integer, String> daysOfWeek = new HashMap<>();
+        daysOfWeek.put(Calendar.SUNDAY, "Sunday");
+        daysOfWeek.put(Calendar.MONDAY, "Monday");
+        daysOfWeek.put(Calendar.TUESDAY, "Tuesday");
+        daysOfWeek.put(Calendar.WEDNESDAY, "Wednesday");
+        daysOfWeek.put(Calendar.THURSDAY, "Thursday");
+        daysOfWeek.put(Calendar.FRIDAY, "Friday");
+        daysOfWeek.put(Calendar.SATURDAY,"Saturday");
+
+
+        return daysOfWeek.get(dayOfWeek);
     }
 }
 

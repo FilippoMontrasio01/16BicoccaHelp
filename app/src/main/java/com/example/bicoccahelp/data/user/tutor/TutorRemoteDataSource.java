@@ -512,6 +512,48 @@ public class TutorRemoteDataSource {
                         "Error deleting document", e));
     }
 
+    public void getTutorModelById(String tutorId, Callback<TutorModel> callback) {
+        tutors.document(tutorId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String id = documentSnapshot.getId() != null ? documentSnapshot.getId() : "";
+                        String email = documentSnapshot.getString(FIELD_EMAIL) != null ? documentSnapshot.getString(FIELD_EMAIL) : "";
+                        Boolean emailVerified = documentSnapshot.getBoolean(EMAIL_VERIFIED) != null ? documentSnapshot.getBoolean(EMAIL_VERIFIED) : false;
+                        String tutorName = documentSnapshot.getString(NAME) != null ? documentSnapshot.getString(NAME) : "";
+                        String photoUriString = documentSnapshot.getString(PHOTO_URI);
+                        if (photoUriString == null) {
+                            photoUriString = "";
+                        }
+                        Uri photoUri = Uri.parse(photoUriString);
+                        Map<String, Boolean> disponibilitaGiorni = (Map<String, Boolean>) documentSnapshot.get(DISPONIBILITA_GIORNI);
+                        if (disponibilitaGiorni == null) {
+                            disponibilitaGiorni = new HashMap<>();
+                        }
+                        String corsoDiStudi = documentSnapshot.getString(CORSO_DI_STUDI) != null ? documentSnapshot.getString(CORSO_DI_STUDI) : "";
+                        ArrayList<String> skills = (ArrayList<String>) documentSnapshot.get(SKILLS);
+                        if (skills == null) {
+                            skills = new ArrayList<>();
+                        }
+
+                        TutorModel tutorModel = new TutorModel(
+                                id,
+                                email,
+                                emailVerified,
+                                tutorName,
+                                photoUri,
+                                disponibilitaGiorni,
+                                corsoDiStudi,
+                                skills);
+
+                        callback.onSucces(tutorModel);
+                    } else {
+                        callback.onFailure(new Exception("No tutor found with the given ID"));
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
 
 
 

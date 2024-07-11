@@ -96,7 +96,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         }
 
         dateViewModel = new ViewModelProvider(requireActivity(),
-                new DateViewModelFactory(dateRepository, lessonRepository, userRepository, tutorRepository)).get(DateViewModel.class);
+                new DateViewModelFactory(dateRepository, lessonRepository, userRepository,
+                        tutorRepository)).get(DateViewModel.class);
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
@@ -140,7 +141,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Crea un nuovo DatePickerDialog
-        DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dialog = new DatePickerDialog(requireContext(),
+                R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year1, int month1, int dayOfMonth1) {
                 Calendar calendar = Calendar.getInstance();
@@ -150,12 +152,18 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
                 // Creare un oggetto Timestamp da un oggetto Date
                 selectedDate = new Timestamp(calendar.getTime());
                 int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+
+
                 Log.d("DayOfWeek", "Giorno della settimana selezionato: " + dayOfWeek);
 
                 // Verifica se è stata già selezionata una data
-                if (!isDateSelected || !Objects.equals(binding.lessonCard.selectDayButton.getText().toString(), InputValidator.formatDate(selectedDate))) {
-                    binding.lessonCard.selectDayButton.setText(InputValidator.formatDate(selectedDate));
-                    // Aggiorna subito gli orari disponibili dopo aver selezionato una nuova data
+                if (!isDateSelected || !Objects.equals(binding.lessonCard.selectDayButton.getText()
+                        .toString(), InputValidator.formatDate(selectedDate))) {
+                    binding.lessonCard.selectDayButton.
+                            setText(InputValidator.formatDate(selectedDate));
+
+
                     insertOrUpdateDate(selectedDate);
                 }
             }
@@ -187,7 +195,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void createDateInstance(Timestamp selectedDate) {
-        dateRepository.createDate(new CreateDateRequest(new HashMap<>(), selectedDate, tutorUid), new Callback<DateModel>() {
+        dateRepository.createDate(new CreateDateRequest(new HashMap<>(), selectedDate, tutorUid),
+                new Callback<DateModel>() {
             @Override
             public void onSucces(DateModel dateModel) {
                 isDateSelected = true;
@@ -237,7 +246,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         dateRecycleViewAdapter = new DateRecycleViewAdapter(dateViewModel.dateList, dateRecycleView);
         dateRecycleView.setAdapter(dateRecycleViewAdapter);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false);
         dateRecycleView.setLayoutManager(layoutManager);  // LinearLayoutManager ORIZZONTALE
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
@@ -263,11 +273,14 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void addOnScrollListener() {
-        binding.lessonCard.HourRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.lessonCard.HourRecyclerView
+                .addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (Objects.equals(lastLoadedTutorUidForScrollListener, tutorUid) && !isLoading && dateViewModel.hasMore() && dy > 0) {
+                if (Objects.equals(lastLoadedTutorUidForScrollListener, tutorUid) && !isLoading
+                        && dateViewModel.hasMore() && dy > 0) {
+
                     dateViewModel.getNextHourPage(tutorUid, selectedDate);
                     lastLoadedTutorUidForScrollListener = tutorUid;
                 }
@@ -276,7 +289,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void clearRecyclerView() {
-        if (dateViewModel != null && dateViewModel.dateList != null) {
+        if (dateViewModel != null) {
             dateViewModel.dateList.clear();
         }
         if (dateRecycleViewAdapter != null) {
@@ -301,7 +314,9 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
 
     private void bookLesson() {
         String uidStudent = dateViewModel.getStudentId();
-        String description = binding.lessonCard.textInputEditTextDescription.getText().toString();
+        String description = Objects.
+                requireNonNull(binding.lessonCard.textInputEditTextDescription.getText()).toString();
+
         String selectedOrario = dateRecycleViewAdapter.getSelectedToggleButtonText();
 
         dateViewModel.bookLesson(uidStudent, selectedDate, selectedOrario, tutorName, description);
@@ -325,7 +340,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
             } else {
                 // Avvisa l'utente che non può prenotare per qualche motivo
                 dateViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
-                    Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(requireActivity().findViewById(R.id.fragment_tutor),
+                            errorMessage, Snackbar.LENGTH_SHORT).show();
                 });
             }
         });
