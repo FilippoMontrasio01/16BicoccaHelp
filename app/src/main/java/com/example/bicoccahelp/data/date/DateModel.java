@@ -17,12 +17,14 @@ public class DateModel {
     private final @NonNull String uidTutor;
 
 
+
     public DateModel(@NonNull Map<String, Boolean> disponibilitaOrari, @NonNull Timestamp data,
                      @NonNull String uidTutor) {
         this.disponibilitaOrari = disponibilitaOrari;
         this.data = data;
         this.uidTutor = uidTutor;
     }
+
 
 
 

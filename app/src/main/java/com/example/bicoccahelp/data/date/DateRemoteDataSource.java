@@ -56,7 +56,6 @@ public class DateRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
-
     public void listOrari(String uidTutor, Timestamp giorno, Long limit, Callback<List<String>> callback) {
         if (giorno == null) {
             // Se la data è nulla, impostiamo la data attuale
@@ -81,32 +80,48 @@ public class DateRemoteDataSource {
                         // Se non ci sono documenti corrispondenti, creiamo un nuovo documento con il metodo createDate
                         CreateDateRequest createDateRequest = new CreateDateRequest(new HashMap<>(), finalGiorno, uidTutor);
 
-
+                        // Chiamiamo createDate in modo sincrono
                         createDate(createDateRequest, new Callback<DateModel>() {
                             @Override
                             public void onSucces(DateModel dateModel) {
-
+                                // Dopo aver creato la data, otteniamo gli orari disponibili
+                                fetchAvailableTimes(uidTutor, finalGiorno, callback);
                             }
 
                             @Override
                             public void onFailure(Exception e) {
-
+                                callback.onFailure(e);
                             }
                         });
                     } else {
-                        DocumentSnapshot document = documents.get(0); // Prendiamo il primo documento che corrisponde
+                        // Se ci sono documenti, otteniamo gli orari disponibili direttamente
+                        fetchAvailableTimes(uidTutor, finalGiorno, callback);
+                    }
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    private void fetchAvailableTimes(String uidTutor, Timestamp giorno, Callback<List<String>> callback) {
+        orarioTutor.whereEqualTo(FIELD_UID_TUTOR, uidTutor)
+                .whereEqualTo(FIELD_DATA, giorno)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0); // Prendiamo il primo documento che corrisponde
                         Map<String, Boolean> disponibilitaOrari = document.get(FIELD_ORARI) != null ? (Map<String, Boolean>) document.get(FIELD_ORARI) : new HashMap<>();
 
                         // Creiamo una lista per contenere solo gli orari disponibili
                         List<String> orariDisponibili = new ArrayList<>();
                         for (Map.Entry<String, Boolean> entry : disponibilitaOrari.entrySet()) {
                             if (entry.getValue()) {
-                                orariDisponibili.add(entry.getKey().toString());
+                                orariDisponibili.add(entry.getKey());
                             }
                         }
 
                         Collections.sort(orariDisponibili);
                         callback.onSucces(orariDisponibili);
+                    } else {
+                        callback.onFailure(new Exception("No matching document found"));
                     }
                 })
                 .addOnFailureListener(callback::onFailure);
