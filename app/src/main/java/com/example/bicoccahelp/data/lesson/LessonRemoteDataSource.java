@@ -1,8 +1,18 @@
 package com.example.bicoccahelp.data.lesson;
 
+import androidx.annotation.NonNull;
+
 import com.example.bicoccahelp.data.Callback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,5 +53,43 @@ public class LessonRemoteDataSource {
 
                 })
                 .addOnFailureListener(callback::onFailure);
+    }
+
+    public void countLesson(String uidStudent, Timestamp day, Callback<Integer> callback){
+        Query query = lesson
+                .whereEqualTo(UID_STUDENT, uidStudent)
+                .whereEqualTo(LESSON_DATE, day);
+        AggregateQuery countQuery = query.count();
+
+        countQuery.get(AggregateSource.SERVER).addOnCompleteListener(task -> {
+           if(task.isSuccessful()){
+               AggregateQuerySnapshot snapshot = task.getResult();
+               long count = snapshot.getCount();
+               callback.onSucces((int) count);
+           } else {
+
+           }
+        }).addOnFailureListener(callback::onFailure);
+    }
+
+    public void checkHourPerDay(String uidStudent, Timestamp day, String hour, Callback<Boolean> callback){
+        Query query = lesson
+                .whereEqualTo(UID_STUDENT, uidStudent)
+                .whereEqualTo(LESSON_DATE, day)
+                .whereEqualTo(ORA, hour);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot snapshot = task.getResult();
+                if (snapshot != null && !snapshot.isEmpty()) {
+                    callback.onSucces(true);
+                } else {
+
+                    callback.onSucces(false);
+                }
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
     }
 }

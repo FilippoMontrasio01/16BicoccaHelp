@@ -40,6 +40,7 @@ public class DateViewModel extends ViewModel {
     public final TutorRepository tutorRepository;
     public final UserRepository userRepository;
     private MutableLiveData<Boolean> lessonCreate;
+    private final MutableLiveData<Boolean> lessonBookingAllowed;
 
     private final Long limit = 80L;
     private boolean hasMore = true;
@@ -58,8 +59,12 @@ public class DateViewModel extends ViewModel {
         this.lessonCreate = new MutableLiveData<>();
         this.tutorId = new MutableLiveData<>();
         this.oraUpdated = new MutableLiveData<>();
+        this.lessonBookingAllowed = new MutableLiveData<>();
     }
 
+    public LiveData<Boolean> getLessonBookingAllowed() {
+        return lessonBookingAllowed;
+    }
 
     public MutableLiveData<Boolean> getOraUpdated() {
         return oraUpdated;
@@ -156,7 +161,7 @@ public class DateViewModel extends ViewModel {
             @Override
             public void onSucces(LessonModel lessonModel) {
                 lessonCreate.setValue(true);
-                updateOrario(lessonModel.getUid_tutor(), lessonModel.getData(), lessonModel.getOra());
+                //updateOrario(lessonModel.getUid_tutor(), lessonModel.getData(), lessonModel.getOra());
             }
 
             @Override
@@ -166,16 +171,90 @@ public class DateViewModel extends ViewModel {
         });
     }
 
+    public void resetLessonCreate() {
+        lessonCreate.setValue(false);
+    }
+
+    public void resetOraUpdated() {
+        oraUpdated.setValue(false);
+    }
+
+
     public void updateOrario(String uidTutor, Timestamp date, String orario) {
         dateRepository.updateOrario(uidTutor, date, orario, new Callback<Void>() {
             @Override
             public void onSucces(Void result) {
-                oraUpdated.setValue(true);  // Imposta oraUpdated su true dopo il successo
+                oraUpdated.setValue(true);
             }
 
             @Override
             public void onFailure(Exception e) {
                 errorMessage.postValue("Impossibile aggiornare l'orario: " + e.getMessage());
+            }
+        });
+    }
+
+    private void countDay(String uidStudent, Timestamp day, Callback<Integer> callback) {
+        lessonRepository.countLesson(uidStudent, day, new Callback<Integer>() {
+            @Override
+            public void onSucces(Integer count) {
+                callback.onSucces(count);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onFailure(e);
+            }
+        });
+    }
+
+    private void checkHour(String uidStudent, Timestamp day, String hour, Callback<Boolean> callback) {
+        lessonRepository.checkHourPerDay(uidStudent, day, hour, new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean exists) {
+                callback.onSucces(exists);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onFailure(e);
+            }
+        });
+    }
+
+    public void bookLesson(String uidStudent, Timestamp selectedDate, String selectedOrario, String tutorName, String description) {
+        countDay(uidStudent, selectedDate, new Callback<Integer>() {
+            @Override
+            public void onSucces(Integer count) {
+                if (count >= 3) {
+                    errorMessage.setValue("You have reached the daily lesson limit.");
+                    lessonBookingAllowed.setValue(false);
+                } else {
+                    checkHour(uidStudent, selectedDate, selectedOrario, new Callback<Boolean>() {
+                        @Override
+                        public void onSucces(Boolean lessonExists) {
+                            if (lessonExists) {
+                                errorMessage.setValue("You already have a booking for the selected day and time.");
+                                lessonBookingAllowed.setValue(false);
+                            } else {
+                                createLessonWithTutorName(tutorName, uidStudent, selectedDate, selectedOrario, description);
+                                lessonBookingAllowed.setValue(true);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            errorMessage.setValue(e.getMessage());
+                            lessonBookingAllowed.setValue(false);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue(e.getMessage());
+                lessonBookingAllowed.setValue(false);
             }
         });
     }

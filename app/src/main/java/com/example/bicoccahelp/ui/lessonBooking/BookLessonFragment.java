@@ -32,6 +32,7 @@ import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentBookLessonBinding;
 import com.example.bicoccahelp.data.date.DateRepository;
 import com.example.bicoccahelp.utils.GlideLoadModel;
+import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
@@ -118,23 +119,6 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
                 .load(GlideLoadModel.get(tutorLogoUri))
                 .into(binding.lessonCard.tutorListItemLogo);
         changeTutor(tutorUid);
-
-        dateViewModel.getLessonCreate().observe(getViewLifecycleOwner(), lessonCreated -> {
-            if (lessonCreated) {
-                // La lezione è stata creata, ora aggiorna l'orario
-                String selectedOrario = dateRecycleViewAdapter.getSelectedToggleButtonText();
-                dateViewModel.updateOrario(tutorUid, selectedDate, selectedOrario);
-            }
-        });
-
-        dateViewModel.getOraUpdated().observe(getViewLifecycleOwner(), oraUpdated -> {
-            if (oraUpdated) {
-                // L'orario è stato aggiornato, ora naviga indietro alla home
-                clearRecyclerView();
-                navController.navigate(R.id.action_from_book_dialog_to_home);
-            }
-        });
-
     }
 
     @Override
@@ -165,18 +149,18 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
 
                 // Creare un oggetto Timestamp da un oggetto Date
                 selectedDate = new Timestamp(calendar.getTime());
-
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                Log.d("DayOfWeek", "Giorno della settimana selezionato: " + dayOfWeek);
 
                 // Verifica se è stata già selezionata una data
-                if (!isDateSelected || !Objects.equals(binding.lessonCard.selectDayButton.getText().toString(), formatDate(selectedDate))) {
-                    binding.lessonCard.selectDayButton.setText(formatDate(selectedDate));
+                if (!isDateSelected || !Objects.equals(binding.lessonCard.selectDayButton.getText().toString(), InputValidator.formatDate(selectedDate))) {
+                    binding.lessonCard.selectDayButton.setText(InputValidator.formatDate(selectedDate));
                     // Aggiorna subito gli orari disponibili dopo aver selezionato una nuova data
                     insertOrUpdateDate(selectedDate);
                 }
             }
         }, year, month, day);
 
-        // Mostra il dialog
         dialog.show();
     }
 
@@ -207,7 +191,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
             @Override
             public void onSucces(DateModel dateModel) {
                 isDateSelected = true;
-                binding.lessonCard.selectDayButton.setText(formatDate(selectedDate));
+                binding.lessonCard.selectDayButton.setText(InputValidator.formatDate(selectedDate));
                 // Aggiorna subito gli orari disponibili dopo aver creato la data nel database
                 loadAvailableTimes(selectedDate);
             }
@@ -225,7 +209,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
             @Override
             public void onSucces(Void unused) {
                 isDateSelected = true;
-                binding.lessonCard.selectDayButton.setText(formatDate(selectedDate));
+                binding.lessonCard.selectDayButton.setText(InputValidator.formatDate(selectedDate));
                 // Aggiorna subito gli orari disponibili dopo aver aggiornato la data nel database
                 loadAvailableTimes(selectedDate);
             }
@@ -292,8 +276,12 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void clearRecyclerView() {
-        dateViewModel.dateList.clear();
-        dateRecycleViewAdapter.notifyDataSetChanged();
+        if (dateViewModel != null && dateViewModel.dateList != null) {
+            dateViewModel.dateList.clear();
+        }
+        if (dateRecycleViewAdapter != null) {
+            dateRecycleViewAdapter.notifyDataSetChanged();
+        }
     }
 
     private void changeTutor(String newTutorUid) {
@@ -304,15 +292,6 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         }
     }
 
-    private String formatDate(Timestamp timestamp) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(timestamp.getSeconds() * 1000);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH) + 1; // Mese è 0-based, quindi aggiungi 1
-        int year = calendar.get(Calendar.YEAR);
-        return day + "/" + month + "/" + year;
-    }
-
     public void onStart() {
         super.onStart();
         if (isDateSelected) {
@@ -320,11 +299,35 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         }
     }
 
-    public void bookLesson() {
+    private void bookLesson() {
         String uidStudent = dateViewModel.getStudentId();
         String description = binding.lessonCard.textInputEditTextDescription.getText().toString();
         String selectedOrario = dateRecycleViewAdapter.getSelectedToggleButtonText();
 
-        dateViewModel.createLessonWithTutorName(tutorName, uidStudent, selectedDate, selectedOrario, description);
+        dateViewModel.bookLesson(uidStudent, selectedDate, selectedOrario, tutorName, description);
+
+        dateViewModel.getLessonBookingAllowed().observe(getViewLifecycleOwner(), bookingAllowed -> {
+            if (bookingAllowed) {
+                dateViewModel.getLessonCreate().observe(getViewLifecycleOwner(), lessonCreated -> {
+                    if (lessonCreated) {
+                        dateViewModel.updateOrario(tutorUid, selectedDate, selectedOrario);
+                        dateViewModel.resetLessonCreate();
+                    }
+                });
+
+                dateViewModel.getOraUpdated().observe(getViewLifecycleOwner(), oraUpdated -> {
+                    if (oraUpdated) {
+                        clearRecyclerView();
+                        navController.navigate(R.id.action_from_book_dialog_to_home);
+                        dateViewModel.resetOraUpdated();
+                    }
+                });
+            } else {
+                // Avvisa l'utente che non può prenotare per qualche motivo
+                dateViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+                    Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_SHORT).show();
+                });
+            }
+        });
     }
 }
