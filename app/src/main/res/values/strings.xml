@@ -144,7 +144,7 @@
     <string name="disponibility_error">Please insert at least one day to proceed</string>
     <string name="class_booking">Book a\nClass</string>
     <string name="tutor_fragment">Fragment Tutor</string>
-    <string name="select_disponibilities">Select your disponibilities</string>
+    <string name="select_disponibilities">Select your availability</string>
     <string name="monday">Monday</string>
     <string name="friday">Friday</string>
     <string name="tuesday">Tuesday</string>
@@ -191,5 +191,6 @@
     <string name="student_already_exist">Student already exist</string>
     <string name="tutor_not_exist">Tutor not exist</string>
     <string name="create_student_error">Error: The student could not be created</string>
+    <string name="book_now">Book now</string>
 
 </resources>

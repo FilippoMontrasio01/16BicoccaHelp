@@ -79,8 +79,9 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/star_image_review"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:text=""
+            android:textSize="17sp"
             android:fontFamily="@font/lato_bold"
             android:textColor="@color/philippine_gray"/>
 
@@ -89,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:scaleType="centerCrop"
             />
 

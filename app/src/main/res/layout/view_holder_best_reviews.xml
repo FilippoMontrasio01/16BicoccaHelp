@@ -1,6 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="300dp"
+    android:layout_height="140dp"
+    android:background="@drawable/nav_bar_background">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.cardview.widget.CardView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cardCornerRadius="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        >
+
+        <ImageView
+            android:id="@+id/tutorListItemLogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tutorListItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:text=""
+                android:textColor="@color/dark_gray"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tutorListItemCorsoDiStudi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:text=""
+                android:textColor="@color/philippine_gray" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/filter_name_button"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/toggle_button_background"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/book_now"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tutorListReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/star_image_review"
+            android:fontFamily="@font/lato_bold"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textSize="17sp"
+            android:textColor="@color/philippine_gray" />
+
+        <ImageView
+            android:id="@+id/star_image_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/star_review"
+            />
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>
