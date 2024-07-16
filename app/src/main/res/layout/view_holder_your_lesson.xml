@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewHolderYourLesson"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -7,7 +8,7 @@
     android:background="@drawable/nav_bar_background">
 
     <TextView
-        android:id="@+id/tutorListItemNameq"
+        android:id="@+id/lessonDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -15,11 +16,12 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:fontFamily="@font/lato_bold"
-        android:text="C++ Programming Class"
+        android:text=""
         android:textColor="@color/dark_gray"
         android:textSize="24sp" />
 
     <LinearLayout
+        android:id="@+id/DateAndHourLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -28,12 +30,13 @@
         >
 
         <LinearLayout
+            android:id="@+id/DateLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/round_back_background_date">
 
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/DateTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -41,19 +44,20 @@
                 android:layout_margin="10dp"
                 android:fontFamily="@font/lato_bold"
                 android:gravity="center"
-                android:text="16/7/24  (Tuesday)"
+                android:text=""
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/HourLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/round_back_background_date"
             android:layout_marginStart="10dp">
 
             <TextView
-                android:id="@+id/hour"
+                android:id="@+id/HourTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -61,13 +65,10 @@
                 android:layout_margin="10dp"
                 android:fontFamily="@font/lato_bold"
                 android:gravity="center"
-                android:text="10:00 - 11:00"
+                android:text=""
                 android:textColor="@color/dark_gray"
                 android:textSize="14sp" />
         </LinearLayout>
-
-
-
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
@@ -79,6 +80,7 @@
         app:dividerColor="@android:color/darker_gray"/>
 
     <RelativeLayout
+        android:id="@+id/TutorRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="20dp"
@@ -87,135 +89,129 @@
         android:layout_marginBottom="5dp">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/tutorCardView"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:cardCornerRadius="50dp">
 
             <ImageView
-                android:id="@+id/tutorListItemLogo"
+                android:id="@+id/TutorImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:scaleType="centerCrop"
-                android:src="@drawable/profile_icon" />
+                android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/tutorListItemName"
+            android:id="@+id/TutorName"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="50dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/lato_bold"
-            android:text="Filippo Montrasio"
+            android:text=""
             android:textColor="@color/dark_gray"
             android:textSize="18sp" />
 
         <ViewFlipper
-            android:id="@+id/viewFlipper"
+            android:id="@+id/LessonViewFlipper"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginStart="70dp"
             android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/tutorListItemName">
+            android:layout_toEndOf="@+id/TutorName">
 
-            <FrameLayout
+            <LinearLayout
+                android:id="@+id/JoinLinearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:background="@drawable/round_back_background_lesson_join"
-                >
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:background="@drawable/round_back_background_lesson_join">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent" />
+                <ImageView
+                    android:id="@+id/JoinDot"
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:src="@drawable/dot" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/JoinTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    >
-
-                    <ImageView
-                        android:layout_width="11dp"
-                        android:layout_height="11dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:src="@drawable/dot" />
-
-                    <TextView
-                        android:id="@+id/start"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginEnd="15dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:gravity="center"
-                        android:text="Join Now"
-                        android:textColor="@color/dark_gray"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </FrameLayout>
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="center"
+                    android:text="@string/join_now"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/CancelLinearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:background="@drawable/round_back_background_lesson_canceled">
 
                 <ImageView
+                    android:id="@+id/CancelDot"
                     android:layout_width="11dp"
                     android:layout_height="11dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:src="@drawable/dot_finished" />
 
                 <TextView
-                    android:id="@+id/canceled"
+                    android:id="@+id/CancelTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="15dp"
                     android:fontFamily="@font/lato_bold"
                     android:gravity="center"
-                    android:text="Canceled"
+                    android:text="@string/canceled"
                     android:textColor="@color/deep_red"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/FinishLinearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
-                android:background="@drawable/round_back_background_lesson_finished"
-                >
+                android:background="@drawable/round_back_background_lesson_finished">
 
                 <ImageView
+                    android:id="@+id/FinishDot"
                     android:layout_width="11dp"
                     android:layout_height="11dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:src="@drawable/dot" />
 
                 <TextView
-                    android:id="@+id/finished"
+                    android:id="@+id/FinishTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="15dp"
                     android:fontFamily="@font/lato_bold"
                     android:gravity="center"
-                    android:text="Finished"
+                    android:text="@string/finished"
                     android:textColor="@color/dark_gray"
                     android:textSize="14sp" />
             </LinearLayout>
         </ViewFlipper>
+
     </RelativeLayout>
 </LinearLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ViewHolderBestReview"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="300dp"
@@ -7,6 +8,7 @@
     android:background="@drawable/nav_bar_background">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/TutorCardView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         app:cardCornerRadius="50dp"
@@ -15,7 +17,7 @@
         >
 
         <ImageView
-            android:id="@+id/tutorListItemLogo"
+            android:id="@+id/TutorImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
@@ -23,12 +25,14 @@
     </androidx.cardview.widget.CardView>
 
     <RelativeLayout
+        android:id="@+id/BestReviewRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
         android:layout_marginStart="5dp">
 
         <LinearLayout
+            android:id="@+id/BestReviewLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -36,7 +40,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tutorListItemName"
+                android:id="@+id/TutorNameTextVie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
@@ -45,7 +49,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/tutorListItemCorsoDiStudi"
+                android:id="@+id/TutorEmailTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
@@ -53,7 +57,7 @@
                 android:textColor="@color/philippine_gray" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/filter_name_button"
+                android:id="@+id/BookLessonButton"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="42dp"
@@ -66,10 +70,10 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tutorListReview"
+            android:id="@+id/TutorReviewTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/star_image_review"
+            android:layout_toStartOf="@+id/TutorReviewImageView"
             android:fontFamily="@font/lato_bold"
             android:layout_marginTop="10dp"
             android:text=""
@@ -77,7 +81,7 @@
             android:textColor="@color/philippine_gray" />
 
         <ImageView
-            android:id="@+id/star_image_review"
+            android:id="@+id/TutorReviewImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -88,8 +92,4 @@
             />
 
     </RelativeLayout>
-
-
-
-
 </LinearLayout>

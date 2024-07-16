@@ -192,5 +192,15 @@
     <string name="tutor_not_exist">Tutor not exist</string>
     <string name="create_student_error">Error: The student could not be created</string>
     <string name="book_now">Book now</string>
+    <string name="join_now">Join Now</string>
+    <string name="canceled">Canceled</string>
+    <string name="finished">Finished</string>
+    <string name="welcomeBack">Welcome Back</string>
+    <string name="appTitle">Book Peer Tutoring Class Now!</string>
+    <string name="bestReview">Best Reviews</string>
+    <string name="seeAll">See All</string>
+    <string name="NoTutorsAvailable">No tutors available</string>
+    <string name="lesson">Your lessons</string>
+    <string name="NoLessonsScheduled">No lessons scheduled</string>
 
 </resources>
