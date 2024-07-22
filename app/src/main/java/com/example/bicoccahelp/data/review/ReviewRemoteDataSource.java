@@ -22,10 +22,12 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.DecimalFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ReviewRemoteDataSource {
 
@@ -144,7 +146,46 @@ public class ReviewRemoteDataSource {
                 });
     }
 
+    public void getAverageReviewOrder(String uidTutor, Callback<Double> callback) {
+        review.whereEqualTo(FIELD_UID_TUTOR, uidTutor).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        double totalStars = 0.0;
+                        int count = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            double stars = document.getDouble(FIELD_STARS);
+                            totalStars += stars;
+                            count++;
+                        }
 
+                        if (count != 0){
+                            double averageStars = totalStars / count;
+                            double roundedAverageStars = Math.round(averageStars * 10.0) / 10.0;
+                            callback.onSucces(roundedAverageStars);
+                        } else {
+                            callback.onSucces(null);
+                        }
+                    } else {
+                        Log.d("Firestore Error", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
 
-
+    public void listReviews(String uidTutor, int limit, Callback<List<ReviewModel>> callback) {
+        review.whereEqualTo(FIELD_UID_TUTOR, uidTutor)
+                .orderBy(FIELD_STARS, Query.Direction.DESCENDING)
+                .limit(limit)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<ReviewModel> reviewList = new ArrayList<>();
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        String uidStudent = document.getString(FIELD_UID_STUDENT);
+                        double stars = document.getDouble(FIELD_STARS);
+                        ReviewModel reviewModel = new ReviewModel(uidTutor, uidStudent, (float) stars);
+                        reviewList.add(reviewModel);
+                    }
+                    callback.onSucces(reviewList);
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
 }

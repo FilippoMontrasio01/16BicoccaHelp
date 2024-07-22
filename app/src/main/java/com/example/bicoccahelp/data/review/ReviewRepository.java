@@ -28,6 +28,14 @@ public class ReviewRepository {
         reviewRemoteDataSource.getAverageReview(uidTutor, callback);
     }
 
+    public void getAverageReviewOrder(String uidTutor, Callback<Double> callback){
+        reviewRemoteDataSource.getAverageReviewOrder(uidTutor, callback);
+    }
+
+    public void listReviews(String uidTutor, int limit, Callback<List<ReviewModel>> callback){
+        reviewRemoteDataSource.listReviews(uidTutor, limit, callback);
+    }
+
     public void getReview(String studentUid, String tutorUid, Callback<Float> callback){
         reviewRemoteDataSource.getReview(studentUid, tutorUid, callback);
     }
