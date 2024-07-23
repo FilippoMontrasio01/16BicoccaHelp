@@ -11,6 +11,11 @@
         android:name="com.example.bicoccahelp.ui.home.HomeFragment"
         android:label="@string/home_fragment"
         tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_from_home_to_book_lesson"
+            app:destination="@id/fragment_tutor"/>
+
     </fragment>
 
 

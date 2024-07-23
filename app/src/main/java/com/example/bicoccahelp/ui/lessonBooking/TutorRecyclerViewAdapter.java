@@ -71,9 +71,9 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         private final TextView tutorName;
         private final ImageView areaIcon;
         private final TextView corso;
-        private final TextView reviw;
+        private final TextView review;
 
-        private final ImageView star_icon;
+        private final ImageView starIcon;
         private StudentRepository studentRepository;
         private CorsoDiStudiRepository corsoDiStudiRepository;
         private ReviewRepository reviewRepository;
@@ -84,8 +84,8 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             tutorName = view.findViewById(R.id.tutorListItemName);
             areaIcon = view.findViewById(R.id.areaIcon);
             corso = view.findViewById(R.id.tutorListItemCorsoDiStudi);
-            reviw = view.findViewById(R.id.tutorListReview);
-            star_icon = view.findViewById(R.id.star_image_review);
+            review = view.findViewById(R.id.tutorListReview);
+            starIcon = view.findViewById(R.id.star_image_review);
 
 
             studentRepository = ServiceLocator.getInstance().getStudentRepository();
@@ -192,11 +192,11 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
                 @Override
                 public void onSucces(Double average) {
                     if(average != null){
-                        reviw.setText(String.valueOf(average));
-                        star_icon.setImageResource(R.drawable.star_review);
+                        review.setText(String.valueOf(average));
+                        starIcon.setImageResource(R.drawable.star_review);
                     }else{
-                        reviw.setText("No Reviews");
-                        star_icon.setImageDrawable(null);
+                        review.setText("No Reviews");
+                        starIcon.setImageDrawable(null);
                     }
 
                 }

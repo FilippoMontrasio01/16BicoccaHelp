@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -28,8 +29,7 @@ import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener
-         {
+public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private FragmentProfileBinding binding;
     private NavController navController;
@@ -150,7 +150,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     private void completeTutorOnclick() {
         profileViewModel.getStudentExists().observe(getViewLifecycleOwner(), studentExist ->{
             if(studentExist){
-                navController.navigate(R.id.action_from_profile_to_complete_tutor_fragment);
+                navController.navigate(R.id.action_from_profile_to_complete_tutor_fragment, null, new NavOptions.Builder()
+                        .setPopUpTo(R.id.profile_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
+                        .build());
             }else{
                 Snackbar.make(requireView(), getString(R.string.add_at_least_a_skill),
                         Snackbar.LENGTH_SHORT).show();
@@ -159,7 +161,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     }
 
     private void completeStudentOnClick() {
-        navController.navigate(R.id.action_from_profile_to_complete_student_fragment);
+        navController.navigate(R.id.action_from_profile_to_complete_student_fragment, null, new NavOptions.Builder()
+                .setPopUpTo(R.id.profile_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
+                .build());
     }
 
     private void showConfirmSignOutDialog() {
@@ -179,7 +183,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener
     }
 
     private void reviewOnclick() {
-        navController.navigate(R.id.action_from_profile_to_review_fragment);
+        navController.navigate(R.id.action_from_profile_to_review_fragment, null, new NavOptions.Builder()
+                .setPopUpTo(R.id.profile_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
+                .build());
     }
 
 

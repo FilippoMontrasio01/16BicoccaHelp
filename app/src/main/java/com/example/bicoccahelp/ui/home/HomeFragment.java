@@ -7,7 +7,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -22,10 +25,12 @@ import com.example.bicoccahelp.databinding.FragmentHomeBinding;
 import com.example.bicoccahelp.ui.lessonBooking.TutorFragmentDirections;
 import com.example.bicoccahelp.utils.ServiceLocator;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private FragmentHomeBinding binding;
     private NavController navController;
+    private boolean isLoading = false;
+    private BestReviewsRecycleViewAdapter bestReviewsRecycleViewAdapter;
 
 
     private UserRepository userRepository;
@@ -48,7 +53,7 @@ public class HomeFragment extends Fragment {
         userRepository = ServiceLocator.getInstance().getUserRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
 
-        HomeViewModelFactory factory = new HomeViewModelFactory(userRepository);
+        HomeViewModelFactory factory = new HomeViewModelFactory(userRepository, tutorRepository);
         homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
     }
 
@@ -64,6 +69,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        binding.SeeAllReviewsButton.setOnClickListener(this);
 
         homeViewModel.getUserName(new Callback<String>() {
             @Override
@@ -76,5 +82,84 @@ public class HomeFragment extends Fragment {
                 binding.UsernameTextview.setText(homeViewModel.getErrorMessage().toString());
             }
         });
+
+        this.configureRecyclerView();
+        this.observeUiState();
+        this.loadFirstPage();
+        this.addOnScrollListener();
+
+    }
+
+    private void configureRecyclerView(){
+        RecyclerView bestReviewsRecycleView = binding.BestReviewRecycleView;
+
+        bestReviewsRecycleViewAdapter = new BestReviewsRecycleViewAdapter(
+                homeViewModel.tutorList,
+                requireActivity().getApplication());
+
+        bestReviewsRecycleView.setAdapter(bestReviewsRecycleViewAdapter);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+        bestReviewsRecycleView.setLayoutManager(layoutManager);
+
+    }
+
+    private void observeUiState(){
+        homeViewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
+            stopLoading();
+            if(uiState.fetched == 0){
+                binding.EmptyBestReviewRecycleViewTextView.setVisibility(View.VISIBLE);
+                binding.BestReviewRecycleView.setVisibility(View.GONE);
+                return;
+            }else{
+                binding.EmptyBestReviewRecycleViewTextView.setVisibility(View.GONE);
+                binding.BestReviewRecycleView.setVisibility(View.VISIBLE);
+            }
+
+            bestReviewsRecycleViewAdapter.notifyItemRangeInserted(uiState.sizeBeforeFetch,
+                    uiState.fetched);
+        });
+    }
+
+    private void loadFirstPage() {
+        if (homeViewModel.getCurrentPage() == 0 && homeViewModel.hasMore()) {
+            homeViewModel.getNextTutorsPage();
+        }
+    }
+
+    private void addOnScrollListener(){
+        binding.BestReviewRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(!isLoading && homeViewModel.hasMore() && dy > 0){
+                    homeViewModel.getNextTutorsPage();
+                }
+            }
+        });
+    }
+
+    private void startLoading() {
+        isLoading = true;
+    }
+
+    private void stopLoading() {
+        isLoading = false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == binding.SeeAllReviewsButton.getId()){
+            navController.navigate(R.id.action_from_home_to_book_lesson, null, new NavOptions.Builder()
+                    .setPopUpTo(R.id.home_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
+                    .build());
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

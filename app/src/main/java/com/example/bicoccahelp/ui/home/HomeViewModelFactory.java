@@ -6,22 +6,25 @@ import androidx.lifecycle.ViewModelProvider;
 
 
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 
 
 public class HomeViewModelFactory implements ViewModelProvider.Factory{
 
 
     private final UserRepository userRepository;
+    private final TutorRepository tutorRepository;
 
 
-    public HomeViewModelFactory(UserRepository userRepository) {
+    public HomeViewModelFactory(UserRepository userRepository, TutorRepository tutorRepository) {
         this.userRepository = userRepository;
+        this.tutorRepository = tutorRepository;
     }
 
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass){
-        return (T) new HomeViewModel(userRepository);
+        return (T) new HomeViewModel(userRepository, tutorRepository);
     }
 }
