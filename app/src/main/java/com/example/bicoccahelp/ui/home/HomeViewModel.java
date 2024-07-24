@@ -35,7 +35,7 @@ public class HomeViewModel extends ViewModel {
     public final List<TutorModel> tutorList;
     private final MutableLiveData<List<TutorModel>> list;
     private final TutorRepository tutorRepository;
-    private final Long limit = 5L;
+    private final Long limit = 10L;
     private boolean hasMore = true;
     private int currentPage = 0;
 
@@ -85,7 +85,7 @@ public class HomeViewModel extends ViewModel {
             return;
         }
 
-        tutorRepository.listTutors(limit, new Callback<List<TutorModel>>() {
+        tutorRepository.listTutorOrderReview(limit, new Callback<List<TutorModel>>() {
             @Override
             public void onSucces(List<TutorModel> data) {
                 currentPage += 1;

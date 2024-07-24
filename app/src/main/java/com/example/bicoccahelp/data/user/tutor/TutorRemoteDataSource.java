@@ -33,6 +33,7 @@ public class TutorRemoteDataSource {
     private static final String CORSO_DI_STUDI = "corso di studi";
     private static final String DISPONIBILITA_GIORNI = "disponibilità giorni";
     private static final String SKILLS = "skills";
+    private static final String AVERAGE_REVIEW = "average review";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference tutors = db.collection("Tutor");
     private DocumentSnapshot lastDocument;
@@ -53,6 +54,8 @@ public class TutorRemoteDataSource {
         data.put(CORSO_DI_STUDI, createTutorRequest.getCorsoDiStudi());
         data.put(DISPONIBILITA_GIORNI, createTutorRequest.getDisponibilitaGiorni());
         data.put(SKILLS, createTutorRequest.getSkills());
+        data.put(AVERAGE_REVIEW, createTutorRequest.getAverageReview());
+
 
         tutors.document(user.getUid())
                 .set(data)
@@ -62,7 +65,8 @@ public class TutorRemoteDataSource {
                             user.getDisplayName(),
                             user.getPhotoUrl(), createTutorRequest.getDisponibilitaGiorni(),
                             createTutorRequest.getCorsoDiStudi(),
-                            createTutorRequest.getSkills());
+                            createTutorRequest.getSkills(),
+                            createTutorRequest.getAverageReview());
                     callback.onSucces(tutor);
                 })
                 .addOnFailureListener(callback::onFailure);
@@ -86,6 +90,7 @@ public class TutorRemoteDataSource {
                         Log.d("", "ID USER: "+ id);
                         String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
                         Log.d("", "EMAIL USER: "+ email);
+                        double averageReview = document.getDouble(AVERAGE_REVIEW);
                         Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
                         String name = document.getString(NAME) != null ? document.getString(NAME) : "";
                         Log.d("", "NAME USER: "+ name);
@@ -112,7 +117,8 @@ public class TutorRemoteDataSource {
                                 photoUri,
                                 disponibilitaGiorni,
                                 corsoDiStudi,
-                                skills);
+                                skills,
+                                averageReview);
                         tutorList.add(tutorModel);
                     }
 
@@ -152,6 +158,7 @@ public class TutorRemoteDataSource {
                         String id = document.getId() != null ? document.getId() : "";
                         Log.d("", "ID USER: "+ id);
                         String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
+                        double averageReview = document.getDouble(AVERAGE_REVIEW);
                         Log.d("", "EMAIL USER: "+ email);
                         Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
                         String tutorName = document.getString(NAME) != null ? document.getString(NAME) : "";
@@ -178,7 +185,8 @@ public class TutorRemoteDataSource {
                                 photoUri,
                                 disponibilitaGiorni,
                                 corsoDiStudi,
-                                skills);
+                                skills,
+                                averageReview);
 
                         tutorList.add(tutorModel);
 
@@ -209,6 +217,7 @@ public class TutorRemoteDataSource {
                     for (DocumentSnapshot document: documents) {
                         String id = document.getId() != null ? document.getId() : "";
                         String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
+                        double averageReview = document.getDouble(AVERAGE_REVIEW);
                         Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
                         String tutorName = document.getString(NAME) != null ? document.getString(NAME) : "";
 
@@ -236,7 +245,8 @@ public class TutorRemoteDataSource {
                                 photoUri,
                                 disponibilitaGiorni,
                                 corsoDiStudi,
-                                skills);
+                                skills,
+                                averageReview);
 
                         tutorList.add(tutorModel);
 
@@ -271,6 +281,7 @@ public class TutorRemoteDataSource {
                     for (DocumentSnapshot document: documents) {
                         String id = document.getId() != null ? document.getId() : "";
                         String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
+                        double averageReview = document.getDouble(AVERAGE_REVIEW);
                         Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
                         String tutorName = document.getString(NAME) != null ? document.getString(NAME) : "";
 
@@ -297,7 +308,8 @@ public class TutorRemoteDataSource {
                                 photoUri,
                                 disponibilitaGiorni,
                                 corsoDiStudi,
-                                skills);
+                                skills,
+                                averageReview);
 
                         tutorList.add(tutorModel);
 
@@ -331,6 +343,7 @@ public class TutorRemoteDataSource {
                     for (DocumentSnapshot document: documents) {
                         String id = document.getId() != null ? document.getId() : "";
                         String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
+                        double averageReview = document.getDouble(AVERAGE_REVIEW);
                         Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
                         String tutorName = document.getString(NAME) != null ? document.getString(NAME) : "";
 
@@ -357,7 +370,8 @@ public class TutorRemoteDataSource {
                                 photoUri,
                                 disponibilitaGiorni,
                                 corsoDiStudi,
-                                skills);
+                                skills,
+                                averageReview);
 
                         tutorList.add(tutorModel);
 
@@ -369,6 +383,61 @@ public class TutorRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
 
 
+    }
+
+    public void listTutorOrderReview(Long limit, Callback<List<TutorModel>> callback) {
+        Query query = tutors.orderBy(AVERAGE_REVIEW, Query.Direction.DESCENDING).limit(limit);
+        if (lastDocument != null) {
+            query = query.startAfter(lastDocument);
+        }
+        query.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    if (documents.size() > 0) {
+                        lastDocument = documents.get(documents.size() - 1);
+                    }
+                    List<TutorModel> tutorList = new ArrayList<>();
+
+                    for (DocumentSnapshot document : documents) {
+                        String id = document.getId() != null ? document.getId() : "";
+                        Log.d("", "ID USER: " + id);
+                        String email = document.getString(FIELD_EMAIL) != null ? document.getString(FIELD_EMAIL) : "";
+                        Log.d("", "EMAIL USER: " + email);
+                        double averageReview = document.getDouble(AVERAGE_REVIEW);
+                        Boolean emailVerified = document.getBoolean(EMAIL_VERIFIED) != null ? document.getBoolean(EMAIL_VERIFIED) : false;
+                        String name = document.getString(NAME) != null ? document.getString(NAME) : "";
+                        Log.d("", "NAME USER: " + name);
+                        String photoUriString = document.getString(PHOTO_URI);
+                        if (photoUriString == null) {
+                            photoUriString = "";
+                        }
+                        Uri photoUri = Uri.parse(photoUriString);
+                        Map<String, Boolean> disponibilitaGiorni = (Map<String, Boolean>) document.get(DISPONIBILITA_GIORNI);
+                        if (disponibilitaGiorni == null) {
+                            disponibilitaGiorni = new HashMap<>();
+                        }
+                        String corsoDiStudi = document.getString(CORSO_DI_STUDI) != null ? document.getString(CORSO_DI_STUDI) : "";
+                        ArrayList<String> skills = (ArrayList<String>) document.get(SKILLS);
+                        if (skills == null) {
+                            skills = new ArrayList<>();
+                        }
+
+                        TutorModel tutorModel = new TutorModel(
+                                id,
+                                email,
+                                emailVerified,
+                                name,
+                                photoUri,
+                                disponibilitaGiorni,
+                                corsoDiStudi,
+                                skills,
+                                averageReview);
+                        tutorList.add(tutorModel);
+                    }
+
+                    callback.onSucces(tutorList);
+                })
+                .addOnFailureListener(callback::onFailure);
     }
 
 
@@ -398,7 +467,8 @@ public class TutorRemoteDataSource {
                             user.getDisplayName(),
                             user.getPhotoUrl(), createTutorRequest.getDisponibilitaGiorni(),
                             createTutorRequest.getCorsoDiStudi(),
-                            createTutorRequest.getSkills());
+                            createTutorRequest.getSkills(),
+                            createTutorRequest.getAverageReview());
                     callback.onSucces(tutor);
                 })
                 .addOnFailureListener(callback::onFailure);
@@ -518,6 +588,7 @@ public class TutorRemoteDataSource {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String id = documentSnapshot.getId() != null ? documentSnapshot.getId() : "";
+                        double averageReview = documentSnapshot.getDouble(AVERAGE_REVIEW);
                         String email = documentSnapshot.getString(FIELD_EMAIL) != null ? documentSnapshot.getString(FIELD_EMAIL) : "";
                         Boolean emailVerified = documentSnapshot.getBoolean(EMAIL_VERIFIED) != null ? documentSnapshot.getBoolean(EMAIL_VERIFIED) : false;
                         String tutorName = documentSnapshot.getString(NAME) != null ? documentSnapshot.getString(NAME) : "";
@@ -544,7 +615,8 @@ public class TutorRemoteDataSource {
                                 photoUri,
                                 disponibilitaGiorni,
                                 corsoDiStudi,
-                                skills);
+                                skills,
+                                averageReview);
 
                         callback.onSucces(tutorModel);
                     } else {

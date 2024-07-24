@@ -14,13 +14,18 @@ public class CreateTutorRequest {
     private final @NonNull Map<String, Boolean> disponibilitaGiorni;
     private final @NonNull ArrayList<String> skills;
 
+    private final @NonNull double averageReview;
+
 
     public CreateTutorRequest(@NonNull String corsoDiStudi,
                               @NonNull Map<String, Boolean> disponibilitaGiorni,
-                              @NonNull ArrayList<String> skills) {
+                              @NonNull ArrayList<String> skills,
+                              @NonNull double averageReview) {
         this.corsoDiStudi = corsoDiStudi;
         this.disponibilitaGiorni = disponibilitaGiorni;
         this.skills = skills;
+        this.averageReview = averageReview;
+
     }
 
     @NonNull
@@ -36,5 +41,9 @@ public class CreateTutorRequest {
     @NonNull
     public ArrayList<String> getSkills() {
         return skills;
+    }
+
+    public double getAverageReview() {
+        return averageReview;
     }
 }

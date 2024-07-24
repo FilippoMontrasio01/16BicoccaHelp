@@ -273,7 +273,7 @@ public class CompleteProfileViewModel extends ViewModel {
                 }
 
                 if (idCorso != null) {
-                    CreateTutorRequest request = new CreateTutorRequest(idCorso, disponibilitaGiorni.getValue(), subject);
+                    CreateTutorRequest request = new CreateTutorRequest(idCorso, disponibilitaGiorni.getValue(), subject, 0.0);
 
                     tutorRepository.createTutor(request, new Callback<TutorModel>() {
                         @Override

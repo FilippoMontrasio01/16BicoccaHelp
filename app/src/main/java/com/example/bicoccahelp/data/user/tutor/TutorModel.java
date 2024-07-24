@@ -18,15 +18,18 @@ public class TutorModel extends UserModel {
     
     private final @NonNull String corsoDiStudi;
     private final @NonNull ArrayList<String> skills;
+    private final @NonNull double averageReview;
 
 
     public TutorModel(String uid, String email, boolean emailVerified, String name, Uri photoUri,
                       @NonNull Map<String, Boolean> disponibilitaGiorni,
-                      @NonNull String corsoDiStudi, @NonNull ArrayList<String> skills) {
+                      @NonNull String corsoDiStudi, @NonNull ArrayList<String> skills,
+                      @NonNull double averageReview) {
         super(uid, email, emailVerified, name, photoUri != null ? photoUri : Uri.parse(""));
         this.corsoDiStudi = corsoDiStudi;
         this.disponibilitaGiorni = disponibilitaGiorni;
         this.skills = skills;
+        this.averageReview = averageReview;
     }
 
 
@@ -47,5 +50,9 @@ public class TutorModel extends UserModel {
     @NonNull
     public ArrayList<String> getSkills() {
         return skills;
+    }
+
+    public double getAverageReview() {
+        return averageReview;
     }
 }

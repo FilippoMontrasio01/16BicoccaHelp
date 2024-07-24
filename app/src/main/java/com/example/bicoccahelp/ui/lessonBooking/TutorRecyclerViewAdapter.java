@@ -98,6 +98,8 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             tutorName.setText(tutorModel.getName());
             itemView.setOnClickListener(view -> listener.onTutorItemClick(tutorModel));
             getCorsoId(tutorModel.getUid());
+            //review.setText(String.valueOf(tutorModel.getAverageReview()));
+            //starIcon.setImageResource(R.drawable.star_review);
             getAverageReview(tutorModel.getUid());
 
 
@@ -182,10 +184,9 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
                 case "Giuridica":
                     areaIcon.setImageResource(R.drawable.giurisprudenza);
                     break;
-
-
             }
         }
+
 
         private void getAverageReview(String uidTutor){
             reviewRepository.getAverageReview(uidTutor, new Callback<Double>() {
@@ -194,11 +195,7 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
                     if(average != null){
                         review.setText(String.valueOf(average));
                         starIcon.setImageResource(R.drawable.star_review);
-                    }else{
-                        review.setText("No Reviews");
-                        starIcon.setImageDrawable(null);
                     }
-
                 }
 
                 @Override

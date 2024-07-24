@@ -35,8 +35,11 @@ public class ReviewRemoteDataSource {
         private static final String FIELD_UID_TUTOR = "uid_Tutor";
         private static final String FIELD_STARS = "stars";
 
+        private static final String AVERAGE_REVIEW = "average review";
+
         private final FirebaseFirestore db = FirebaseFirestore.getInstance();
         private final CollectionReference review = db.collection("review");
+
         private DocumentSnapshot lastDocument;
 
     public void createReview(CreateReviewRequest request, Callback<ReviewModel> callback){
@@ -118,6 +121,7 @@ public class ReviewRemoteDataSource {
 
     public void getAverageReview(String uidTutor, Callback<Double> callback) {
 
+        CollectionReference tutors = db.collection("Tutor");
 
         review.whereEqualTo(FIELD_UID_TUTOR, uidTutor).get()
                 .addOnCompleteListener(task -> {
@@ -125,48 +129,32 @@ public class ReviewRemoteDataSource {
                         double totalStars = 0.0;
                         int count = 0;
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            double stars = document.getDouble(FIELD_STARS);
-                            totalStars += stars;
-                            count++;
+                            Double stars = document.getDouble(FIELD_STARS);
+                            if (stars != null) {
+                                totalStars += stars;
+                                count++;
+                            }
                         }
 
                         if(count != 0){
                             double averageStars = totalStars / count;
                             double roundedAverageStars = Math.round(averageStars * 10.0) / 10.0;
-                            callback.onSucces(roundedAverageStars);
-                        }else{
-                            callback.onSucces(null);
-                        }
 
-
-
-                    } else {
-                        Log.d("Firestore Error", "Error getting documents: ", task.getException());
-                    }
-                });
-    }
-
-    public void getAverageReviewOrder(String uidTutor, Callback<Double> callback) {
-        review.whereEqualTo(FIELD_UID_TUTOR, uidTutor).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        double totalStars = 0.0;
-                        int count = 0;
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            double stars = document.getDouble(FIELD_STARS);
-                            totalStars += stars;
-                            count++;
-                        }
-
-                        if (count != 0){
-                            double averageStars = totalStars / count;
-                            double roundedAverageStars = Math.round(averageStars * 10.0) / 10.0;
-                            callback.onSucces(roundedAverageStars);
+                            // Aggiornamento del campo del tutor con la media calcolata
+                            tutors.document(uidTutor).update(AVERAGE_REVIEW, roundedAverageStars)
+                                    .addOnSuccessListener(aVoid -> {
+                                        callback.onSucces(roundedAverageStars);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.w("Firestore Error", "Error updating averageReview", e);
+                                        callback.onFailure(e);
+                                    });
                         } else {
                             callback.onSucces(null);
                         }
                     } else {
                         Log.d("Firestore Error", "Error getting documents: ", task.getException());
+                        callback.onFailure(task.getException());
                     }
                 });
     }
