@@ -26,7 +26,7 @@ public class LessonRemoteDataSource {
     private static final String ORA = "hour";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference lesson = db.collection("lesson");
+    private final CollectionReference lesson = db.collection("Class");
 
 
     public void createLesson(CreateLessonRequest request,

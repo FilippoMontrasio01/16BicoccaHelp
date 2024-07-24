@@ -2,9 +2,11 @@ package com.example.bicoccahelp.ui.home;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,10 +27,15 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
 
     private final List<TutorModel> tutorList;
     private final Application application;
+    private final OnItemClickListener listener;
 
-    public BestReviewsRecycleViewAdapter(List<TutorModel> tutorList, Application application){
+    public interface OnItemClickListener {
+        void onTutorItemClick(TutorModel tutorModel);
+    }
+    public BestReviewsRecycleViewAdapter(List<TutorModel> tutorList, Application application, OnItemClickListener listener){
         this.tutorList = tutorList;
         this.application = application;
+        this.listener = listener;
     }
 
     @Override
@@ -53,7 +60,7 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(@NonNull ReviewsViewHolder holder, int position) {
-        holder.bind(tutorList.get(position));
+        holder.bind(tutorList.get(position), listener);
     }
 
     public class ReviewsViewHolder extends RecyclerView.ViewHolder{
@@ -62,6 +69,7 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
         private final TextView tutorEmail;
         private final TextView averageReview;
         private final ImageView starIcon;
+        private final Button bookLessonButton;
         private ReviewRepository reviewRepository;
 
         public ReviewsViewHolder(@NonNull View view){
@@ -72,16 +80,18 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
             tutorEmail = view.findViewById(R.id.TutorEmailTextView);
             averageReview = view.findViewById(R.id.TutorReviewTextView);
             starIcon = view.findViewById(R.id.TutorReviewImageView);
+            bookLessonButton = view.findViewById(R.id.BookLessonButton);
 
             reviewRepository = ServiceLocator.getInstance().getReviewRepository();
         }
 
 
-        public void bind(TutorModel tutorModel){
+        public void bind(TutorModel tutorModel, OnItemClickListener listener){
             tutorName.setText(tutorModel.getName());
             tutorEmail.setText(tutorModel.getEmail());
             getAverageReview(tutorModel.getUid());
-
+            //itemView.setOnClickListener(v -> listener.onTutorItemClick(tutorModel));
+            bookLessonButton.setOnClickListener(v -> listener.onTutorItemClick(tutorModel));
             if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
                     .getPhotoUri().toString()) ){
                 userPhoto.setImageResource(R.drawable.profile_icon);
@@ -90,6 +100,7 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
                         .load(GlideLoadModel.get(tutorModel.getPhotoUri().toString()))
                         .into(userPhoto);
             }
+
 
         }
 
@@ -102,7 +113,6 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
                         averageReview.setText(String.valueOf(average));
                         starIcon.setImageResource(R.drawable.star_review);
                     }else{
-                        averageReview.setText("No Reviews");
                         starIcon.setImageDrawable(null);
                     }
 

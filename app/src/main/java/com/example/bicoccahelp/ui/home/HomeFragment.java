@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,9 +94,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private void configureRecyclerView(){
         RecyclerView bestReviewsRecycleView = binding.BestReviewRecycleView;
 
+        BestReviewsRecycleViewAdapter.OnItemClickListener listener = tutor -> {
+            if (tutor != null) { // Aggiungi questo controllo di nullità
+                HomeFragmentDirections.ActionToLessonCardFromHome action = HomeFragmentDirections.actionToLessonCardFromHome(
+                        tutor.getName(), tutor.getEmail(), tutor.getPhotoUri().toString(), tutor.getUid());
+                navController.navigate(action);
+            } else {
+                Log.e("HomeFragment", "TutorModel is null in OnItemClickListener");
+            }
+        };
+
         bestReviewsRecycleViewAdapter = new BestReviewsRecycleViewAdapter(
                 homeViewModel.tutorList,
-                requireActivity().getApplication());
+                requireActivity().getApplication(),
+                listener);
 
         bestReviewsRecycleView.setAdapter(bestReviewsRecycleViewAdapter);
 

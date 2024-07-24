@@ -16,6 +16,15 @@
             android:id="@+id/action_from_home_to_book_lesson"
             app:destination="@id/fragment_tutor"/>
 
+        <action
+            android:id="@+id/actionToLessonCardFromHome"
+            app:destination="@id/lesson_card"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_in_left"
+            />
+
     </fragment>
 
 

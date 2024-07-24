@@ -38,7 +38,7 @@ public class ReviewRemoteDataSource {
         private static final String AVERAGE_REVIEW = "average review";
 
         private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        private final CollectionReference review = db.collection("review");
+        private final CollectionReference review = db.collection("Review");
 
         private DocumentSnapshot lastDocument;
 

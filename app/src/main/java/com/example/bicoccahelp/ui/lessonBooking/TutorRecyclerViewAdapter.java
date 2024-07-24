@@ -98,8 +98,6 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             tutorName.setText(tutorModel.getName());
             itemView.setOnClickListener(view -> listener.onTutorItemClick(tutorModel));
             getCorsoId(tutorModel.getUid());
-            //review.setText(String.valueOf(tutorModel.getAverageReview()));
-            //starIcon.setImageResource(R.drawable.star_review);
             getAverageReview(tutorModel.getUid());
 
 
@@ -195,6 +193,8 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
                     if(average != null){
                         review.setText(String.valueOf(average));
                         starIcon.setImageResource(R.drawable.star_review);
+                    }else{
+                        starIcon.setImageDrawable(null);
                     }
                 }
 
@@ -206,8 +206,5 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         }
 
     }
-
-
-
 
 }

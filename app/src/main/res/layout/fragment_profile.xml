@@ -241,12 +241,12 @@
                         android:padding="6dp"
                         android:src="@drawable/history" />
                     <TextView
-                        android:id="@+id/history_textView"
+                        android:id="@+id/your_lesson_textView"
                         android:layout_marginStart="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="@string/history"
+                        android:text="@string/lesson"
                         android:textColor="@color/dark_gray"
                         android:fontFamily="@font/lato_bold"
                         android:textSize="20sp"

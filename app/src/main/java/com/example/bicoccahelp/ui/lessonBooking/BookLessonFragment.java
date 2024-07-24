@@ -81,11 +81,14 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
-        userRepository = ServiceLocator.INSTANCE.getUserRepository();
+        userRepository = ServiceLocator.getInstance().getUserRepository();
         dateRepository = ServiceLocator.getInstance().getDateRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
-        tutorViewModel = new ViewModelProvider(requireActivity()).get(TutorViewModel.class);
+
+
+        TutorViewModelFactory factory = new TutorViewModelFactory(tutorRepository);
+        tutorViewModel = new ViewModelProvider(requireActivity(), factory).get(TutorViewModel.class);
         lessonRepository = ServiceLocator.getInstance().getLessonRepository();
 
         if (getArguments() != null) {
