@@ -114,7 +114,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         yourLessonRecycleViewAdapter = new YourLessonRecycleViewAdapter(
                 homeViewModel.classList,
                 requireActivity().getApplication(),
-                listener
+                listener,
+                homeViewModel
         );
 
         yourLessonRecycleView.setAdapter(yourLessonRecycleViewAdapter);

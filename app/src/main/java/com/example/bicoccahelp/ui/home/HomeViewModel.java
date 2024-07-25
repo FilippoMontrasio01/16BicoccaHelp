@@ -69,6 +69,8 @@ public class HomeViewModel extends ViewModel {
         this.uiStateMutableLiveData = new MutableLiveData<>(new UiState(0, 0, -1));
     }
 
+
+
     public String getUid(){
         return userRepository.getCurrentUser().getUid();
     }
@@ -183,5 +185,19 @@ public class HomeViewModel extends ViewModel {
         }else{
             errorMessage.setValue("No name found");
         }
+    }
+
+    public void getTutorName(String uid, Callback<String> callback){
+        tutorRepository.getTutorName(uid, new Callback<String>() {
+            @Override
+            public void onSucces(String name) {
+                callback.onSucces(name);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 }

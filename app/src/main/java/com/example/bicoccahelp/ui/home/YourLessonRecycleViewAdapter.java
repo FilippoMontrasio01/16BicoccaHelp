@@ -7,11 +7,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bicoccahelp.R;
+import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.lesson.LessonModel;
+import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
 
@@ -25,16 +29,17 @@ public class YourLessonRecycleViewAdapter extends RecyclerView.Adapter<
     private final List<LessonModel> classList;
     private final Application application;
     private final OnItemClickListener listener;
-
+    private final HomeViewModel homeViewModel;
     public interface OnItemClickListener{
         void onClassItemClick(LessonModel lessonModel);
     }
 
     public YourLessonRecycleViewAdapter(List<LessonModel> classList, Application application,
-                                        OnItemClickListener listener){
+                                        OnItemClickListener listener, HomeViewModel homeViewModel){
         this.classList = classList;
         this.application = application;
         this.listener = listener;
+        this.homeViewModel = homeViewModel;
     }
 
     public int getItemCount(){
@@ -67,19 +72,32 @@ public class YourLessonRecycleViewAdapter extends RecyclerView.Adapter<
         private final TextView dateTitle;
         private final TextView hourTitle;
 
+
         public YourLessonViewHolder(@NonNull View view){
             super(view);
             lessonDescription = view.findViewById(R.id.lessonDescription1);
             dateTitle = view.findViewById(R.id.DateTitle1);
             hourTitle = view.findViewById(R.id.HourTitle1);
+
+
         }
 
         public void bind(LessonModel lessonModel, OnItemClickListener listener){
 
-            if(lessonModel.getDescription() != null){
-                lessonDescription.setText("Class with: ");
+            if(lessonModel.getDescription().isEmpty()){
+                homeViewModel.getTutorName(lessonModel.getUid_tutor(), new Callback<String>() {
+                    @Override
+                    public void onSucces(String tutorName) {
+                        lessonDescription.setText("Class with: "+tutorName);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
             }else{
-                lessonDescription.setText("Class with: "+lessonModel.getUid_tutor());
+                lessonDescription.setText(lessonModel.getDescription());
             }
 
             dateTitle.setText(InputValidator.formatDate(lessonModel.getData()));
