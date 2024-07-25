@@ -5,14 +5,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/nav_bar_background">
 
     <TextView
-        android:id="@+id/lessonDescription"
+        android:id="@+id/lessonDescription1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -41,7 +40,7 @@
             android:background="@drawable/round_back_background_date">
 
             <TextView
-                android:id="@+id/DateTitle"
+                android:id="@+id/DateTitle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -62,7 +61,7 @@
             android:layout_marginStart="10dp">
 
             <TextView
-                android:id="@+id/HourTitle"
+                android:id="@+id/HourTitle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"

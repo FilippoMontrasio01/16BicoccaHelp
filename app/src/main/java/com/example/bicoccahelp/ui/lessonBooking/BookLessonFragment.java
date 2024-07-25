@@ -123,6 +123,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
                 .load(GlideLoadModel.get(tutorLogoUri))
                 .into(binding.lessonCard.tutorListItemLogo);
         changeTutor(tutorUid);
+
+
     }
 
     @Override
@@ -316,6 +318,13 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void bookLesson() {
+
+        if (!isDateSelected || dateRecycleViewAdapter.getSelectedOrario() == null) {
+            // Mostra la Snackbar se la data o l'orario non sono stati selezionati
+            Snackbar.make(requireView(), getString(R.string.select_day_and_time), Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
         String uidStudent = dateViewModel.getStudentId();
         String description = Objects.
                 requireNonNull(binding.lessonCard.textInputEditTextDescription.getText()).toString();

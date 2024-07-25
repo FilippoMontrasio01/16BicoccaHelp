@@ -1,4 +1,4 @@
-package com.example.bicoccahelp.ui.profile;
+package com.example.bicoccahelp.ui.profile.completeProfile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

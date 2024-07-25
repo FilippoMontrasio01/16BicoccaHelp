@@ -12,9 +12,13 @@ import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LessonRemoteDataSource {
@@ -30,14 +34,14 @@ public class LessonRemoteDataSource {
 
 
     public void createLesson(CreateLessonRequest request,
-                             Callback<LessonModel> callback){
+                             Callback<LessonModel> callback) {
 
         Map<String, Object> data = new HashMap<>();
 
-        data.put(UID_STUDENT , request.getUid_Student());
+        data.put(UID_STUDENT, request.getUid_Student());
         data.put(UID_TUTOR, request.getUid_tutor());
-        data.put(DESCRIPTION , request.getDescription());
-        data.put(LESSON_DATE , request.getData());
+        data.put(DESCRIPTION, request.getDescription());
+        data.put(LESSON_DATE, request.getData());
         data.put(ORA, request.getOra());
 
         lesson.add(data)
@@ -55,24 +59,24 @@ public class LessonRemoteDataSource {
                 .addOnFailureListener(callback::onFailure);
     }
 
-    public void countLesson(String uidStudent, Timestamp day, Callback<Integer> callback){
+    public void countLesson(String uidStudent, Timestamp day, Callback<Integer> callback) {
         Query query = lesson
                 .whereEqualTo(UID_STUDENT, uidStudent)
                 .whereEqualTo(LESSON_DATE, day);
         AggregateQuery countQuery = query.count();
 
         countQuery.get(AggregateSource.SERVER).addOnCompleteListener(task -> {
-           if(task.isSuccessful()){
-               AggregateQuerySnapshot snapshot = task.getResult();
-               long count = snapshot.getCount();
-               callback.onSucces((int) count);
-           } else {
+            if (task.isSuccessful()) {
+                AggregateQuerySnapshot snapshot = task.getResult();
+                long count = snapshot.getCount();
+                callback.onSucces((int) count);
+            } else {
 
-           }
+            }
         }).addOnFailureListener(callback::onFailure);
     }
 
-    public void checkHourPerDay(String uidStudent, Timestamp day, String hour, Callback<Boolean> callback){
+    public void checkHourPerDay(String uidStudent, Timestamp day, String hour, Callback<Boolean> callback) {
         Query query = lesson
                 .whereEqualTo(UID_STUDENT, uidStudent)
                 .whereEqualTo(LESSON_DATE, day)
@@ -92,4 +96,37 @@ public class LessonRemoteDataSource {
             }
         });
     }
+    public void listLessonsByStudent(String uidStudent, Long limit, Callback<List<LessonModel>> callback) {
+        Query query = lesson.whereEqualTo(UID_STUDENT, uidStudent)
+                .orderBy(LESSON_DATE, Query.Direction.ASCENDING)
+                .limit(limit);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<LessonModel> lessons = new ArrayList<>();
+                QuerySnapshot snapshot = task.getResult();
+                if (snapshot != null && !snapshot.isEmpty()) {
+                    for (QueryDocumentSnapshot document : snapshot) {
+                        LessonModel lessonModel = new LessonModel(
+                                document.getId(),
+                                document.getString(UID_STUDENT),
+                                document.getString(UID_TUTOR),
+                                document.getTimestamp(LESSON_DATE),
+                                document.getString(ORA),
+                                document.getString(DESCRIPTION)
+                        );
+                        lessons.add(lessonModel);
+                    }
+                    callback.onSucces(lessons);
+                } else {
+
+                }
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+
+
 }

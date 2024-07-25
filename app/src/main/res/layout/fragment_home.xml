@@ -12,8 +12,7 @@
     <ScrollView
         android:id="@+id/FragmentHomeScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="100dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/HomePageLinearLayout"
@@ -177,20 +176,19 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingStart="12dp"
-                android:paddingEnd="8dp" />
+                android:paddingEnd="12dp"
+                />
 
             <TextView
                 android:id="@+id/EmptyLessonRecycleViewTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:layout_marginTop="60dp"
-                android:layout_marginBottom="60dp"
                 android:text="@string/NoLessonsScheduled"
                 android:fontFamily="@font/lato_bold"
                 android:textSize="20sp"
                 android:textColor="@color/dark_red"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

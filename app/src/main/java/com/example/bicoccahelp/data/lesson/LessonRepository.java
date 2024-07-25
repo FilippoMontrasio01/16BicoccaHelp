@@ -25,4 +25,8 @@ public class LessonRepository {
     public void checkHourPerDay(String uidStudent, Timestamp day, String hour, Callback<Boolean> callback){
         lessonRemoteDataSource.checkHourPerDay(uidStudent, day, hour, callback);
     }
+
+    public void listLessonsByStudent(String uidStudent, Long limit, Callback<List<LessonModel>> callback){
+        lessonRemoteDataSource.listLessonsByStudent(uidStudent,limit, callback);
+    }
 }

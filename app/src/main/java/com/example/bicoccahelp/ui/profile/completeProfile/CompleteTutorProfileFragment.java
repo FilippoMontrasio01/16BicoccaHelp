@@ -1,4 +1,4 @@
-package com.example.bicoccahelp.ui.profile;
+package com.example.bicoccahelp.ui.profile.completeProfile;
 
 import android.os.Bundle;
 
@@ -8,31 +8,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.example.bicoccahelp.R;
-import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
-import com.example.bicoccahelp.data.user.tutor.CreateTutorRequest;
-import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentCompleteTutorProfileBinding;
-import com.example.bicoccahelp.utils.InputValidator;
+import com.example.bicoccahelp.ui.profile.completeProfile.CompleteProfileVIewModelFactory;
+import com.example.bicoccahelp.ui.profile.completeProfile.CompleteProfileViewModel;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.checkerframework.checker.units.qual.C;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 

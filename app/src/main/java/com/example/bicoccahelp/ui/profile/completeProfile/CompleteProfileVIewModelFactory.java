@@ -1,4 +1,4 @@
-package com.example.bicoccahelp.ui.profile;
+package com.example.bicoccahelp.ui.profile.completeProfile;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -8,6 +8,7 @@ import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
+import com.example.bicoccahelp.ui.profile.completeProfile.CompleteProfileViewModel;
 
 public class CompleteProfileVIewModelFactory implements ViewModelProvider.Factory{
 

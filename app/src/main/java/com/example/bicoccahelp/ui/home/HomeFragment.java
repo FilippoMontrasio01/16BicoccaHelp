@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
+import com.example.bicoccahelp.data.lesson.LessonRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentHomeBinding;
@@ -32,10 +33,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private NavController navController;
     private boolean isLoading = false;
     private BestReviewsRecycleViewAdapter bestReviewsRecycleViewAdapter;
+    private YourLessonRecycleViewAdapter yourLessonRecycleViewAdapter;
 
 
     private UserRepository userRepository;
     private TutorRepository tutorRepository;
+    private LessonRepository lessonRepository;
     private HomeViewModel homeViewModel;
 
 
@@ -45,6 +48,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+
+
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         userRepository = ServiceLocator.getInstance().getUserRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
+        lessonRepository = ServiceLocator.getInstance().getLessonRepository();
 
         HomeViewModelFactory factory = new HomeViewModelFactory(userRepository, tutorRepository);
         homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
@@ -92,6 +98,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     private void configureRecyclerView(){
+        bestReviewsRecycleView();
+        yourLessonRecycleView();
+    }
+
+    private void yourLessonRecycleView(){
+        RecyclerView yourLessonRecycleView = binding.LessonRecycleView;
+
+        YourLessonRecycleViewAdapter.OnItemClickListener listener = lesson -> {
+            if(lesson != null){
+                navController.navigate(R.id.action_from_home_to_book_lesson);
+            }
+        };
+
+        yourLessonRecycleViewAdapter = new YourLessonRecycleViewAdapter(
+                homeViewModel.classList,
+                requireActivity().getApplication(),
+                listener
+        );
+
+        yourLessonRecycleView.setAdapter(yourLessonRecycleViewAdapter);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.VERTICAL, false);
+        yourLessonRecycleView.setLayoutManager(layoutManager);
+
+    }
+
+    private void bestReviewsRecycleView(){
         RecyclerView bestReviewsRecycleView = binding.BestReviewRecycleView;
 
         BestReviewsRecycleViewAdapter.OnItemClickListener listener = tutor -> {
@@ -123,13 +157,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             if(uiState.fetched == 0){
                 binding.EmptyBestReviewRecycleViewTextView.setVisibility(View.VISIBLE);
                 binding.BestReviewRecycleView.setVisibility(View.GONE);
+                binding.EmptyLessonRecycleViewTextView.setVisibility(View.VISIBLE);
+                binding.LessonRecycleView.setVisibility(View.GONE);
                 return;
             }else{
                 binding.EmptyBestReviewRecycleViewTextView.setVisibility(View.GONE);
+                binding.EmptyLessonRecycleViewTextView.setVisibility(View.GONE);
                 binding.BestReviewRecycleView.setVisibility(View.VISIBLE);
+                binding.LessonRecycleView.setVisibility(View.VISIBLE);
             }
 
             bestReviewsRecycleViewAdapter.notifyItemRangeInserted(uiState.sizeBeforeFetch,
+                    uiState.fetched);
+
+            yourLessonRecycleViewAdapter.notifyItemRangeInserted(uiState.sizeBeforeFetch,
                     uiState.fetched);
         });
     }
@@ -137,6 +178,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private void loadFirstPage() {
         if (homeViewModel.getCurrentPage() == 0 && homeViewModel.hasMore()) {
             homeViewModel.getNextTutorsPage();
+            homeViewModel.getNextClassesPage(homeViewModel.getUid());
         }
     }
 
@@ -147,6 +189,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 super.onScrolled(recyclerView, dx, dy);
                 if(!isLoading && homeViewModel.hasMore() && dy > 0){
                     homeViewModel.getNextTutorsPage();
+                }
+            }
+        });
+
+        binding.LessonRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(!isLoading && homeViewModel.hasMore() && dy > 0){
+                    homeViewModel.getNextClassesPage(homeViewModel.getUid());
                 }
             }
         });

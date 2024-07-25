@@ -43,6 +43,7 @@ public class DateViewModel extends ViewModel {
     public final LessonRepository lessonRepository;
     public final TutorRepository tutorRepository;
     public final UserRepository userRepository;
+    public DateRecycleViewAdapter dateRecycleViewAdapter;
     private MutableLiveData<Boolean> lessonCreate;
     private final MutableLiveData<Boolean> lessonBookingAllowed;
 

@@ -16,8 +16,10 @@ import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
 import com.example.bicoccahelp.data.review.ReviewRepository;
+import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
+import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.utils.GlideLoadModel;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
@@ -77,6 +79,7 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         private StudentRepository studentRepository;
         private CorsoDiStudiRepository corsoDiStudiRepository;
         private ReviewRepository reviewRepository;
+        private UserRepository userRepository;
 
         public TutorViewHolder(@NonNull View view) {
             super(view);
@@ -91,25 +94,31 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             studentRepository = ServiceLocator.getInstance().getStudentRepository();
             corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
             reviewRepository = ServiceLocator.getInstance().getReviewRepository();
+            userRepository = ServiceLocator.getInstance().getUserRepository();
 
         }
 
         public void bind(TutorModel tutorModel, OnItemClickListener listener) {
-            tutorName.setText(tutorModel.getName());
-            itemView.setOnClickListener(view -> listener.onTutorItemClick(tutorModel));
-            getCorsoId(tutorModel.getUid());
-            getAverageReview(tutorModel.getUid());
+
+            String currentUid = userRepository.getCurrentUser().getUid();
+
+            if (!tutorModel.getUid().equals(currentUid)) {
+                tutorName.setText(tutorModel.getName());
+                itemView.setOnClickListener(view -> listener.onTutorItemClick(tutorModel));
+                getCorsoId(tutorModel.getUid());
+                getAverageReview(tutorModel.getUid());
 
 
-            if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
-                    .getPhotoUri().toString()) ){
-                photo.setImageResource(R.drawable.profile_icon);
-            }else{
-                Glide.with(application.getApplicationContext())
-                        .load(GlideLoadModel.get(tutorModel.getPhotoUri().toString()))
-                        .into(photo);
+                if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
+                        .getPhotoUri().toString()) ){
+                    photo.setImageResource(R.drawable.profile_icon);
+                }else{
+                    Glide.with(application.getApplicationContext())
+                            .load(GlideLoadModel.get(tutorModel.getPhotoUri().toString()))
+                            .into(photo);
+                }
+
             }
-
         }
 
         private void getCorsoId(String uid){

@@ -1,19 +1,20 @@
 package com.example.bicoccahelp.ui.lessonBooking;
 
-import android.app.Activity;
+
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.RadioButton;
+
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bicoccahelp.R;
-import com.google.android.material.snackbar.Snackbar;
+
 
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 public class DateRecycleViewAdapter extends RecyclerView.Adapter<DateRecycleViewAdapter.DateViewHolder> {
 
     private final List<String> disponibilitaOrari;
+    private final MutableLiveData<Boolean> hourCheck;
     private SparseBooleanArray itemStateArray = new SparseBooleanArray();
     private int selectedPosition = -1;
     private RecyclerView recyclerView;
@@ -28,6 +30,11 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<DateRecycleView
     public DateRecycleViewAdapter(List<String> disponibilitaOrari, RecyclerView recyclerView) {
         this.disponibilitaOrari = disponibilitaOrari;
         this.recyclerView = recyclerView;
+        this.hourCheck = new MutableLiveData<>();
+    }
+
+    public MutableLiveData<Boolean> getHourCheck() {
+        return hourCheck;
     }
 
     @Override
@@ -67,6 +74,7 @@ public class DateRecycleViewAdapter extends RecyclerView.Adapter<DateRecycleView
                 if (!itemStateArray.get(adapterPosition, false)) {
                     toggleButton.setChecked(true);
                     itemStateArray.put(adapterPosition, true);
+                    hourCheck.setValue(true);
                     selectedPosition = adapterPosition;
 
                     for (int i = 0; i < itemStateArray.size(); i++) {

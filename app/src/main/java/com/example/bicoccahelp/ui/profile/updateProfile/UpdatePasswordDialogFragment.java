@@ -1,4 +1,4 @@
-package com.example.bicoccahelp.ui.profile;
+package com.example.bicoccahelp.ui.profile.updateProfile;
 
 import android.os.Bundle;
 
@@ -18,6 +18,8 @@ import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.auth.AuthRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.databinding.FragmentUpdatePasswordDialogBinding;
+import com.example.bicoccahelp.ui.profile.ProfileViewModel;
+import com.example.bicoccahelp.ui.profile.ProfileViewModelFactory;
 import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;

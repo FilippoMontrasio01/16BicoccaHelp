@@ -202,5 +202,7 @@
     <string name="NoTutorsAvailable">No tutors available</string>
     <string name="lesson">Your lessons</string>
     <string name="NoLessonsScheduled">No lessons scheduled</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="select_day_and_time">Please select both date and time before booking</string>
 
 </resources>
