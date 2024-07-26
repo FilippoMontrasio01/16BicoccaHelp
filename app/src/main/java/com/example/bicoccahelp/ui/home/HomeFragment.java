@@ -142,7 +142,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         bestReviewsRecycleViewAdapter = new BestReviewsRecycleViewAdapter(
                 homeViewModel.tutorList,
                 requireActivity().getApplication(),
-                listener);
+                listener,
+                homeViewModel);
 
         bestReviewsRecycleView.setAdapter(bestReviewsRecycleViewAdapter);
 

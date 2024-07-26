@@ -1,5 +1,8 @@
 package com.example.bicoccahelp.ui.review;
 
+import android.net.Uri;
+import android.telecom.Call;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -190,5 +193,47 @@ public class ReviewViewModel extends ViewModel {
 
     public String getCurrentUserUid() {
         return userRepository.getCurrentUser().getUid();
+    }
+
+    public void getTutorName(String uidTutor, Callback<String> callback){
+        tutorRepository.getTutorName(uidTutor, new Callback<String>() {
+            @Override
+            public void onSucces(String tutorName) {
+                callback.onSucces(tutorName);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Tutor name not found");
+            }
+        });
+    }
+
+    public void getPhotoUri(String uidTutor, Callback<Uri> callback){
+        tutorRepository.getTutorPhotoUri(uidTutor, new Callback<Uri>() {
+            @Override
+            public void onSucces(Uri photoUri) {
+                callback.onSucces(photoUri);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Tutor photo not found");
+            }
+        });
+    }
+
+    public void getTutorEmail(String uidTutor, Callback<String> callback){
+        tutorRepository.getTutorEmail(uidTutor, new Callback<String>() {
+            @Override
+            public void onSucces(String email) {
+                callback.onSucces(email);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Tutor email not found");
+            }
+        });
     }
 }

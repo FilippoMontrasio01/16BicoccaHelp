@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.corsoDiStudi.CorsoDiStudiRepository;
+import com.example.bicoccahelp.data.review.ReviewRepository;
+import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.utils.ServiceLocator;
@@ -34,9 +37,13 @@ public class TutorViewModel extends ViewModel {
     private final MutableLiveData<List<TutorModel>> updateTutorList;
     private List<TutorModel> originalTutorList;
     private final MutableLiveData<String> errorMessage;
+    private final MutableLiveData<String> nomeCorso;
+    private final MutableLiveData<String> areaCorso;
     public final List<TutorModel> tutorList;
     public final CorsoDiStudiRepository corsoDiStudiRepository;
-
+    public final UserRepository userRepository;
+    public final ReviewRepository reviewRepository;
+    public final StudentRepository studentRepository;
     private final TutorRepository tutorRepository;
     private final Long limit = 80L;
     private boolean hasMore = true;
@@ -50,12 +57,25 @@ public class TutorViewModel extends ViewModel {
         this.updateTutorList = new MutableLiveData<>(new ArrayList<>());
         this.tutorRepository = tutorRepository;
         this.corsoDiStudiRepository = ServiceLocator.getInstance().getCorsoDiStudiRepository();
+        this.userRepository = ServiceLocator.getInstance().getUserRepository();
+        this.reviewRepository = ServiceLocator.getInstance().getReviewRepository();
+        this.studentRepository = ServiceLocator.getInstance().getStudentRepository();
+        this.nomeCorso = new MutableLiveData<>();
+        this.areaCorso = new MutableLiveData<>();
     }
 
     public LiveData<UiState> getUiState() {
         return uiStateMutableLiveData;
     }
     public LiveData<String> getErrorMessage() { return errorMessage; }
+
+    public MutableLiveData<String> getNomeC() {
+        return nomeCorso;
+    }
+
+    public MutableLiveData<String> getAreaC() {
+        return areaCorso;
+    }
 
     public boolean hasMore() {
         return hasMore;
@@ -244,6 +264,67 @@ public class TutorViewModel extends ViewModel {
     public void restoreOriginalList() {
         tutorList.clear();
         tutorList.addAll(originalTutorList);
+    }
+
+    public String getUserId(){
+        return userRepository.getCurrentUser().getUid();
+    }
+
+    public void getAverageReview(String uidTutor, Callback<Double> callback){
+        reviewRepository.getAverageReview(uidTutor, new Callback<Double>() {
+            @Override
+            public void onSucces(Double averageReview) {
+                callback.onSucces(averageReview);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Impossible to calculate the average review.");
+            }
+        });
+    }
+
+    public void getCorsoDiStudi(String studentUid, Callback<String> callback){
+        studentRepository.getCorsoDiStudi(studentUid, new Callback<String>() {
+            @Override
+            public void onSucces(String corsoId) {
+                callback.onSucces(corsoId);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Study Program not found");
+            }
+        });
+    }
+
+
+    public void getNomeCorso(String idCorso, Callback<String> callback){
+        corsoDiStudiRepository.getCorsodiStudiName(idCorso, new Callback<String>() {
+            @Override
+            public void onSucces(String nomeC) {
+                callback.onSucces(nomeC);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Name not found");
+            }
+        });
+    }
+
+    public void getAreaCorso(String idCorso, Callback<String> callback){
+        corsoDiStudiRepository.getArea(idCorso, new Callback<String>() {
+            @Override
+            public void onSucces(String area) {
+                callback.onSucces(area);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Study Program area not found");
+            }
+        });
     }
 
 

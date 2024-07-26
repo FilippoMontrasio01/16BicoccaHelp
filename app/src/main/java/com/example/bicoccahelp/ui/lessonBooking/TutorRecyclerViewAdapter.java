@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -36,12 +37,15 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
     private final List<TutorModel> tutorList;
     private final Application application;
     private final OnItemClickListener onItemClickListener;
+    private final TutorViewModel tutorViewModel;
 
     public TutorRecyclerViewAdapter(List<TutorModel> tutorList, Application application,
-                                       OnItemClickListener onItemClickListener) {
+                                       OnItemClickListener onItemClickListener,
+                                    TutorViewModel tutorViewModel) {
         this.tutorList = tutorList;
         this.application = application;
         this.onItemClickListener = onItemClickListener;
+        this.tutorViewModel = tutorViewModel;
     }
 
     @Override
@@ -73,7 +77,7 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         private final TextView tutorName;
         private final ImageView areaIcon;
         private final TextView corso;
-        private final TextView review;
+        private final TextView averageReview;
 
         private final ImageView starIcon;
         private StudentRepository studentRepository;
@@ -87,7 +91,7 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             tutorName = view.findViewById(R.id.tutorListItemName);
             areaIcon = view.findViewById(R.id.areaIcon);
             corso = view.findViewById(R.id.tutorListItemCorsoDiStudi);
-            review = view.findViewById(R.id.tutorListReview);
+            averageReview = view.findViewById(R.id.tutorListReview);
             starIcon = view.findViewById(R.id.star_image_review);
 
 
@@ -100,14 +104,31 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
 
         public void bind(TutorModel tutorModel, OnItemClickListener listener) {
 
-            String currentUid = userRepository.getCurrentUser().getUid();
+            String currentUid = tutorViewModel.getUserId();
 
             if (!tutorModel.getUid().equals(currentUid)) {
                 tutorName.setText(tutorModel.getName());
                 itemView.setOnClickListener(view -> listener.onTutorItemClick(tutorModel));
-                getCorsoId(tutorModel.getUid());
-                getAverageReview(tutorModel.getUid());
+                getCorsoDiStudi(tutorModel.getUid());
 
+
+                tutorViewModel.getAverageReview(tutorModel.getUid(), new Callback<Double>() {
+                    @Override
+                    public void onSucces(Double average) {
+                        if (average != null) {
+                            averageReview.setText(String.valueOf(average));
+                            starIcon.setImageResource(R.drawable.star_review);
+                        } else {
+                            averageReview.setText("0.0");
+                            starIcon.setImageDrawable(null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
 
                 if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
                         .getPhotoUri().toString()) ){
@@ -121,13 +142,12 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
             }
         }
 
-        private void getCorsoId(String uid){
-
-            studentRepository.getCorsoDiStudi(uid, new Callback<String>() {
+        private void getCorsoDiStudi(String idTutor){
+            tutorViewModel.getCorsoDiStudi(idTutor, new Callback<String>() {
                 @Override
                 public void onSucces(String idCorso) {
-                    getCorsoArea(idCorso);
                     getNomeCorso(idCorso);
+                    getAreaCorso(idCorso);
                 }
 
                 @Override
@@ -138,72 +158,13 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
         }
 
         private void getNomeCorso(String idCorso){
-            corsoDiStudiRepository.getCorsodiStudiName(idCorso, new Callback<String>() {
+
+            tutorViewModel.getNomeCorso(idCorso, new Callback<String>() {
                 @Override
-                public void onSucces(String nomeCorso) {
-                    nomeCorso = InputValidator.capitalizeFirstLetter(nomeCorso);
-                    corso.setText(nomeCorso);
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-
-                }
-            });
-        }
-
-        private void getCorsoArea(String idCorso){
-            corsoDiStudiRepository.getArea(idCorso, new Callback<String>() {
-                @Override
-                public void onSucces(String areaCorso) {
-                    setAreaLogo(areaCorso);
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-
-                }
-            });
-        }
-
-
-
-        private void setAreaLogo(String area){
-            switch (area){
-                case "Scientifica":
-                    areaIcon.setImageResource(R.drawable.scienze);
-                    break;
-                case "Medica":
-                    areaIcon.setImageResource(R.drawable.medicina);
-                    break;
-                case "Economico statistica":
-                    areaIcon.setImageResource(R.drawable.economia);
-                    break;
-                case "Sociologica":
-                    areaIcon.setImageResource(R.drawable.sociologia);
-                    break;
-                case "Psicologica":
-                    areaIcon.setImageResource(R.drawable.psicologia);
-                    break;
-                case "Formazione":
-                    areaIcon.setImageResource(R.drawable.educazione);
-                    break;
-                case "Giuridica":
-                    areaIcon.setImageResource(R.drawable.giurisprudenza);
-                    break;
-            }
-        }
-
-
-        private void getAverageReview(String uidTutor){
-            reviewRepository.getAverageReview(uidTutor, new Callback<Double>() {
-                @Override
-                public void onSucces(Double average) {
-                    if(average != null){
-                        review.setText(String.valueOf(average));
-                        starIcon.setImageResource(R.drawable.star_review);
-                    }else{
-                        starIcon.setImageDrawable(null);
+                public void onSucces(String nomeCorsoDiStudi) {
+                    if(nomeCorsoDiStudi != null){
+                        nomeCorsoDiStudi = InputValidator.capitalizeFirstLetter(nomeCorsoDiStudi);
+                        corso.setText(nomeCorsoDiStudi);
                     }
                 }
 
@@ -211,6 +172,48 @@ public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<
                 public void onFailure(Exception e) {
 
                 }
+            });
+        }
+
+        private void getAreaCorso(String idCorso){
+
+
+            tutorViewModel.getAreaCorso(idCorso, new Callback<String>() {
+                @Override
+                public void onSucces(String areaCorsoDiStudi) {
+                    if(areaCorsoDiStudi != null){
+                        switch (areaCorsoDiStudi){
+                            case "Scientifica":
+                                areaIcon.setImageResource(R.drawable.scienze);
+                                break;
+                            case "Medica":
+                                areaIcon.setImageResource(R.drawable.medicina);
+                                break;
+                            case "Economico statistica":
+                                areaIcon.setImageResource(R.drawable.economia);
+                                break;
+                            case "Sociologica":
+                                areaIcon.setImageResource(R.drawable.sociologia);
+                                break;
+                            case "Psicologica":
+                                areaIcon.setImageResource(R.drawable.psicologia);
+                                break;
+                            case "Formazione":
+                                areaIcon.setImageResource(R.drawable.educazione);
+                                break;
+                            case "Giuridica":
+                                areaIcon.setImageResource(R.drawable.giurisprudenza);
+                                break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+
+
             });
         }
 

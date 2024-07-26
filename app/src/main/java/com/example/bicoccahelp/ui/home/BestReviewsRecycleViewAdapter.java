@@ -20,6 +20,8 @@ import com.example.bicoccahelp.data.review.ReviewRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.utils.GlideLoadModel;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 
 public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
@@ -28,14 +30,16 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
     private final List<TutorModel> tutorList;
     private final Application application;
     private final OnItemClickListener listener;
+    private final HomeViewModel homeViewModel;
 
     public interface OnItemClickListener {
         void onTutorItemClick(TutorModel tutorModel);
     }
-    public BestReviewsRecycleViewAdapter(List<TutorModel> tutorList, Application application, OnItemClickListener listener){
+    public BestReviewsRecycleViewAdapter(List<TutorModel> tutorList, Application application, OnItemClickListener listener, HomeViewModel homeViewModel){
         this.tutorList = tutorList;
         this.application = application;
         this.listener = listener;
+        this.homeViewModel = homeViewModel;
     }
 
     @Override
@@ -63,7 +67,7 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
         holder.bind(tutorList.get(position), listener);
     }
 
-    public class ReviewsViewHolder extends RecyclerView.ViewHolder{
+    public class ReviewsViewHolder extends RecyclerView.ViewHolder {
         private final ImageView userPhoto;
         private final TextView tutorName;
         private final TextView tutorEmail;
@@ -72,7 +76,7 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
         private final Button bookLessonButton;
         private ReviewRepository reviewRepository;
 
-        public ReviewsViewHolder(@NonNull View view){
+        public ReviewsViewHolder(@NonNull View view) {
             super(view);
 
             userPhoto = view.findViewById(R.id.TutorImage);
@@ -86,36 +90,20 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
         }
 
 
-        public void bind(TutorModel tutorModel, OnItemClickListener listener){
+        public void bind(TutorModel tutorModel, OnItemClickListener listener) {
             tutorName.setText(tutorModel.getName());
             tutorEmail.setText(tutorModel.getEmail());
-            getAverageReview(tutorModel.getUid());
-            //itemView.setOnClickListener(v -> listener.onTutorItemClick(tutorModel));
-            bookLessonButton.setOnClickListener(v -> listener.onTutorItemClick(tutorModel));
-            if(tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
-                    .getPhotoUri().toString()) ){
-                userPhoto.setImageResource(R.drawable.profile_icon);
-            }else{
-                Glide.with(application.getApplicationContext())
-                        .load(GlideLoadModel.get(tutorModel.getPhotoUri().toString()))
-                        .into(userPhoto);
-            }
 
-
-        }
-
-
-        private void getAverageReview(String uidTutor){
-            reviewRepository.getAverageReview(uidTutor, new Callback<Double>() {
+            homeViewModel.getAverageReview(tutorModel.getUid(), new Callback<Double>() {
                 @Override
                 public void onSucces(Double average) {
-                    if(average != null){
+                    if (average != null) {
                         averageReview.setText(String.valueOf(average));
                         starIcon.setImageResource(R.drawable.star_review);
-                    }else{
+                    } else {
+                        averageReview.setText("0.0");
                         starIcon.setImageDrawable(null);
                     }
-
                 }
 
                 @Override
@@ -123,11 +111,16 @@ public class BestReviewsRecycleViewAdapter extends RecyclerView.Adapter<
 
                 }
             });
+
+            bookLessonButton.setOnClickListener(v -> listener.onTutorItemClick(tutorModel));
+            if (tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
+                    .getPhotoUri().toString())) {
+                userPhoto.setImageResource(R.drawable.profile_icon);
+            } else {
+                Glide.with(application.getApplicationContext())
+                        .load(GlideLoadModel.get(tutorModel.getPhotoUri().toString()))
+                        .into(userPhoto);
+            }
         }
-
     }
-
-
-
-
 }

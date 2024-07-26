@@ -92,7 +92,7 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
 
         tutorRecyclerViewAdapter = new TutorRecyclerViewAdapter(
                 tutorViewModel.tutorList,
-                requireActivity().getApplication(), listener);
+                requireActivity().getApplication(), listener, tutorViewModel);
         tutorRecyclerView.setAdapter(tutorRecyclerViewAdapter);
 
         LinearLayoutManager layoutManager = (LinearLayoutManager) tutorRecyclerView

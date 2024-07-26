@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.lesson.LessonModel;
 import com.example.bicoccahelp.data.lesson.LessonRepository;
+import com.example.bicoccahelp.data.review.ReviewRepository;
 import com.example.bicoccahelp.data.user.UserModel;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
@@ -48,6 +49,7 @@ public class HomeViewModel extends ViewModel {
 
     private final UserRepository userRepository;
     private final LessonRepository lessonRepository;
+    private final ReviewRepository reviewRepository;
 
     private final MutableLiveData<String> errorMessage;
 
@@ -56,6 +58,7 @@ public class HomeViewModel extends ViewModel {
         this.userRepository = userRepository;
         this.tutorRepository = tutorRepository;
         this.lessonRepository = ServiceLocator.getInstance().getLessonRepository();
+        this.reviewRepository = ServiceLocator.getInstance().getReviewRepository();
         this.errorMessage = new MutableLiveData<>();
 
         this.originalTutorList = new ArrayList<>();
@@ -197,6 +200,20 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void onFailure(Exception e) {
 
+            }
+        });
+    }
+
+    public void getAverageReview(String uidTutor, Callback<Double> callback){
+        reviewRepository.getAverageReview(uidTutor, new Callback<Double>() {
+            @Override
+            public void onSucces(Double averageReview) {
+                callback.onSucces(averageReview);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Impossible to calculate the average review.");
             }
         });
     }

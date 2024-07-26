@@ -86,7 +86,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
 
         reviewRecycleViewAdapter = new ReviewRecycleViewAdapter(
                 reviewViewModel.reviewList,
-                requireActivity().getApplication());
+                requireActivity().getApplication(), reviewViewModel);
         reviewRecyclerView.setAdapter(reviewRecycleViewAdapter);
 
         LinearLayoutManager layoutManager = (LinearLayoutManager) reviewRecyclerView.getLayoutManager();

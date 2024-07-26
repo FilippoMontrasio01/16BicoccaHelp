@@ -35,11 +35,13 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
     private final List<ReviewModel> reviewList;
     private final Application application;
     private final TutorRepository tutorRepository;
+    private final ReviewViewModel reviewViewModel;
 
-    public ReviewRecycleViewAdapter(List<ReviewModel> reviewList, Application application) {
+    public ReviewRecycleViewAdapter(List<ReviewModel> reviewList, Application application,
+                                    ReviewViewModel reviewViewModel) {
         this.reviewList = reviewList;
         this.application = application;
-
+        this.reviewViewModel = reviewViewModel;
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
     }
 
@@ -86,18 +88,12 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
 
         public void bind(ReviewModel reviewModel) {
 
-            setName(reviewModel.getUidTutor());
-            setPhotoUri(reviewModel.getUidTutor());
-            checkStar(reviewModel);
-            setEmail(reviewModel.getUidTutor());
-
-        }
-
-        public void setName(String uidTutor){
-            tutorRepository.getTutorName(uidTutor, new Callback<String>() {
+            reviewViewModel.getTutorName(reviewModel.getUidTutor(), new Callback<String>() {
                 @Override
                 public void onSucces(String name) {
-                    tutorName.setText(name);
+                    if(name != null){
+                        tutorName.setText(name);
+                    }
                 }
 
                 @Override
@@ -105,13 +101,10 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
 
                 }
             });
-        }
 
-        public void setPhotoUri(String uidTutor){
-            tutorRepository.getTutorPhotoUri(uidTutor, new Callback<Uri>() {
+            reviewViewModel.getPhotoUri(reviewModel.getUidTutor(), new Callback<Uri>() {
                 @Override
                 public void onSucces(Uri tutorPhotoUri) {
-
                     if(tutorPhotoUri == null || TextUtils.isEmpty(tutorPhotoUri.toString()) ){
                         photo.setImageResource(R.drawable.profile_icon);
                     }else{
@@ -126,10 +119,8 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
 
                 }
             });
-        }
 
-        public void setEmail(String uidTutor){
-            tutorRepository.getTutorEmail(uidTutor, new Callback<String>() {
+            reviewViewModel.getTutorEmail(reviewModel.getUidTutor(), new Callback<String>() {
                 @Override
                 public void onSucces(String tutorEmail) {
                     if(tutorEmail.isEmpty() || (tutorEmail == null)){
@@ -144,9 +135,9 @@ public class ReviewRecycleViewAdapter extends RecyclerView.Adapter<
 
                 }
             });
+            checkStar(reviewModel);
+
         }
-
-
 
         public void checkStar(ReviewModel reviewModel){
             double starsValue = reviewModel.getStars();
