@@ -9,7 +9,7 @@
     app:defaultNavHost="true"
     app:navGraph="@navigation/main_navigation_graph"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.lessonBooking.BookLessonFragment">
+    tools:context=".ui.home.UpdateLessonFragment">
 
     <LinearLayout
         android:layout_width="370dp"
@@ -167,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="Class topic"
+                android:text="Class Topic"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -216,6 +216,23 @@
                 android:fontFamily="@font/lato_bold"
                 android:gravity="center"
                 android:text="Book your lesson"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/deleteLessonButton"
+                style="@android:style/Widget.Button"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_toEndOf="@+id/date"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center"
+                android:text="Cancel your lesson"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="15sp"

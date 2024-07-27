@@ -31,7 +31,7 @@ public class YourLessonRecycleViewAdapter extends RecyclerView.Adapter<
     private final OnItemClickListener listener;
     private final HomeViewModel homeViewModel;
     public interface OnItemClickListener{
-        void onClassItemClick(LessonModel lessonModel);
+        void onClassItemClick(LessonModel lessonModel, TutorModel tutorModel);
     }
 
     public YourLessonRecycleViewAdapter(List<LessonModel> classList, Application application,
@@ -103,7 +103,18 @@ public class YourLessonRecycleViewAdapter extends RecyclerView.Adapter<
             dateTitle.setText(InputValidator.formatDate(lessonModel.getData()));
             hourTitle.setText(lessonModel.getOra());
 
-            itemView.setOnClickListener(v -> listener.onClassItemClick(lessonModel));
+
+            homeViewModel.getTutorDetails(lessonModel.getUid_tutor(), new Callback<TutorModel>() {
+                @Override
+                public void onSucces(TutorModel tutorModel) {
+                    itemView.setOnClickListener(v -> listener.onClassItemClick(lessonModel, tutorModel));
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    // Gestione errore
+                }
+            });
         }
 
     }

@@ -25,6 +25,14 @@
             app:popExitAnim="@android:anim/slide_in_left"
             />
 
+        <action
+            android:id="@+id/actionToUpdateLessonCard"
+            app:destination="@id/update_lesson_card"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_in_left"
+            />
 
 
     </fragment>
@@ -150,6 +158,27 @@
         <action
             android:id="@+id/action_from_book_dialog_to_home"
             app:destination="@id/home_fragment"/>
+    </dialog>
+
+    <dialog
+        android:id="@+id/update_lesson_card"
+        android:label="@string/UpdateLessonFragment"
+        android:name="com.example.bicoccahelp.ui.home.UpdateLessonFragment"
+        tools:layout="@layout/fragment_update_lesson">
+
+        <argument
+            android:name="tutorName"
+            app:argType="string" />
+        <argument
+            android:name="tutorEmail"
+            app:argType="string" />
+        <argument
+            android:name="tutorLogoUri"
+            app:argType="string" />
+        <argument
+            android:name="tutorUid"
+            app:argType="string" />
+
     </dialog>
 
     <activity

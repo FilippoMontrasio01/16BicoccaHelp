@@ -83,8 +83,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
         dateRepository = ServiceLocator.getInstance().getDateRepository();
-        userRepository = ServiceLocator.getInstance().getUserRepository();
-        tutorRepository = ServiceLocator.getInstance().getTutorRepository();
+
 
 
         TutorViewModelFactory factory = new TutorViewModelFactory(tutorRepository);
@@ -123,8 +122,6 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
                 .load(GlideLoadModel.get(tutorLogoUri))
                 .into(binding.lessonCard.tutorListItemLogo);
         changeTutor(tutorUid);
-
-
     }
 
     @Override

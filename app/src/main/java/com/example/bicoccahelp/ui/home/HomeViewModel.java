@@ -217,4 +217,18 @@ public class HomeViewModel extends ViewModel {
             }
         });
     }
+
+    public void getTutorDetails(String uidTutor, Callback<TutorModel> callback){
+        tutorRepository.getTutorModelById(uidTutor, new Callback<TutorModel>() {
+            @Override
+            public void onSucces(TutorModel tutorModel) {
+                callback.onSucces(tutorModel);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+            }
+        });
+    }
 }
