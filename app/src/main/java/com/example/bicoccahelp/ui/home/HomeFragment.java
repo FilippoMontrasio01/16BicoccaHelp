@@ -108,10 +108,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         YourLessonRecycleViewAdapter.OnItemClickListener listener = (lesson, tutor) -> {
             if(lesson != null && tutor != null){
 
-                HomeFragmentDirections.ActionToUpdateLessonCard action = HomeFragmentDirections.actionToUpdateLessonCard(
+                HomeFragmentDirections.ActionToLessonCardFromHome action = HomeFragmentDirections.actionToLessonCardFromHome(
                         tutor.getName(), tutor.getEmail(), tutor.getPhotoUri().toString(), tutor.getUid()
                 );
-                navController.navigate(action);
+
+
+                Bundle bundle = action.getArguments();
+                bundle.putString("navigationSource", "desiredSource");
+
+
+                navController.navigate(R.id.lesson_card, bundle);
             }else{
                 Log.e("HomeFragment", "TutorModel is null in OnItemClickListener");
             }

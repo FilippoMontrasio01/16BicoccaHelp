@@ -116,12 +116,22 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         navController = NavHostFragment.findNavController(this);
         binding.lessonCard.selectDayButton.setOnClickListener(this);
         binding.lessonCard.bookLessonButton.setOnClickListener(this);
+        binding.lessonCard.deleteLessonButton.setOnClickListener(this);
         binding.lessonCard.tutorListItemName.setText(tutorName);
         binding.lessonCard.tutorListItemEmail.setText(tutorEmail);
         Glide.with(requireActivity().getApplicationContext())
                 .load(GlideLoadModel.get(tutorLogoUri))
                 .into(binding.lessonCard.tutorListItemLogo);
         changeTutor(tutorUid);
+
+        BookLessonFragmentArgs args = BookLessonFragmentArgs.fromBundle(getArguments());
+        String navigationSource = args.getNavigationSource();
+
+        if ("desiredSource".equals(navigationSource)) {
+            binding.lessonCard.deleteLessonButton.setVisibility(View.VISIBLE);
+        } else {
+            binding.lessonCard.deleteLessonButton.setVisibility(View.GONE);
+        }
     }
 
     @Override
