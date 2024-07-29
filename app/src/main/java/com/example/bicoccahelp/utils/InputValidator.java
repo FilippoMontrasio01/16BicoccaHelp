@@ -8,6 +8,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,6 +96,20 @@ public class InputValidator {
         int month = calendar.get(Calendar.MONTH) + 1; // Mese è 0-based, quindi aggiungi 1
         int year = calendar.get(Calendar.YEAR);
         return day + "/" + month + "/" + year;
+    }
+
+    public static int calculateDaysDifference(Timestamp lessonDate) {
+        // Ottieni la data attuale come Timestamp
+        Timestamp currentTimestamp = Timestamp.now();
+
+        // Calcola la differenza in millisecondi tra le date
+        long diffInMillis = lessonDate.getSeconds() * 1000 - currentTimestamp.getSeconds() * 1000;
+
+        // Converti la differenza in giorni
+        long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
+
+        // Restituisci la differenza come intero
+        return (int) diffInDays;
     }
 
 

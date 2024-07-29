@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -381,18 +383,35 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void deleteLesson(String lessonId){
+
+        int checkDate = InputValidator.calculateDaysDifference(lessonDate);
+
         if(!lessonId.isEmpty() && !lessonHour.isEmpty() && lessonDate != null){
-            dateViewModel.deleteLesson(lessonId, lessonDate, lessonHour, tutorUid );
-            navController.navigate(R.id.action_from_book_dialog_to_home);
+
+            if(checkDate > 1){
+                dateViewModel.deleteLesson(lessonId, lessonDate, lessonHour, tutorUid );
+                navController.navigate(R.id.action_from_book_dialog_to_home);
+            }else{
+                Snackbar.make(getView(), "Impossible to delete your lesson. It is scheduled for the next day.", Snackbar.LENGTH_SHORT).show();
+            }
+
         }else{
             Snackbar.make(getView(), "Impossible to delete your lesson", Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void updateLesson(String lessonId){
+
+        int checkDate = InputValidator.calculateDaysDifference(lessonDate);
+
         if(!lessonId.isEmpty() && !lessonHour.isEmpty() && lessonDate != null){
-            dateViewModel.deleteLesson(lessonId, lessonDate, lessonHour, tutorUid );
-            bookLesson();
+            if(checkDate > 1){
+                dateViewModel.deleteLesson(lessonId, lessonDate, lessonHour, tutorUid );
+                bookLesson();
+            }else{
+                Snackbar.make(getView(), "Impossible to replan your lesson. It is scheduled for the next day.", Snackbar.LENGTH_SHORT).show();
+            }
+
         }else{
             Snackbar.make(getView(), "Impossible to update your lesson", Snackbar.LENGTH_SHORT).show();
         }
