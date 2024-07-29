@@ -198,6 +198,9 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
             }
         }, year, month, day);
 
+        Calendar minDate = Calendar.getInstance();
+        dialog.getDatePicker().setMinDate(minDate.getTimeInMillis());
+
         dialog.show();
     }
 
