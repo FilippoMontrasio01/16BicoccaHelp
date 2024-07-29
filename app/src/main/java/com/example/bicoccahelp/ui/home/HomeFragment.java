@@ -26,6 +26,9 @@ import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentHomeBinding;
 import com.example.bicoccahelp.ui.lessonBooking.TutorFragmentDirections;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -38,7 +41,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private UserRepository userRepository;
     private TutorRepository tutorRepository;
-    private LessonRepository lessonRepository;
     private HomeViewModel homeViewModel;
 
 
@@ -58,7 +60,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         userRepository = ServiceLocator.getInstance().getUserRepository();
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
-        lessonRepository = ServiceLocator.getInstance().getLessonRepository();
 
         HomeViewModelFactory factory = new HomeViewModelFactory(userRepository, tutorRepository);
         homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
@@ -109,7 +110,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             if(lesson != null && tutor != null){
 
                 HomeFragmentDirections.ActionToLessonCardFromHome action = HomeFragmentDirections.actionToLessonCardFromHome(
-                        tutor.getName(), tutor.getEmail(), tutor.getPhotoUri().toString(), tutor.getUid()
+                        tutor.getName(), tutor.getEmail(), tutor.getPhotoUri().toString(), tutor.getUid(), lesson.getId(),
+                        lesson.getData(), lesson.getOra()
                 );
 
 
@@ -144,7 +146,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         BestReviewsRecycleViewAdapter.OnItemClickListener listener = tutor -> {
             if (tutor != null) { // Aggiungi questo controllo di nullità
                 HomeFragmentDirections.ActionToLessonCardFromHome action = HomeFragmentDirections.actionToLessonCardFromHome(
-                        tutor.getName(), tutor.getEmail(), tutor.getPhotoUri().toString(), tutor.getUid());
+                        tutor.getName(), tutor.getEmail(), tutor.getPhotoUri().toString(), tutor.getUid(), "",new Timestamp(new Date(0)), "");
                 navController.navigate(action);
             } else {
                 Log.e("HomeFragment", "TutorModel is null in OnItemClickListener");
@@ -233,6 +235,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     .setPopUpTo(R.id.home_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
                     .build());
         }
+
     }
 
     @Override

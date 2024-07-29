@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +24,6 @@ import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.date.CreateDateRequest;
 import com.example.bicoccahelp.data.date.DateModel;
-import com.example.bicoccahelp.data.lesson.CreateLessonRequest;
 import com.example.bicoccahelp.data.lesson.LessonRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
@@ -61,11 +59,18 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     private static final String ARG_TUTOR_EMAIL = "tutorEmail";
     private static final String ARG_TUTOR_LOGO_URI = "tutorLogoUri";
     private static final String ARG_TUTOR_UID = "tutorUid";
+    private static final String ARG_LESSON_ID = "lessonId";
+    private static final String ARG_LESSON_DATE = "lessonDate";
 
+    private static final String ARG_LESSON_HOUR = "lessonHour";
     private String tutorName;
     private String tutorEmail;
     private String tutorLogoUri;
     private String tutorUid;
+    private String lessonId;
+
+    private Timestamp lessonDate;
+    private String lessonHour;
 
     private Timestamp selectedDate;
     private boolean isDateSelected = false;
@@ -95,6 +100,9 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
             tutorEmail = getArguments().getString(ARG_TUTOR_EMAIL);
             tutorLogoUri = getArguments().getString(ARG_TUTOR_LOGO_URI);
             tutorUid = getArguments().getString(ARG_TUTOR_UID);
+            lessonId = getArguments().getString(ARG_LESSON_ID);
+            lessonDate = (Timestamp) getArguments().get(ARG_LESSON_DATE);
+            lessonHour = getArguments().getString(ARG_LESSON_HOUR);
         }
 
         dateViewModel = new ViewModelProvider(requireActivity(),
@@ -138,8 +146,11 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     public void onClick(View v) {
         if (v.getId() == binding.lessonCard.selectDayButton.getId()) {
             openCalendar();
+
         } else if (v.getId() == binding.lessonCard.bookLessonButton.getId()) {
             bookLesson();
+        }else if (v.getId() == binding.lessonCard.deleteLessonButton.getId()){
+            deleteLesson(lessonId);
         }
     }
 
@@ -353,16 +364,24 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
                     if (oraUpdated) {
                         clearRecyclerView();
                         navController.navigate(R.id.action_from_book_dialog_to_home);
-                        dateViewModel.resetOraUpdated();
+                        dateViewModel.setOra();
                     }
                 });
             } else {
-                // Avvisa l'utente che non può prenotare per qualche motivo
                 dateViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
                     Snackbar.make(requireActivity().findViewById(R.id.fragment_tutor),
                             errorMessage, Snackbar.LENGTH_SHORT).show();
                 });
             }
         });
+    }
+
+    private void deleteLesson(String lessonId){
+        if(!lessonId.isEmpty() && !lessonHour.isEmpty() && lessonDate != null){
+            dateViewModel.deleteLesson(lessonId, lessonDate, lessonHour, tutorUid );
+            navController.navigate(R.id.action_from_book_dialog_to_home);
+        }else{
+            Snackbar.make(getView(), "Impossible to delete your lesson", Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

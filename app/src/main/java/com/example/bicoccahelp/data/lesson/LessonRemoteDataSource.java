@@ -1,5 +1,7 @@
 package com.example.bicoccahelp.data.lesson;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.bicoccahelp.data.Callback;
@@ -128,5 +130,12 @@ public class LessonRemoteDataSource {
     }
 
 
+
+    public void deleteLesson(String lessonUid, Callback<Void> callback){
+        lesson.document(lessonUid)
+                .delete()
+                .addOnSuccessListener(callback::onSucces)
+                .addOnFailureListener(callback::onFailure);
+    }
 
 }

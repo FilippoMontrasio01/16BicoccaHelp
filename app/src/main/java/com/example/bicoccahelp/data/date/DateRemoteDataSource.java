@@ -181,5 +181,32 @@ public class DateRemoteDataSource {
                 });
     }
 
+    public void resetOrario(String uidTutor, Timestamp date, String orario, Callback<Void> callback) {
+        orarioTutor
+                .whereEqualTo(FIELD_UID_TUTOR, uidTutor)
+                .whereEqualTo(FIELD_DATA, date)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        DocumentReference documentReference = documentSnapshot.getReference();
+
+                        // Aggiorna il campo specifico nella mappa degli orari
+                        documentReference.update(FIELD_ORARI + "." + orario, true)
+                                .addOnSuccessListener(aVoid -> {
+                                    callback.onSucces(null);
+                                })
+                                .addOnFailureListener(e -> {
+                                    callback.onFailure(e);
+                                });
+                    } else {
+                        callback.onFailure(new Exception("No matching document found"));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onFailure(e);
+                });
+    }
+
 
 }

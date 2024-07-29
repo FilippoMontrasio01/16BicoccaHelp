@@ -147,9 +147,21 @@
             app:argType="string" />
 
         <argument
+            android:name="lessonId"
+            app:argType="string" />
+
+        <argument
             android:name="navigationSource"
             app:argType="string"
             android:defaultValue="" />
+
+        <argument
+            android:name="lessonDate"
+            app:argType="com.google.firebase.Timestamp"/>
+
+        <argument
+            android:name="lessonHour"
+            app:argType="string"/>
 
         <action
             android:id="@+id/action_from_book_dialog_to_home"

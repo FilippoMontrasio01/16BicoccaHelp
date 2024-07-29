@@ -14,7 +14,6 @@ import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.auth.User;
 
 
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ public class DateViewModel extends ViewModel {
 
     private final MutableLiveData<UiState> uiState;
     private final MutableLiveData<String> errorMessage;
+    private final MutableLiveData<Boolean> lessonDelete;
     private MutableLiveData<String> tutorId;
     public final ArrayList<String> dateList;
     public final DateRepository dateRepository;
@@ -65,6 +65,11 @@ public class DateViewModel extends ViewModel {
         this.tutorId = new MutableLiveData<>();
         this.oraUpdated = new MutableLiveData<>();
         this.lessonBookingAllowed = new MutableLiveData<>();
+        this.lessonDelete = new MutableLiveData<>();
+    }
+
+    public MutableLiveData<Boolean> getLessonDelete() {
+        return lessonDelete;
     }
 
     public LiveData<Boolean> getLessonBookingAllowed() {
@@ -182,10 +187,9 @@ public class DateViewModel extends ViewModel {
         lessonCreate.setValue(false);
     }
 
-    public void resetOraUpdated() {
+    public void setOra() {
         oraUpdated.setValue(false);
-    }
-
+}
 
     public void updateOrario(String uidTutor, Timestamp date, String orario) {
         dateRepository.updateOrario(uidTutor, date, orario, new Callback<Void>() {
@@ -338,5 +342,35 @@ public class DateViewModel extends ViewModel {
 
         return daysOfWeek.get(dayOfWeek);
     }
-}
 
+    public void deleteLesson(String lessonUid, Timestamp date, String hour, String uidTutor){
+
+        lessonRepository.deleteLesson(lessonUid, new Callback<Void>() {
+            @Override
+            public void onSucces(Void unused) {
+                resetOrario(uidTutor, date, hour);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("class not deleted");
+            }
+        });
+    }
+
+    public void resetOrario(String uidTutor, Timestamp date, String hour){
+        dateRepository.resetOrario(uidTutor, date, hour, new Callback<Void>() {
+            @Override
+            public void onSucces(Void unused) {
+                lessonDelete.setValue(true);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Orario not updated");
+            }
+        });
+    }
+
+
+}

@@ -23,7 +23,9 @@ import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentTutorBinding;
 import com.example.bicoccahelp.utils.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.Timestamp;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -83,7 +85,7 @@ public class TutorFragment extends Fragment implements View.OnClickListener{
         TutorRecyclerViewAdapter.OnItemClickListener listener = tutor -> {
             TutorFragmentDirections.ActionToLessonCard action = TutorFragmentDirections.actionToLessonCard(
                     tutor.getName(),tutor.getEmail(), tutor.getPhotoUri().toString(),
-                    tutor.getUid());
+                    tutor.getUid(), "", new Timestamp(new Date(0)), "");
             navController.navigate(action);
         };
 
