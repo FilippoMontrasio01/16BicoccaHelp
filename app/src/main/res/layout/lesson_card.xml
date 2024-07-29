@@ -194,7 +194,7 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/update_name_linearLayout"
+            android:id="@+id/BookClassButtonLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -222,6 +222,38 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/UpdateClassButtonLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/update_name_TextInputLayout"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/UpdateLessonButton"
+                style="@android:style/Widget.Button"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_toEndOf="@+id/date"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center"
+                android:text="Replan your lesson"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/deleteLessonButton"
@@ -238,7 +270,6 @@
                 android:textSize="15sp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:visibility="gone"
                 />
 
         </LinearLayout>

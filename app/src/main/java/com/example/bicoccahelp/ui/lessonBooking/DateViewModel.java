@@ -66,6 +66,7 @@ public class DateViewModel extends ViewModel {
         this.oraUpdated = new MutableLiveData<>();
         this.lessonBookingAllowed = new MutableLiveData<>();
         this.lessonDelete = new MutableLiveData<>();
+
     }
 
     public MutableLiveData<Boolean> getLessonDelete() {
@@ -371,6 +372,4 @@ public class DateViewModel extends ViewModel {
             }
         });
     }
-
-
 }

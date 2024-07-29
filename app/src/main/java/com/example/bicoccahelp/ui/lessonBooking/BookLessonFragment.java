@@ -125,6 +125,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         binding.lessonCard.selectDayButton.setOnClickListener(this);
         binding.lessonCard.bookLessonButton.setOnClickListener(this);
         binding.lessonCard.deleteLessonButton.setOnClickListener(this);
+        binding.lessonCard.UpdateLessonButton.setOnClickListener(this);
         binding.lessonCard.tutorListItemName.setText(tutorName);
         binding.lessonCard.tutorListItemEmail.setText(tutorEmail);
         Glide.with(requireActivity().getApplicationContext())
@@ -136,9 +137,10 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         String navigationSource = args.getNavigationSource();
 
         if ("desiredSource".equals(navigationSource)) {
-            binding.lessonCard.deleteLessonButton.setVisibility(View.VISIBLE);
+            binding.lessonCard.UpdateClassButtonLinearLayout.setVisibility(View.VISIBLE);
+            binding.lessonCard.BookClassButtonLinearLayout.setVisibility(View.GONE);
         } else {
-            binding.lessonCard.deleteLessonButton.setVisibility(View.GONE);
+            binding.lessonCard.UpdateClassButtonLinearLayout.setVisibility(View.GONE);
         }
     }
 
@@ -151,6 +153,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
             bookLesson();
         }else if (v.getId() == binding.lessonCard.deleteLessonButton.getId()){
             deleteLesson(lessonId);
+        }else if(v.getId() == binding.lessonCard.UpdateLessonButton.getId()){
+            updateLesson(lessonId);
         }
     }
 
@@ -382,6 +386,15 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
             navController.navigate(R.id.action_from_book_dialog_to_home);
         }else{
             Snackbar.make(getView(), "Impossible to delete your lesson", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateLesson(String lessonId){
+        if(!lessonId.isEmpty() && !lessonHour.isEmpty() && lessonDate != null){
+            dateViewModel.deleteLesson(lessonId, lessonDate, lessonHour, tutorUid );
+            bookLesson();
+        }else{
+            Snackbar.make(getView(), "Impossible to update your lesson", Snackbar.LENGTH_SHORT).show();
         }
     }
 }
