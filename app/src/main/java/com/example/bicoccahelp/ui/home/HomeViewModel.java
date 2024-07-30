@@ -15,6 +15,8 @@ import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.utils.ServiceLocator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
@@ -147,22 +149,37 @@ public class HomeViewModel extends ViewModel {
         lessonRepository.listLessonsByStudent(uidStudent, limit, new Callback<List<LessonModel>>() {
             @Override
             public void onSucces(List<LessonModel> data) {
-                currentPage += 1;
-                if (data.size() < limit) {
+                // Filtro le lezioni per data
+                List<LessonModel> filteredData = new ArrayList<>();
+                Calendar currentDate = Calendar.getInstance(); // Ottieni la data corrente
+
+                for (LessonModel lesson : data) {
+                    Calendar lessonDate = Calendar.getInstance();
+                    lessonDate.setTime(lesson.getData().toDate());
+
+                    // Controllo se la data della lezione è oggi o futura
+                    if (lessonDate.get(Calendar.YEAR) > currentDate.get(Calendar.YEAR) ||
+                            (lessonDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                                    lessonDate.get(Calendar.DAY_OF_YEAR) >= currentDate.get(Calendar.DAY_OF_YEAR))) {
+                        filteredData.add(lesson);
+                    }
+                }
+
+                if (filteredData.size() < limit) {
                     hasMore = false;
                 }
 
-                if (data.size() == 0) {
+                if (filteredData.size() == 0) {
                     return;
                 }
 
                 int sizeBeforeFetch = classList.size();
-                int fetch = data.size();
+                int fetch = filteredData.size();
 
                 UiState newUiState = new UiState(sizeBeforeFetch, fetch, -1);
-                classList.addAll(data);
-                originalClassList.addAll(data);
-                listC.setValue(data);
+                classList.addAll(filteredData);
+                originalClassList.addAll(filteredData);
+                listC.setValue(filteredData);
                 uiStateMutableLiveData.postValue(newUiState);
             }
 
@@ -172,6 +189,7 @@ public class HomeViewModel extends ViewModel {
             }
         });
     }
+
 
     public void restoreOriginalList() {
         tutorList.clear();

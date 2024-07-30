@@ -178,8 +178,6 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/book_class_background"
             app:layout_constraintTop_toTopOf="@+id/book_class_background" />
-
-
     </LinearLayout>
 
 
