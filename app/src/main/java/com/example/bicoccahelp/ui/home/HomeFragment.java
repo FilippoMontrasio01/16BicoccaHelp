@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
         binding.SeeAllReviewsButton.setOnClickListener(this);
+        binding.SeeAllLessonsButton.setOnClickListener(this);
 
         homeViewModel.getUserName(new Callback<String>() {
             @Override
@@ -232,6 +233,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         if(v.getId() == binding.SeeAllReviewsButton.getId()){
             navController.navigate(R.id.action_from_home_to_book_lesson, null, new NavOptions.Builder()
+                    .setPopUpTo(R.id.home_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
+                    .build());
+        }
+
+        if(v.getId() == binding.SeeAllLessonsButton.getId()){
+            navController.navigate(R.id.action_from_home_to_your_lesson_fragment, null, new NavOptions.Builder()
                     .setPopUpTo(R.id.home_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
                     .build());
         }

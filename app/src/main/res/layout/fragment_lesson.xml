@@ -1,14 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.lessons.LessonFragment">
+    android:orientation="vertical"
+    android:background="@color/light_gray"
+    tools:context=".ui.lessonBooking.TutorFragment">
 
+    <ImageView
+        android:id="@+id/book_class_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/wave_haikei_4_"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/book_class_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lesson"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:textSize="30sp"
+        android:fontFamily="@font/lato_bold"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        android:layout_marginTop="220dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/light_gray"
+        app:layout_constraintEnd_toEndOf="@+id/book_class_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/book_class_background">
 
-</FrameLayout>
+        <TextView
+
+            android:id="@+id/find_tutor_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/filter_your_class"
+            android:textColor="@color/dark_gray"
+            android:textSize="23sp"
+            />
+
+        <RelativeLayout
+            android:id="@+id/best_subject_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="15dp">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search_tutor_TextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/search_tutor"
+                app:errorTextAppearance="@font/lato_bold"
+                android:textColor="@color/dark_gray"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_tutor_editText"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:background="@drawable/edittext_background"
+                    android:hint="@string/search"
+                    android:fontFamily="@font/lato"
+                    android:padding="12dp"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="18sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/filter_name_button"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textAllCaps="false"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/white"
+                android:text="@string/filter" />
+
+        </RelativeLayout>
+
+        <TextView
+
+            android:id="@+id/search_field_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/search_field"
+            android:textColor="@color/dark_gray"
+            android:textSize="18sp"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:paddingHorizontal="15dp"
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:id="@+id/upcomingToggle"
+                android:layout_marginEnd="10dp"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/toggle_button_background"
+                android:textOn="Upcoming"
+                android:textOff="Upcoming"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:fontFamily="@font/lato_bold"
+                android:textSize="14sp"/>
+
+            <ToggleButton
+                android:id="@+id/TerminatedToggle"
+                android:layout_width="110dp"
+                android:layout_marginEnd="10dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/toggle_button_background"
+                android:textOn="Terminated"
+                android:textOff="Terminated"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:fontFamily="@font/lato_bold"
+                android:textSize="14sp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/date_button"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textAllCaps="false"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/white"
+                android:text="Date" />
+
+
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tutorRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:paddingBottom="250dp"
+            android:paddingStart="12dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="@+id/book_class_background"
+            app:layout_constraintTop_toTopOf="@+id/book_class_background" />
+    </LinearLayout>
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

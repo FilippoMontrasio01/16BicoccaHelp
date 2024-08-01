@@ -23,10 +23,26 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_out_right"
             app:popExitAnim="@android:anim/slide_in_left"
-
             />
 
+        <action
+            android:id="@+id/action_from_home_to_your_lesson_fragment"
+            app:destination="@id/lesson_fragment"/>
+
     </fragment>
+
+    <fragment
+        android:id="@+id/lesson_fragment"
+        android:name="com.example.bicoccahelp.ui.profile.lessons.LessonFragment"
+        android:label="@string/lesson_fragment"
+        tools:layout="@layout/fragment_lesson">
+
+
+
+    </fragment>
+
+
+
 
 
     <fragment
@@ -67,6 +83,10 @@
         <action
             android:id="@+id/action_from_profile_to_review_fragment"
             app:destination="@id/review_fragment"/>
+
+        <action
+            android:id="@+id/action_from_profile_to_your_lesson"
+            app:destination="@id/lesson_fragment"/>
 
     </fragment>
 

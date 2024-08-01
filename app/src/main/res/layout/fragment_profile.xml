@@ -228,7 +228,7 @@
                     app:dividerColor="@android:color/darker_gray"/>
 
                 <RelativeLayout
-                    android:id="@+id/history_item"
+                    android:id="@+id/yourLessons_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"

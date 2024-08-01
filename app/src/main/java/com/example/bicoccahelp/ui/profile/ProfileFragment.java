@@ -88,6 +88,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         binding.deleteProfileItem.setOnClickListener(this);
         binding.updatePasswordItem.setOnClickListener(this);
         binding.updateNameItem.setOnClickListener(this);
+        binding.yourLessonsItem.setOnClickListener(this);
         binding.displayEmailTextView.setText(user.getEmail());
         binding.displayNameTextView.setText(user.getName());
         binding.completeStudentItem.setOnClickListener(this);
@@ -142,6 +143,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         if(v.getId() == binding.reviewItem.getId()){
             reviewOnclick();
+            return;
+        }
+
+        if(v.getId() == binding.yourLessonsItem.getId()){
+            yourLessonOnClick();
         }
     }
 
@@ -162,6 +168,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private void completeStudentOnClick() {
         navController.navigate(R.id.action_from_profile_to_complete_student_fragment, null, new NavOptions.Builder()
+                .setPopUpTo(R.id.profile_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
+                .build());
+    }
+
+    private void yourLessonOnClick(){
+        navController.navigate(R.id.action_from_profile_to_your_lesson, null, new NavOptions.Builder()
                 .setPopUpTo(R.id.profile_fragment, true)  // Rimuove il fragment di origine e tutto ciò che è sopra di esso nello stack
                 .build());
     }
