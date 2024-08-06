@@ -23,7 +23,7 @@ public class LessonFragment extends Fragment {
 
 
     public LessonFragment() {
-        // Required empty public constructor
+
     }
 
 
