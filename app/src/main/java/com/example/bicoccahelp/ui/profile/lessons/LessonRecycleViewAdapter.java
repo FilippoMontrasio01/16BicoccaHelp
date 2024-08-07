@@ -1,20 +1,24 @@
 package com.example.bicoccahelp.ui.profile.lessons;
 
 import android.app.Application;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.Callback;
 import com.example.bicoccahelp.data.lesson.LessonModel;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.ui.home.HomeViewModel;
 import com.example.bicoccahelp.ui.home.YourLessonRecycleViewAdapter;
+import com.example.bicoccahelp.utils.GlideLoadModel;
 import com.example.bicoccahelp.utils.InputValidator;
 
 
@@ -26,22 +30,18 @@ public class LessonRecycleViewAdapter extends RecyclerView.Adapter<
 
     private final List<LessonModel> classList;
     private final Application application;
-    private final OnItemClickListener listener;
     private final LessonViewModel lessonViewModel;
-    private final HomeViewModel homeViewModel;
 
     private interface OnItemClickListener{
-        void onClassItemClick(LessonModel lessonModel, TutorModel tutorModel);
+        void onClassItemClick(LessonModel lessonModel);
     }
 
     public LessonRecycleViewAdapter(List<LessonModel> classList, Application application,
-                                    OnItemClickListener listener, LessonViewModel lessonViewModel,
-                                    HomeViewModel homeViewModel){
+                                    LessonViewModel lessonViewModel
+                                    ){
         this.classList = classList;
         this.application = application;
-        this.listener = listener;
         this.lessonViewModel = lessonViewModel;
-        this.homeViewModel = homeViewModel;
     }
 
     public int getItemCount(){
@@ -62,30 +62,35 @@ public class LessonRecycleViewAdapter extends RecyclerView.Adapter<
     }
 
     public void onBindViewHolder(@NonNull YourLessonViewHolder holder, int position){
-        holder.bind(classList.get(position), listener);
+        holder.bind(classList.get(position));
     }
 
     public class YourLessonViewHolder extends RecyclerView.ViewHolder{
         private final TextView lessonDescription;
         private final TextView dateTitle;
         private final TextView hourTitle;
+        private final ImageView userPhoto;
+        private final TextView tutor_Name;
 
         public YourLessonViewHolder(@NonNull View view){
             super(view);
             lessonDescription = view.findViewById(R.id.lessonDescription);
             dateTitle = view.findViewById(R.id.DateTitle);
             hourTitle = view.findViewById(R.id.HourTitle);
+            userPhoto = view.findViewById(R.id.TutorImage);
+            tutor_Name = view.findViewById(R.id.TutorName);
         }
 
-        public void bind(LessonModel lessonModel, OnItemClickListener listener){
+        public void bind(LessonModel lessonModel){
             hourTitle.setText(lessonModel.getOra());
             dateTitle.setText(InputValidator.formatDate(lessonModel.getData()));
 
             if(lessonModel.getDescription().isEmpty()){
-                homeViewModel.getTutorName(lessonModel.getUid_tutor(), new Callback<String>() {
+                lessonViewModel.getTutorName(lessonModel.getUid_tutor(), new Callback<String>() {
                     @Override
                     public void onSucces(String tutorName) {
                         lessonDescription.setText("Class with: "+tutorName);
+                        tutor_Name.setText(tutorName);
                     }
 
                     @Override
@@ -97,12 +102,17 @@ public class LessonRecycleViewAdapter extends RecyclerView.Adapter<
                 lessonDescription.setText(lessonModel.getDescription());
             }
 
-
-            homeViewModel.getTutorDetails(lessonModel.getUid_tutor(), new Callback<TutorModel>() {
+            lessonViewModel.getTutorDetails(lessonModel.getUid_tutor(), new Callback<TutorModel>() {
                 @Override
                 public void onSucces(TutorModel tutorModel) {
-                    itemView.setOnClickListener(v -> listener.onClassItemClick(lessonModel,
-                            tutorModel));
+                    if (tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
+                            .getPhotoUri().toString())) {
+                        userPhoto.setImageResource(R.drawable.profile_icon);
+                    } else {
+                        Glide.with(application.getApplicationContext())
+                                .load(GlideLoadModel.get(tutorModel.getPhotoUri().toString()))
+                                .into(userPhoto);
+                    }
                 }
 
                 @Override

@@ -169,11 +169,12 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tutorRecyclerView"
+            android:id="@+id/lessonRecycleView"
             android:layout_width="match_parent"
             android:layout_height="600dp"
             android:paddingBottom="250dp"
             android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/book_class_background"

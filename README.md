@@ -1,6 +1,6 @@
 # BicoccaHelp
 
-BicoccaHel è un'applicazione sviluppata da Filippo Montrasio per l'Università Milano Bicocca. Si tratta di un servizio di tutoring progettato per fornire supporto agli studenti durante il loro percorso accademico.
+BicoccaHelp è un'applicazione sviluppata da Filippo Montrasio per l'Università Milano Bicocca. Si tratta di un servizio di tutoring progettato per fornire supporto agli studenti durante il loro percorso accademico.
 
 ## Descrizione
 

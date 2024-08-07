@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="190dp"
+    android:layout_marginBottom="20dp"
     android:background="@drawable/nav_bar_background">
 
     <TextView
@@ -118,7 +119,7 @@
             android:id="@+id/LessonViewFlipper"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_marginStart="70dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:layout_toEndOf="@+id/TutorName">
 
