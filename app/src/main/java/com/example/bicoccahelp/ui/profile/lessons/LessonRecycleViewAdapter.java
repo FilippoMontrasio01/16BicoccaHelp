@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,6 +72,7 @@ public class LessonRecycleViewAdapter extends RecyclerView.Adapter<
         private final TextView hourTitle;
         private final ImageView userPhoto;
         private final TextView tutor_Name;
+        private final ViewFlipper lessonViewFlipper;
 
         public YourLessonViewHolder(@NonNull View view){
             super(view);
@@ -79,18 +81,19 @@ public class LessonRecycleViewAdapter extends RecyclerView.Adapter<
             hourTitle = view.findViewById(R.id.HourTitle);
             userPhoto = view.findViewById(R.id.TutorImage);
             tutor_Name = view.findViewById(R.id.TutorName);
+            lessonViewFlipper = view.findViewById(R.id.LessonViewFlipper);
         }
 
         public void bind(LessonModel lessonModel){
             hourTitle.setText(lessonModel.getOra());
             dateTitle.setText(InputValidator.formatDate(lessonModel.getData()));
 
+
             if(lessonModel.getDescription().isEmpty()){
                 lessonViewModel.getTutorName(lessonModel.getUid_tutor(), new Callback<String>() {
                     @Override
                     public void onSucces(String tutorName) {
                         lessonDescription.setText("Class with: "+tutorName);
-                        tutor_Name.setText(tutorName);
                     }
 
                     @Override
@@ -105,6 +108,7 @@ public class LessonRecycleViewAdapter extends RecyclerView.Adapter<
             lessonViewModel.getTutorDetails(lessonModel.getUid_tutor(), new Callback<TutorModel>() {
                 @Override
                 public void onSucces(TutorModel tutorModel) {
+                    tutor_Name.setText(tutorModel.getName());
                     if (tutorModel.getPhotoUri() == null || TextUtils.isEmpty(tutorModel
                             .getPhotoUri().toString())) {
                         userPhoto.setImageResource(R.drawable.profile_icon);
@@ -120,6 +124,12 @@ public class LessonRecycleViewAdapter extends RecyclerView.Adapter<
 
                 }
             });
+
+            if(InputValidator.calculateDaysDifference(lessonModel.getData()) > 0){
+                lessonViewFlipper.setDisplayedChild(0);
+            }else{
+                lessonViewFlipper.setDisplayedChild(1);
+            }
         }
     }
 }

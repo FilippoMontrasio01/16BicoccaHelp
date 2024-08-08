@@ -1,12 +1,6 @@
 package com.example.bicoccahelp.data.lesson;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.example.bicoccahelp.data.Callback;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.AggregateQuery;
 import com.google.firebase.firestore.AggregateQuerySnapshot;
@@ -18,7 +12,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,9 +91,40 @@ public class LessonRemoteDataSource {
             }
         });
     }
-    public void listLessonsByStudent(String uidStudent, Long limit, Callback<List<LessonModel>> callback) {
+    public void listLessonsByStudentASC(String uidStudent, Long limit, Callback<List<LessonModel>> callback) {
         Query query = lesson.whereEqualTo(UID_STUDENT, uidStudent)
                 .orderBy(LESSON_DATE, Query.Direction.ASCENDING)
+                .limit(limit);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<LessonModel> lessons = new ArrayList<>();
+                QuerySnapshot snapshot = task.getResult();
+                if (snapshot != null && !snapshot.isEmpty()) {
+                    for (QueryDocumentSnapshot document : snapshot) {
+                        LessonModel lessonModel = new LessonModel(
+                                document.getId(),
+                                document.getString(UID_STUDENT),
+                                document.getString(UID_TUTOR),
+                                document.getTimestamp(LESSON_DATE),
+                                document.getString(ORA),
+                                document.getString(DESCRIPTION)
+                        );
+                        lessons.add(lessonModel);
+                    }
+                    callback.onSucces(lessons);
+                } else {
+
+                }
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+    public void listLessonsByStudentDES(String uidStudent, Long limit, Callback<List<LessonModel>> callback) {
+        Query query = lesson.whereEqualTo(UID_STUDENT, uidStudent)
+                .orderBy(LESSON_DATE, Query.Direction.DESCENDING)
                 .limit(limit);
 
         query.get().addOnCompleteListener(task -> {

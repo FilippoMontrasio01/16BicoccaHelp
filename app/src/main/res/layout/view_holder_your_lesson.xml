@@ -26,8 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
         android:orientation="horizontal"
-        android:layout_gravity="center"
+
         >
 
         <LinearLayout
@@ -124,15 +125,15 @@
             android:layout_toEndOf="@+id/TutorName">
 
             <LinearLayout
-                android:id="@+id/JoinLinearLayout"
+                android:id="@+id/upcomingLinearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:background="@drawable/round_back_background_lesson_join">
 
                 <ImageView
-                    android:id="@+id/JoinDot"
+                    android:id="@+id/upcomingDot"
                     android:layout_width="11dp"
                     android:layout_height="11dp"
                     android:layout_gravity="center"
@@ -140,7 +141,7 @@
                     android:src="@drawable/dot" />
 
                 <TextView
-                    android:id="@+id/JoinTextView"
+                    android:id="@+id/upcomingTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -154,39 +155,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/CancelLinearLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:background="@drawable/round_back_background_lesson_canceled">
-
-                <ImageView
-                    android:id="@+id/CancelDot"
-                    android:layout_width="11dp"
-                    android:layout_height="11dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="15dp"
-                    android:src="@drawable/dot_finished" />
-
-                <TextView
-                    android:id="@+id/CancelTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="15dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:gravity="center"
-                    android:text="@string/canceled"
-                    android:textColor="@color/deep_red"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/FinishLinearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:background="@drawable/round_back_background_lesson_finished">

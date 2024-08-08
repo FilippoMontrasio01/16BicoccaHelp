@@ -1,7 +1,6 @@
 package com.example.bicoccahelp.data.lesson;
 
 import com.example.bicoccahelp.data.Callback;
-import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.google.firebase.Timestamp;
 
 import java.util.List;
@@ -27,12 +26,16 @@ public class LessonRepository {
         lessonRemoteDataSource.checkHourPerDay(uidStudent, day, hour, callback);
     }
 
-    public void listLessonsByStudent(String uidStudent, Long limit, Callback<List<LessonModel>> callback){
-        lessonRemoteDataSource.listLessonsByStudent(uidStudent,limit, callback);
+    public void listLessonsByStudentASC(String uidStudent, Long limit, Callback<List<LessonModel>> callback){
+        lessonRemoteDataSource.listLessonsByStudentASC(uidStudent,limit, callback);
     }
 
     public void deleteLesson(String lessonUid, Callback<Void> callback){
         lessonRemoteDataSource.deleteLesson(lessonUid, callback);
+    }
+
+    public void listLessonsByStudentDES(String uidStudent, Long limit, Callback<List<LessonModel>> callback){
+        lessonRemoteDataSource.listLessonsByStudentDES(uidStudent, limit, callback);
     }
 
 }

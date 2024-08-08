@@ -16,7 +16,6 @@ import com.example.bicoccahelp.utils.ServiceLocator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
@@ -146,7 +145,7 @@ public class HomeViewModel extends ViewModel {
             return;
         }
 
-        lessonRepository.listLessonsByStudent(uidStudent, limit, new Callback<List<LessonModel>>() {
+        lessonRepository.listLessonsByStudentASC(uidStudent, limit, new Callback<List<LessonModel>>() {
             @Override
             public void onSucces(List<LessonModel> data) {
                 // Filtro le lezioni per data

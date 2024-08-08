@@ -87,7 +87,7 @@ public class LessonViewModel  extends ViewModel {
             return;
         }
 
-        lessonRepository.listLessonsByStudent(uidStudent, limit, new Callback<List<LessonModel>>() {
+        lessonRepository.listLessonsByStudentDES(uidStudent, limit, new Callback<List<LessonModel>>() {
             @Override
             public void onSucces(List<LessonModel> data) {
                 if(data.size() < limit){
@@ -134,7 +134,7 @@ public class LessonViewModel  extends ViewModel {
         });
     }
 
-    public void getTutorDetails(String uidTutor, Callback<TutorModel> callback){
+    public void getTutorDetails(String uidTutor, Callback<TutorModel> callback) {
         tutorRepository.getTutorModelById(uidTutor, new Callback<TutorModel>() {
             @Override
             public void onSucces(TutorModel tutorModel) {
@@ -147,4 +147,6 @@ public class LessonViewModel  extends ViewModel {
             }
         });
     }
+
+
 }
