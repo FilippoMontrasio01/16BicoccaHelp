@@ -12,9 +12,13 @@ import com.example.bicoccahelp.data.lesson.LessonRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
+import com.example.bicoccahelp.ui.home.HomeViewModel;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.firebase.Timestamp;
+
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class LessonViewModel  extends ViewModel {
@@ -154,9 +158,136 @@ public class LessonViewModel  extends ViewModel {
         });
     }
 
+    public void getNextUpcomingClassesPage(String uidStudent) {
+
+
+        Log.d("lezione", "PROVIAMO SE ENTRA");
+
+        lessonRepository.listLessonsByStudentASC(uidStudent, limit, new Callback<List<LessonModel>>() {
+            @Override
+            public void onSucces(List<LessonModel> data) {
+                // Filtro le lezioni per data
+                List<LessonModel> filteredData = new ArrayList<>();
+                Calendar currentDate = Calendar.getInstance();
+
+                for (LessonModel lesson : data) {
+
+                    Calendar lessonDate = Calendar.getInstance();
+                    lessonDate.setTimeInMillis(lesson.getData().toDate().getTime());
+
+                    if (lessonDate.after(currentDate)) {
+                        Log.d("lezione", "SONO DENTROOOOOO");
+                        filteredData.add(lesson);
+                    }
+                }
+
+                if (filteredData.size() < limit) {
+                    hasMore = false;
+                }
+
+                if (filteredData.size() == 0) {
+                    return;
+                }
+
+                int sizeBeforeFetch = classList.size();
+                int fetched = filteredData.size();
+
+                UiState newUiState = new UiState(sizeBeforeFetch, fetched, -1);
+                classList.addAll(filteredData);
+                listC.setValue(filteredData);
+                uiStateMutableLiveData.postValue(newUiState);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.d("lezione", "UUFA NON VA");
+                errorMessage.postValue(e.getMessage());
+            }
+        });
+    }
+
+    public void getNextDateClassesPage(Timestamp selectedDate, String uidStudent){
+        lessonRepository.listLessonByDate(uidStudent, selectedDate, limit, new Callback<List<LessonModel>>() {
+            @Override
+            public void onSucces(List<LessonModel> data) {
+                if (data.size() < limit) {
+                    hasMore = false;
+                }
+
+                if (data.size() == 0) {
+                    return;
+                }
+
+                int sizeBeforeFetch = classList.size();
+                int fetched = data.size();
+
+                UiState newUiState = new UiState(sizeBeforeFetch, fetched, -1);
+                classList.addAll(data);
+                listC.setValue(data);
+                uiStateMutableLiveData.postValue(newUiState);
+                Log.d("lezione", "È ENTRATA");
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+                Log.d("lezione", "NON ENTRA");
+            }
+        });
+    }
+
+    public void getNextTerminatedClassesPage(String uidStudent) {
+
+
+        lessonRepository.listLessonsByStudentASC(uidStudent, limit, new Callback<List<LessonModel>>() {
+            @Override
+            public void onSucces(List<LessonModel> data) {
+                // Filtro le lezioni per data
+                List<LessonModel> filteredData = new ArrayList<>();
+                Calendar currentDate = Calendar.getInstance();
+
+                for (LessonModel lesson : data) {
+
+                    Calendar lessonDate = Calendar.getInstance();
+                    lessonDate.setTimeInMillis(lesson.getData().toDate().getTime());
+
+                    if (lessonDate.before(currentDate)) {
+                        filteredData.add(lesson);
+                    }
+                }
+
+                if (filteredData.size() < limit) {
+                    hasMore = false;
+                }
+
+                if (filteredData.size() == 0) {
+                    return;
+                }
+
+                int sizeBeforeFetch = classList.size();
+                int fetched = filteredData.size();
+
+                UiState newUiState = new UiState(sizeBeforeFetch, fetched, -1);
+                classList.addAll(filteredData);
+                listC.setValue(filteredData);
+                uiStateMutableLiveData.postValue(newUiState);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+            }
+        });
+    }
+
     public void restoreOriginalList(){
         classList.clear();
         classList.addAll(originalClassList);
+    }
+
+    public void resetClassList() {
+        classList.clear();
+        listC.setValue(classList);
     }
 
     public void getTutorName(String uidTutor, Callback<String> callback){

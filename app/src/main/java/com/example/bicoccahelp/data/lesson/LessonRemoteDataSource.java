@@ -119,6 +119,7 @@ public class LessonRemoteDataSource {
 
                 }
             } else {
+                Log.d("lezione", "Query fallita: " + task.getException());
                 callback.onFailure(task.getException());
             }
         });
@@ -163,6 +164,51 @@ public class LessonRemoteDataSource {
         Log.d("lezione", "Inizio query: UID_STUDENT = " + uidStudent + ", UID_TUTOR = " + uidTutor);
 
         // Esegui la query
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<LessonModel> lessons = new ArrayList<>();
+                QuerySnapshot snapshot = task.getResult();
+
+                // Se la query restituisce documenti
+                if (snapshot != null && !snapshot.isEmpty()) {
+                    for (QueryDocumentSnapshot document : snapshot) {
+                        // Log dei dati grezzi del documento
+                        Log.d("lezione", "Documento trovato: " + document.getData());
+
+                        // Creazione dell'oggetto LessonModel dai dati del documento
+                        LessonModel lessonModel = new LessonModel(
+                                document.getId(),
+                                document.getString(UID_STUDENT),
+                                document.getString(UID_TUTOR),
+                                document.getTimestamp(LESSON_DATE),
+                                document.getString(ORA),
+                                document.getString(DESCRIPTION)
+                        );
+                        lessons.add(lessonModel);
+
+                        // Log dell'UID dello studente e del tutor per confermare che sono corretti
+                        Log.d("lezione", "UID TUTOR: " + lessonModel.getUid_tutor() +
+                                " | UID STUDENT: " + lessonModel.getUid_Student() +
+                                " | UID LEZIONE: " + lessonModel.getId());
+                    }
+                    // Passa i risultati alla callback
+                    callback.onSucces(lessons);
+                } else {
+                    Log.d("lezione", "Nessun documento trovato che corrisponde alla query.");
+                    callback.onSucces(new ArrayList<>()); // Restituisce una lista vuota
+                }
+            } else {
+                Log.d("lezione", "Query fallita: " + task.getException());
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+    public void listLessonByDate(String uidStudent, Timestamp selectedDate, Long limit, Callback<List<LessonModel>> callback){
+        Query query = lesson.whereEqualTo(UID_STUDENT, uidStudent)
+                .whereEqualTo(LESSON_DATE, selectedDate)
+                .limit(limit);
+
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<LessonModel> lessons = new ArrayList<>();

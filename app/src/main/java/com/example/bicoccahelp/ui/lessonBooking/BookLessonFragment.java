@@ -171,32 +171,29 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
 
         // Crea un nuovo DatePickerDialog
         DatePickerDialog dialog = new DatePickerDialog(requireContext(),
-                R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year1, int month1, int dayOfMonth1) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year1, month1, dayOfMonth1, 0, 0, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
+                R.style.MyDatePickerDialogTheme, (view, year1, month1, dayOfMonth1) -> {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year1, month1, dayOfMonth1, 0, 0, 0);
+                    calendar.set(Calendar.MILLISECOND, 0);
 
-                // Creare un oggetto Timestamp da un oggetto Date
-                selectedDate = new Timestamp(calendar.getTime());
-                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                    // Creare un oggetto Timestamp da un oggetto Date
+                    selectedDate = new Timestamp(calendar.getTime());
+                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
 
 
-                Log.d("DayOfWeek", "Giorno della settimana selezionato: " + dayOfWeek);
+                    Log.d("DayOfWeek", "Giorno della settimana selezionato: " + dayOfWeek);
 
-                // Verifica se è stata già selezionata una data
-                if (!isDateSelected || !Objects.equals(binding.lessonCard.selectDayButton.getText()
-                        .toString(), InputValidator.formatDate(selectedDate))) {
-                    binding.lessonCard.selectDayButton.
-                            setText(InputValidator.formatDate(selectedDate));
+                    // Verifica se è stata già selezionata una data
+                    if (!isDateSelected || !Objects.equals(binding.lessonCard.selectDayButton.getText()
+                            .toString(), InputValidator.formatDate(selectedDate))) {
+                        binding.lessonCard.selectDayButton.
+                                setText(InputValidator.formatDate(selectedDate));
 
 
-                    insertOrUpdateDate(selectedDate);
-                }
-            }
-        }, year, month, day);
+                        insertOrUpdateDate(selectedDate);
+                    }
+                }, year, month, day);
 
         Calendar minDate = Calendar.getInstance();
         dialog.getDatePicker().setMinDate(minDate.getTimeInMillis());

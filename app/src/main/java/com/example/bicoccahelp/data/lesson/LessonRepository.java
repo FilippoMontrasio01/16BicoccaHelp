@@ -42,4 +42,8 @@ public class LessonRepository {
         lessonRemoteDataSource.listLessonsByTutorDES(uidStudent, uidTutor, limit, callback);
     }
 
+    public void listLessonByDate(String uidStudent, Timestamp selectedDate, Long limit, Callback<List<LessonModel>> callback){
+        lessonRemoteDataSource.listLessonByDate(uidStudent, selectedDate, limit, callback);
+    }
+
 }

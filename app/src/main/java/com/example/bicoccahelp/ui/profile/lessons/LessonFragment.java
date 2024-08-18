@@ -1,5 +1,6 @@
 package com.example.bicoccahelp.ui.profile.lessons;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ToggleButton;
 
 import com.example.bicoccahelp.R;
 import com.example.bicoccahelp.data.lesson.LessonModel;
@@ -23,7 +25,12 @@ import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentLessonBinding;
 import com.example.bicoccahelp.databinding.FragmentProfileBinding;
 import com.example.bicoccahelp.ui.home.HomeViewModel;
+import com.example.bicoccahelp.utils.InputValidator;
 import com.example.bicoccahelp.utils.ServiceLocator;
+import com.google.firebase.Timestamp;
+
+import java.util.Calendar;
+import java.util.Objects;
 
 public class LessonFragment extends Fragment implements View.OnClickListener{
 
@@ -34,7 +41,7 @@ public class LessonFragment extends Fragment implements View.OnClickListener{
     private UserRepository userRepository;
     private TutorRepository tutorRepository;
     private LessonViewModel lessonViewModel;
-
+    private Timestamp selectedDate;
 
     public LessonFragment() {
 
@@ -66,12 +73,17 @@ public class LessonFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+
         this.configureRecycleView();
         this.observeUiState();
         this.loadFirstPage();
         this.addOnScrollListener();
 
+        binding.upcomingToggle.setOnClickListener(this);
+        binding.TerminatedToggle.setOnClickListener(this);
         binding.filterNameButton.setOnClickListener(this);
+        binding.dateButton.setOnClickListener(this);
+
     }
 
     private void configureRecycleView(){
@@ -144,12 +156,62 @@ public class LessonFragment extends Fragment implements View.OnClickListener{
 
         if(v.getId() == binding.filterNameButton.getId()){
             filterNameOnClick();
+            return;
         }
+
+        if(v.getId() == binding.TerminatedToggle.getId()){
+            filterCompletedOnClick();
+            return;
+        }
+
+        if(v.getId() == binding.upcomingToggle.getId()) {
+            filterUpcomingOnClick();
+            return;
+        }
+
+        if(v.getId() == binding.dateButton.getId()){
+            filterDateOnClick();
+        }
+
+    }
+
+    private void filterCompletedOnClick(){
+        lessonViewModel.getNextTerminatedClassesPage(lessonViewModel.getUid());
+    }
+
+    private void filterUpcomingOnClick(){
+        lessonViewModel.getNextUpcomingClassesPage(lessonViewModel.getUid());
+    }
+
+    private void filterDateOnClick() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dialog = new DatePickerDialog(requireContext(),
+                R.style.MyDatePickerDialogTheme, (view, year1, month1, dayOfMonth1) -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year1, month1, dayOfMonth1, 0, 0, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            // Crea un Timestamp dalla data selezionata
+            selectedDate = new Timestamp(calendar.getTime());
+            binding.dateButton.setText(InputValidator.formatDate(selectedDate));
+
+            // Reset della lista e chiamata al ViewModel per caricare le lezioni della nuova data
+            lessonViewModel.resetClassList();  // Metodo per svuotare la lista corrente
+            lessonViewModel.getNextDateClassesPage(selectedDate, lessonViewModel.getUid());
+
+        }, year, month, day);
+
+        dialog.show();
     }
 
     private void filterNameOnClick(){
 
         Log.d("PROVA", "IL BOTTONE VA");
+
 
         String tutorName = binding.searchTutorEditText.getText().toString();
 
@@ -157,10 +219,11 @@ public class LessonFragment extends Fragment implements View.OnClickListener{
             lessonViewModel.restoreOriginalList();
             Log.d("PROVA", "IL BOTTONE È VUOTO");
         }else{
-
             lessonViewModel.getTutorId(tutorName);
         }
     }
+
+
 
     public void onDestroyView() {
         super.onDestroyView();

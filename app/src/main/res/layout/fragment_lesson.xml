@@ -124,29 +124,27 @@
             android:paddingHorizontal="15dp"
             android:orientation="horizontal">
 
-            <ToggleButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/upcomingToggle"
                 android:layout_marginEnd="10dp"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/toggle_button_background"
-                android:textOn="Upcoming"
-                android:textOff="Upcoming"
+                android:text="Upcoming"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:fontFamily="@font/lato_bold"
                 android:textSize="14sp"/>
 
-            <ToggleButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/TerminatedToggle"
                 android:layout_width="110dp"
                 android:layout_marginEnd="10dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/toggle_button_background"
-                android:textOn="Terminated"
-                android:textOff="Terminated"
+                android:text="Completed"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:fontFamily="@font/lato_bold"
@@ -171,7 +169,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lessonRecycleView"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="550dp"
             android:paddingBottom="250dp"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
