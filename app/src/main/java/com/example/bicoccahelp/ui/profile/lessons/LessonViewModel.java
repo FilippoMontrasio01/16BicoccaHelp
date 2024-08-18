@@ -1,5 +1,7 @@
 package com.example.bicoccahelp.ui.profile.lessons;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -36,7 +38,6 @@ public class LessonViewModel  extends ViewModel {
     private final Long limit = 50L;
     private boolean hasMore = true;
     private int currentPage = 0;
-
     private final UserRepository userRepository;
     private final LessonRepository lessonRepository;
     private final TutorRepository tutorRepository;
@@ -52,6 +53,7 @@ public class LessonViewModel  extends ViewModel {
         this.classList = new ArrayList<>();
         this.listC = new MutableLiveData<>();
         this.uiStateMutableLiveData = new MutableLiveData<>(new UiState(0, 0, -1));
+
     }
 
     public String getUid(){
@@ -115,6 +117,43 @@ public class LessonViewModel  extends ViewModel {
         });
     }
 
+    public void getNextTutorNameClassPage(String uidStudent, String uidTutor) {
+        Log.d("lezione", "PROVA");
+
+
+        Log.d("lezione", "PROVA 2");
+
+        lessonRepository.listLessonsByTutorDES(uidStudent, uidTutor, limit, new Callback<List<LessonModel>>() {
+            @Override
+            public void onSucces(List<LessonModel> data) {
+                if (data.size() < limit) {
+                    hasMore = false;
+                }
+
+                if (data.size() == 0) {
+                    return;
+                }
+
+                int sizeBeforeFetch = classList.size();
+                int fetched = data.size();
+
+                UiState newUiState = new UiState(sizeBeforeFetch, fetched, -1);
+                classList.addAll(data);
+                listC.setValue(data);
+                uiStateMutableLiveData.postValue(newUiState);
+                Log.d("lezione", "È ENTRATA");
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+                Log.d("lezione", "NON ENTRA");
+
+            }
+        });
+    }
+
     public void restoreOriginalList(){
         classList.clear();
         classList.addAll(originalClassList);
@@ -144,6 +183,24 @@ public class LessonViewModel  extends ViewModel {
             @Override
             public void onFailure(Exception e) {
                 errorMessage.postValue(e.getMessage());
+            }
+        });
+    }
+
+    public void getTutorId(String tutorName){
+
+        String userId = userRepository.getCurrentUser().getUid();
+
+        tutorRepository.getTutorUid(tutorName, new Callback<String>() {
+            @Override
+            public void onSucces(String tutorId) {
+                Log.d("lezione", "UID TUTOR È: "+ tutorId  + "USER UID È: "+ userId);
+                getNextTutorNameClassPage(userId, tutorId);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("tutor not found");
             }
         });
     }

@@ -49,7 +49,8 @@ public class LessonRecycleViewAdapter extends RecyclerView.Adapter<
         return classList.size();
     }
 
-    public void aggiornaDati(List<LessonModel> nuoviDati){
+    public void aggiornaDati(List<LessonModel> nuoviDati) {
+
         this.classList.clear();
         this.classList.addAll(nuoviDati);
         notifyDataSetChanged();

@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import com.example.bicoccahelp.databinding.FragmentProfileBinding;
 import com.example.bicoccahelp.ui.home.HomeViewModel;
 import com.example.bicoccahelp.utils.ServiceLocator;
 
-public class LessonFragment extends Fragment {
+public class LessonFragment extends Fragment implements View.OnClickListener{
 
     private NavController navController;
     private FragmentLessonBinding binding;
@@ -69,6 +70,8 @@ public class LessonFragment extends Fragment {
         this.observeUiState();
         this.loadFirstPage();
         this.addOnScrollListener();
+
+        binding.filterNameButton.setOnClickListener(this);
     }
 
     private void configureRecycleView(){
@@ -133,8 +136,35 @@ public class LessonFragment extends Fragment {
         isLoading = false;
     }
 
+    @Override
+    public void onClick(View v) {
+
+        lessonViewModel.getLessonList().observe(getViewLifecycleOwner(),
+                lessons -> lessonRecycleViewAdapter.aggiornaDati(lessons));
+
+        if(v.getId() == binding.filterNameButton.getId()){
+            filterNameOnClick();
+        }
+    }
+
+    private void filterNameOnClick(){
+
+        Log.d("PROVA", "IL BOTTONE VA");
+
+        String tutorName = binding.searchTutorEditText.getText().toString();
+
+        if(tutorName.isEmpty()){
+            lessonViewModel.restoreOriginalList();
+            Log.d("PROVA", "IL BOTTONE È VUOTO");
+        }else{
+
+            lessonViewModel.getTutorId(tutorName);
+        }
+    }
+
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 }

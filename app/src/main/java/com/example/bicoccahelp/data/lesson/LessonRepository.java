@@ -38,4 +38,8 @@ public class LessonRepository {
         lessonRemoteDataSource.listLessonsByStudentDES(uidStudent, limit, callback);
     }
 
+    public void listLessonsByTutorDES(String uidStudent, String uidTutor, Long limit, Callback<List<LessonModel>> callback){
+        lessonRemoteDataSource.listLessonsByTutorDES(uidStudent, uidTutor, limit, callback);
+    }
+
 }
