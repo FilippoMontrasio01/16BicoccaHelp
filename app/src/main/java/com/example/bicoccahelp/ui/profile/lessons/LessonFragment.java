@@ -218,9 +218,13 @@ public class LessonFragment extends Fragment implements View.OnClickListener{
         if(tutorName.isEmpty()){
             lessonViewModel.restoreOriginalList();
             Log.d("PROVA", "IL BOTTONE È VUOTO");
+
         }else{
             lessonViewModel.getTutorId(tutorName);
         }
+
+        binding.dateButton.setText(R.string.date);
+
     }
 
 

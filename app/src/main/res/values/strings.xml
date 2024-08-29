@@ -208,5 +208,6 @@
     <string name="lesson_fragment">Lesson Fragment</string>
     <string name="your_class">Your Class</string>
     <string name="filter_your_class">Filter you Class</string>
+    <string name="date">Date</string>
 
 </resources>

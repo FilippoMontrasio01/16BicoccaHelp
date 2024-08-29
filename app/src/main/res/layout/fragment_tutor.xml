@@ -175,18 +175,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tutorRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="550dp"
             android:paddingBottom="250dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@+id/book_class_background"
             app:layout_constraintTop_toTopOf="@+id/book_class_background" />
     </LinearLayout>
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
