@@ -35,7 +35,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 View.OnFocusChangeListener{
 
     private NavController navController;
-    private FragmentRegistrationBinding binding;
+    public FragmentRegistrationBinding binding;
     private AuthRepository authRepository;
     private UserRepository userRepository;
     private WelcomeViewModel welcomeViewModel;
@@ -157,7 +157,7 @@ View.OnFocusChangeListener{
 
     }
 
-    private boolean checkPassword(){
+    public boolean checkPassword(){
 
         String password = Objects.requireNonNull(binding.createAccountPasswordEditText
                 .getText()).toString();
@@ -180,7 +180,7 @@ View.OnFocusChangeListener{
     }
 
     @SuppressLint("ResourceType")
-    private boolean validateName(){
+    public boolean validateName(){
         String name = Objects.requireNonNull(binding.createAccountNameEditText.getText())
                 .toString();
 
@@ -221,7 +221,7 @@ View.OnFocusChangeListener{
 
 
     @SuppressLint("ResourceType")
-    private boolean validateEmail(){
+    public boolean validateEmail(){
         String email = Objects.requireNonNull(binding.createAccountEmailEditText.getText())
                 .toString();
 
@@ -242,7 +242,7 @@ View.OnFocusChangeListener{
     }
 
     @SuppressLint("ResourceType")
-    private boolean validatePassword(){
+    public boolean validatePassword(){
         String psw = Objects.requireNonNull(binding.createAccountPasswordEditText.getText())
                 .toString();
 

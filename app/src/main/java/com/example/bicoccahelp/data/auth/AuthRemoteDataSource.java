@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class AuthRemoteDataSource {
-    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    public FirebaseAuth auth = FirebaseAuth.getInstance();
     public void register(String email, String password, Callback<Void> callback){
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> callback.onSucces(null))

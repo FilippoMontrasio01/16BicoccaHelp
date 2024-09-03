@@ -79,5 +79,19 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
 
+    // Dipendenze per i test unitari
+    testImplementation("junit:junit:4.13.2")
+
+
+    testImplementation("org.mockito:mockito-core:3.12.4")
+    testImplementation("org.mockito:mockito-inline:3.12.4")
+    implementation("org.mockito:mockito-core:3.12.4")
+    implementation("org.mockito:mockito-android:5.3.1")
+    testImplementation("org.mockito:mockito-android:5.3.1")
+
+
+    testImplementation("androidx.test.ext:junit:1.1.5")
+
+
 }
 
