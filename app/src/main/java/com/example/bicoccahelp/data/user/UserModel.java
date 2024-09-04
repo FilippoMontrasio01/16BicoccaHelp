@@ -6,8 +6,8 @@ public class UserModel {
     private final String uid;
     private final String email;
     private boolean emailVerified;
-    private final String name;
-    private final Uri photoUri;
+    private String name;
+    private Uri photoUri;
 
 
     public UserModel(String uid, String email, boolean emailVerified, String name, Uri photoUri) {
@@ -15,6 +15,14 @@ public class UserModel {
         this.email = email;
         this.emailVerified = emailVerified;
         this.name = name;
+        this.photoUri = photoUri;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhotoUri(Uri photoUri) {
         this.photoUri = photoUri;
     }
 

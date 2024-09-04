@@ -8,7 +8,7 @@ public class LessonModel {
 
     private @NonNull String uid_Student;
     private @NonNull String uid_tutor;
-    private final @NonNull Timestamp data;
+    private @NonNull Timestamp data;
     private @NonNull String ora;
 
     private @NonNull String description;
@@ -45,6 +45,14 @@ public class LessonModel {
         return ora;
     }
 
+
+    public void setData(@NonNull Timestamp data) {
+        this.data = data;
+    }
+
+    public void setOra(@NonNull String ora) {
+        this.ora = ora;
+    }
 
     public void setId(@NonNull String id) {
         this.id = id;

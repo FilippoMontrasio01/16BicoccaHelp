@@ -1,4 +1,4 @@
-package com.example.bicoccahelp;
+package com.example.bicoccahelp.data.repository;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;

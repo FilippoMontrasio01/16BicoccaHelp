@@ -2,18 +2,18 @@ package com.example.bicoccahelp.data.user.student;
 
 import androidx.annotation.NonNull;
 
-import org.checkerframework.checker.units.qual.N;
+
+
+import java.util.Objects;
 
 public class CreateStudentRequest {
 
-
-
-    private final @NonNull String corsoDiStudi;
-    private final  boolean isTutor;
+    private @NonNull String corsoDiStudi;
+    private boolean isTutor;
 
 
     public CreateStudentRequest(@NonNull String corsoDiStudi,  boolean isTutor) {
-        this.corsoDiStudi = corsoDiStudi;
+        this.corsoDiStudi = Objects.requireNonNull(corsoDiStudi, "Corso Di Studi Cannot be null");
         this.isTutor = isTutor;
     }
 
@@ -24,5 +24,13 @@ public class CreateStudentRequest {
 
     public boolean isTutor() {
         return isTutor;
+    }
+
+    public void setCorsoDiStudi(@NonNull String corsoDiStudi) {
+        this.corsoDiStudi = Objects.requireNonNull(corsoDiStudi, "Corso Di Studi Cannot be null");
+    }
+
+    public void setTutor(boolean tutor) {
+        isTutor = tutor;
     }
 }

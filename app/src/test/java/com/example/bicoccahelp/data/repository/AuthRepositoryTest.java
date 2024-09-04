@@ -1,4 +1,4 @@
-package com.example.bicoccahelp;
+package com.example.bicoccahelp.data.repository;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -14,17 +14,17 @@ import java.util.Map;
 public class TutorModel extends UserModel {
 
 
-    private final @NonNull Map<String, Boolean> disponibilitaGiorni;
+    private @NonNull Map<String, Boolean> disponibilitaGiorni;
     
-    private final @NonNull String corsoDiStudi;
-    private final @NonNull ArrayList<String> skills;
-    private final @NonNull double averageReview;
+    private @NonNull String corsoDiStudi;
+    private @NonNull ArrayList<String> skills;
+    private double averageReview;
 
 
     public TutorModel(String uid, String email, boolean emailVerified, String name, Uri photoUri,
                       @NonNull Map<String, Boolean> disponibilitaGiorni,
                       @NonNull String corsoDiStudi, @NonNull ArrayList<String> skills,
-                      @NonNull double averageReview) {
+                      double averageReview) {
         super(uid, email, emailVerified, name, photoUri != null ? photoUri : Uri.parse(""));
         this.corsoDiStudi = corsoDiStudi;
         this.disponibilitaGiorni = disponibilitaGiorni;
@@ -54,5 +54,21 @@ public class TutorModel extends UserModel {
 
     public double getAverageReview() {
         return averageReview;
+    }
+
+    public void setDisponibilitaGiorni(@NonNull Map<String, Boolean> disponibilitaGiorni) {
+        this.disponibilitaGiorni = disponibilitaGiorni;
+    }
+
+    public void setCorsoDiStudi(@NonNull String corsoDiStudi) {
+        this.corsoDiStudi = corsoDiStudi;
+    }
+
+    public void setSkills(@NonNull ArrayList<String> skills) {
+        this.skills = skills;
+    }
+
+    public void setAverageReview(double averageReview) {
+        this.averageReview = averageReview;
     }
 }

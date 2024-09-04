@@ -12,9 +12,9 @@ import java.util.Map;
 public class DateModel {
 
 
-    private final @NonNull Map<String, Boolean> disponibilitaOrari;
-    private final @NonNull Timestamp data;
-    private final @NonNull String uidTutor;
+    private @NonNull Map<String, Boolean> disponibilitaOrari;
+    private @NonNull Timestamp data;
+    private @NonNull String uidTutor;
 
 
 
@@ -25,8 +25,17 @@ public class DateModel {
         this.uidTutor = uidTutor;
     }
 
+    public void setDisponibilitaOrari(@NonNull Map<String, Boolean> disponibilitaOrari) {
+        this.disponibilitaOrari = disponibilitaOrari;
+    }
 
+    public void setData(@NonNull Timestamp data) {
+        this.data = data;
+    }
 
+    public void setUidTutor(@NonNull String uidTutor) {
+        this.uidTutor = uidTutor;
+    }
 
     @NonNull
     public Map<String, Boolean> getDisponibilitaOrari() {

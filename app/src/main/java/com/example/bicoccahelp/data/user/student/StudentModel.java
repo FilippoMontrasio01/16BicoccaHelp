@@ -8,8 +8,8 @@ import com.example.bicoccahelp.data.user.UserModel;
 
 public class StudentModel extends UserModel {
 
-    private final @NonNull String corsoDiStudi;
-    private final boolean isTutor;
+    private @NonNull String corsoDiStudi;
+    private boolean isTutor;
 
     public StudentModel(String uid, String email, boolean emailVerified, String name,
                         Uri photoUri, @NonNull String corsoDiStudi,
@@ -28,7 +28,11 @@ public class StudentModel extends UserModel {
         return isTutor;
     }
 
+    public void setCorsoDiStudi(@NonNull String corsoDiStudi) {
+        this.corsoDiStudi = corsoDiStudi;
+    }
 
-
-
+    public void setTutor(boolean tutor) {
+        isTutor = tutor;
+    }
 }

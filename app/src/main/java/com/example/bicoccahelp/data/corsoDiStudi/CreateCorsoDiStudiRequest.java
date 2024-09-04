@@ -2,12 +2,12 @@ package com.example.bicoccahelp.data.corsoDiStudi;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class CreateCorsoDiStudiRequest {
-    private
-    @NonNull String nomeCorso;
+    private @NonNull String nomeCorso;
     private @NonNull String area;
-    private
-    @NonNull String livello;
+    private @NonNull String livello;
 
     public CreateCorsoDiStudiRequest(@NonNull String nomeCorso,
                                      @NonNull String area, @NonNull String livello){
@@ -18,15 +18,15 @@ public class CreateCorsoDiStudiRequest {
     }
 
     public void setNomeCorso(@NonNull String nomeCorso) {
-        this.nomeCorso = nomeCorso;
+        this.nomeCorso = Objects.requireNonNull(nomeCorso, "nomeCorso cannot be null");
     }
 
     public void setArea(@NonNull String area) {
-        this.area = area;
+        this.area = Objects.requireNonNull(area, "area cannot be null");
     }
 
     public void setLivello(@NonNull String livello) {
-        this.livello = livello;
+        this.livello = Objects.requireNonNull(livello, "livello cannot be null");
     }
 
     @NonNull

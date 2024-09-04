@@ -88,6 +88,8 @@ dependencies {
     implementation("org.mockito:mockito-core:3.12.4")
     implementation("org.mockito:mockito-android:5.3.1")
     testImplementation("org.mockito:mockito-android:5.3.1")
+    testImplementation ("org.robolectric:robolectric:4.9")
+
 
 
     testImplementation("androidx.test.ext:junit:1.1.5")
