@@ -16,7 +16,7 @@ public class WelcomeViewModel extends ViewModel {
     private final AuthRepository authRepository;
     private final UserRepository userRepository;
 
-    private final MutableLiveData<Boolean> loginSuccess;
+    private MutableLiveData<Boolean> loginSuccess;
     private final MutableLiveData<Boolean> isLoading;
     private final MutableLiveData<Boolean> emailSent;
     private final MutableLiveData<Boolean> emailVerified;
@@ -35,6 +35,10 @@ public class WelcomeViewModel extends ViewModel {
 
     public LiveData<Boolean> getLoginSuccess() {
         return loginSuccess;
+    }
+
+    public void setLoginSuccess(boolean isSuccess) {
+        loginSuccess.setValue(isSuccess);
     }
 
     public LiveData<Boolean> getIsLoading() {

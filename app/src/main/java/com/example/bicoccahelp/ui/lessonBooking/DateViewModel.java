@@ -11,11 +11,13 @@ import com.example.bicoccahelp.data.lesson.CreateLessonRequest;
 import com.example.bicoccahelp.data.lesson.LessonModel;
 import com.example.bicoccahelp.data.lesson.LessonRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorModel;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.google.firebase.Timestamp;
 
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -37,12 +39,14 @@ public class DateViewModel extends ViewModel {
     private final MutableLiveData<UiState> uiState;
     private final MutableLiveData<String> errorMessage;
     private final MutableLiveData<Boolean> lessonDelete;
+    private MutableLiveData<Boolean> studentExist;
     private MutableLiveData<String> tutorId;
     public final ArrayList<String> dateList;
     public final DateRepository dateRepository;
     public final LessonRepository lessonRepository;
     public final TutorRepository tutorRepository;
     public final UserRepository userRepository;
+    public final StudentRepository studentRepository;
     public DateRecycleViewAdapter dateRecycleViewAdapter;
     private MutableLiveData<Boolean> lessonCreate;
     private final MutableLiveData<Boolean> lessonBookingAllowed;
@@ -53,19 +57,22 @@ public class DateViewModel extends ViewModel {
     private MutableLiveData<Boolean> oraUpdated;
 
     public DateViewModel(DateRepository dateRepository, LessonRepository lessonRepository,
-                         UserRepository userRepository, TutorRepository tutorRepository) {
+                         UserRepository userRepository, TutorRepository tutorRepository, StudentRepository studentRepository) {
         this.uiState = new MutableLiveData<>(new UiState(0, 0));;
         this.errorMessage = new MutableLiveData<>(null);;
         this.dateRepository = dateRepository;
         this.lessonRepository = lessonRepository;
         this.userRepository = userRepository;
         this.tutorRepository = tutorRepository;
+        this.studentRepository = studentRepository;
         this.dateList = new ArrayList<>();
         this.lessonCreate = new MutableLiveData<>();
         this.tutorId = new MutableLiveData<>();
         this.oraUpdated = new MutableLiveData<>();
         this.lessonBookingAllowed = new MutableLiveData<>();
         this.lessonDelete = new MutableLiveData<>();
+        this.studentExist = new MutableLiveData<>();
+
 
     }
 
@@ -75,6 +82,10 @@ public class DateViewModel extends ViewModel {
 
     public LiveData<Boolean> getLessonBookingAllowed() {
         return lessonBookingAllowed;
+    }
+
+    public LiveData<Boolean> getStudentExist(){
+        return studentExist;
     }
 
     public MutableLiveData<Boolean> getOraUpdated() {
@@ -232,6 +243,27 @@ public class DateViewModel extends ViewModel {
                 callback.onFailure(e);
             }
         });
+    }
+
+    public void checkStudentExist(String userUid) {
+
+        studentRepository.studentExist(userUid, new Callback<Boolean>() {
+            @Override
+            public void onSucces(Boolean exist) {
+                if(exist){
+                    studentExist.setValue(true);
+                }else{
+                    studentExist.setValue(false);
+                    errorMessage.setValue("Complete Student Profile before booking a lesson");
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Error in checking student");
+            }
+        });
+
     }
 
     public void bookLesson(String uidStudent, Timestamp selectedDate, String selectedOrario,

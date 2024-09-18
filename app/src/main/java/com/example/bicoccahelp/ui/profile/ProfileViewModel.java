@@ -150,7 +150,7 @@ public class ProfileViewModel extends ViewModel {
 
                 @Override
                 public void onFailure(Exception e) {
-                    errorMessage.setValue("Unable to reauthenticate");
+                    errorMessage.setValue("Invalid Password Entered");
                 }
             });
         }

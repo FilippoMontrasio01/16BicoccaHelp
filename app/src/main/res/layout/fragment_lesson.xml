@@ -169,7 +169,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lessonRecycleView"
             android:layout_width="match_parent"
-            android:layout_height="550dp"
+            android:layout_height="600dp"
             android:paddingBottom="250dp"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"

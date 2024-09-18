@@ -93,6 +93,12 @@ public class CompleteTutorProfileFragment extends Fragment implements View.OnCli
 
         if(v.getId() == binding.createTutorButton.getId()){
 
+            if (!completeProfileViewModel.isAnyDaySelected()) {
+                // Mostra una Snackbar se nessun giorno è stato selezionato
+                Snackbar.make(requireView(), "Please select at least one day of availability.", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
             String studyProgram = Objects.requireNonNull(binding.createTutorEditText
                     .getText()).toString();
 

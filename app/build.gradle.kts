@@ -83,13 +83,15 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 
 
+
     testImplementation("org.mockito:mockito-core:3.12.4")
     testImplementation("org.mockito:mockito-inline:3.12.4")
     implementation("org.mockito:mockito-core:3.12.4")
     implementation("org.mockito:mockito-android:5.3.1")
     testImplementation("org.mockito:mockito-android:5.3.1")
     testImplementation ("org.robolectric:robolectric:4.9")
-
+    testImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    debugImplementation("androidx.fragment:fragment-testing:1.3.6")
 
 
     testImplementation("androidx.test.ext:junit:1.1.5")

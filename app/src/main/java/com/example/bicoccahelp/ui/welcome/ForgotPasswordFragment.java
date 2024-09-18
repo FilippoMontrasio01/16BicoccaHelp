@@ -104,6 +104,8 @@ View.OnFocusChangeListener{
         String email = Objects.requireNonNull(binding.forgotPasswordEditText.getText()).toString();
 
         if(email.length() == 0){
+            Snackbar.make(requireView(), getString(R.string.insert_your_email),
+                    Snackbar.LENGTH_SHORT).show();
             return;
         }
 

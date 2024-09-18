@@ -30,10 +30,10 @@ import java.util.Objects;
 
 public class LoginFragment extends Fragment implements View.OnClickListener{
 
-    private NavController navController;
-    private FragmentLoginBinding binding;
+    public NavController navController;
+    public FragmentLoginBinding binding;
 
-    private WelcomeViewModel welcomeViewModel;
+    public WelcomeViewModel welcomeViewModel;
     private AuthRepository authRepository;
     private UserRepository userRepository;
 
@@ -142,6 +142,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 .toString();
 
         if(email.length() == 0 || password.length() == 0){
+            Snackbar.make(requireView(), getString(R.string.insert_email_psw),
+                    Snackbar.LENGTH_SHORT).show();
             return;
         }
 
@@ -150,7 +152,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
 
 
-    private void handleAuthUser(@NonNull UserModel user){
+    public void handleAuthUser(@NonNull UserModel user){
         if (!user.isEmailVerified()) {
             navController.navigate(R.id.action_from_login_to_verify_email);
             return;

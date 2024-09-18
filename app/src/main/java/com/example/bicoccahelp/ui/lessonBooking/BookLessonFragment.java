@@ -28,6 +28,7 @@ import com.example.bicoccahelp.data.date.CreateDateRequest;
 import com.example.bicoccahelp.data.date.DateModel;
 import com.example.bicoccahelp.data.lesson.LessonRepository;
 import com.example.bicoccahelp.data.user.UserRepository;
+import com.example.bicoccahelp.data.user.student.StudentRepository;
 import com.example.bicoccahelp.data.user.tutor.TutorRepository;
 import com.example.bicoccahelp.databinding.FragmentBookLessonBinding;
 import com.example.bicoccahelp.data.date.DateRepository;
@@ -49,6 +50,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
     private DateRepository dateRepository;
     private UserRepository userRepository;
     private LessonRepository lessonRepository;
+    private StudentRepository studentRepository;
     private TutorViewModel tutorViewModel;
 
     private NavController navController;
@@ -90,7 +92,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
         tutorRepository = ServiceLocator.getInstance().getTutorRepository();
         userRepository = ServiceLocator.getInstance().getUserRepository();
         dateRepository = ServiceLocator.getInstance().getDateRepository();
-
+        studentRepository = ServiceLocator.getInstance().getStudentRepository();
 
 
         TutorViewModelFactory factory = new TutorViewModelFactory(tutorRepository);
@@ -109,7 +111,7 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
 
         dateViewModel = new ViewModelProvider(requireActivity(),
                 new DateViewModelFactory(dateRepository, lessonRepository, userRepository,
-                        tutorRepository)).get(DateViewModel.class);
+                        tutorRepository, studentRepository)).get(DateViewModel.class);
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.TransparentDialogStyle);
     }
 
@@ -137,6 +139,8 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
 
         BookLessonFragmentArgs args = BookLessonFragmentArgs.fromBundle(getArguments());
         String navigationSource = args.getNavigationSource();
+
+        dateViewModel.checkStudentExist(dateViewModel.getStudentId());
 
         if ("desiredSource".equals(navigationSource)) {
             binding.lessonCard.UpdateClassButtonLinearLayout.setVisibility(View.VISIBLE);
@@ -355,7 +359,16 @@ public class BookLessonFragment extends DialogFragment implements View.OnClickLi
 
         String selectedOrario = dateRecycleViewAdapter.getSelectedToggleButtonText();
 
-        dateViewModel.bookLesson(uidStudent, selectedDate, selectedOrario, tutorName, description);
+
+        dateViewModel.getStudentExist().observe(getViewLifecycleOwner(), StudentExist -> {
+            if(StudentExist){
+                dateViewModel.bookLesson(uidStudent, selectedDate, selectedOrario, tutorName, description);
+            }else {
+                Snackbar.make(requireView(), "Complete Student Profile before booking a lesson", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         dateViewModel.getLessonBookingAllowed().observe(getViewLifecycleOwner(), bookingAllowed -> {
             if (bookingAllowed) {

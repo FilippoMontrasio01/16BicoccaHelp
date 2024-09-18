@@ -37,6 +37,7 @@ public class CompleteProfileViewModel extends ViewModel {
 
     private ArrayList<String> subject = new ArrayList<>();
     private  MutableLiveData<String> snackbarMessage;
+    private MutableLiveData<Boolean> checkMap;
     private  MutableLiveData<Map<String, Boolean>> disponibilitaGiorni;
     private MutableLiveData<Boolean> isTutorCreated;
     private MutableLiveData<String> corsoLivello;
@@ -62,13 +63,17 @@ public class CompleteProfileViewModel extends ViewModel {
         this.isMagistrale = new MutableLiveData<>();
         this.corsoName = new MutableLiveData<>();
         this.corsoLivello = new MutableLiveData<>();
-
+        this.checkMap = new MutableLiveData<>();
         disponibilitaGiorni.setValue(new HashMap<>());
 
     }
 
     public LiveData<Boolean> getIsTutor() {
         return isTutor;
+    }
+
+    public LiveData<Boolean> getCheckMap() {
+        return checkMap;
     }
 
     public LiveData<Boolean> getIsTutorCreated() {
@@ -267,6 +272,7 @@ public class CompleteProfileViewModel extends ViewModel {
                 if (!exist) {
                     Map<String, Boolean> map = disponibilitaGiorni.getValue();
                     if (map == null || map.isEmpty()) {
+                        checkMap.setValue(true);
                         errorMessage.setValue("Availability error");
                         return;
                     }
@@ -313,6 +319,22 @@ public class CompleteProfileViewModel extends ViewModel {
                 errorMessage.setValue("Failed to check tutor status");
             }
         });
+    }
+
+    public boolean isAnyDaySelected() {
+        Map<String, Boolean> disponibilita = disponibilitaGiorni.getValue();
+        if (disponibilita == null || disponibilita.isEmpty()) {
+            return false;
+        }
+
+        // Verifica se almeno un giorno è selezionato (true)
+        for (Boolean isSelected : disponibilita.values()) {
+            if (isSelected != null && isSelected) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void isTutor(Callback<Boolean> callback) {
