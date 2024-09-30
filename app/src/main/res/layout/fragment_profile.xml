@@ -184,7 +184,7 @@
                     android:layout_height="1dp"
                     app:dividerColor="@android:color/darker_gray"/>
 
-                <!-- Password -->
+
                 <RelativeLayout
                     android:id="@+id/review_item"
                     android:layout_width="match_parent"
