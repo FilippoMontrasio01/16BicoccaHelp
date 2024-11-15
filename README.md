@@ -18,16 +18,6 @@ BicoccaHelp si propone di creare una comunità di apprendimento collaborativo al
 
 - **Recensioni e Valutazioni**: Gli studenti possono lasciare recensioni e valutazioni sui tutor con cui hanno interagito, garantendo un feedback trasparente e utile per la comunità.
 
-- **Notifiche**: Gli studenti ricevono notifiche riguardanti le sessioni di tutoring prenotate, le risposte dei tutor e altre comunicazioni importanti.
-
-## Installazione
-
-Per installare BicoccaHelp sul tuo dispositivo Android, segui questi passaggi:
-
-1. Scarica il file APK più recente dal repository GitHub.
-2. Abilita l'installazione di applicazioni da "Fonti sconosciute" nelle impostazioni del dispositivo.
-3. Apri il file APK scaricato e segui le istruzioni per completare l'installazione.
-
 ## Utilizzo
 
 Dopo aver installato BicoccaHelp sul tuo dispositivo, puoi:
